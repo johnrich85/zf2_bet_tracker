@@ -1,0 +1,115 @@
+<?php
+echo $this->flashMessenger()->render();
+?>
+<div class="row">
+
+    <div class="col-lg-4">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <i class="fa fa-times fa-5x"></i>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <p class="announcement-heading"><?php echo $betCount['losing'] ?></p>
+                        <p class="announcement-text">Losing bets</p>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer announcement-bottom">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            See all losing bets
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <i class="fa fa-arrow-circle-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <i class="fa fa-check-square fa-5x"></i>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <p class="announcement-heading"><?php echo $betCount['winning'] ?></p>
+                        <p class="announcement-text">Winning Bets</p>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer announcement-bottom">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            See all winning bets
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <i class="fa fa-arrow-circle-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <i class="fa fa-money fa-5x"></i>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <p class="announcement-heading">£200</p>
+                        <p class="announcement-text">Bankroll</p>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer announcement-bottom">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            See bank history
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <i class="fa fa-arrow-circle-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<table class="table table-striped table-hover tablesorter">
+    <thead>
+        <tr>
+            <th>Bet <i class="fa fa-sort"></i></th>
+            <th>Winner <i class="fa fa-sort"></i></th>
+            <th>Date <i class="fa fa-sort"></i></th>
+            <th>Bet amount <i class="fa fa-sort"></i></th>
+            <th>Potential Return <i class="fa fa-sort"></i></th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <?php foreach($bets as $bet) : ?>
+            <tr>
+                <td><?php echo $bet->getName() ?></td>
+                <td><?php echo $bet->getSuccessful() == 1 ? '<span class="label label-success">Win</span>' : '<span class="label label-danger">Lose</span>' ?></td>
+                <td><?php echo $bet->getDate() ?></td>
+                <td><?php echo $bet->getAmount() ?></td>
+                <td><?php echo $bet->getReturn() ?></td>
+            </tr>
+        <?php endforeach; ?>
+
+    </tbody>
+</table>
+
+<?php echo $this->partial('partials/pagination', array('paginator' => $bets)); ?>

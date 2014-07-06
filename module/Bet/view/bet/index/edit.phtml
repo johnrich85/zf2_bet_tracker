@@ -1,0 +1,16 @@
+<h1> Update an entry</h1>
+
+<?php
+echo $this->form()->openTag($form);
+$form->setAttribute('action', $this->url('bet', array('action' => 'edit')));
+$form->get('id')->setAttribute('type', 'text');
+$form->get('submit')->setAttribute('value', 'Update');
+$form->prepare();
+
+
+echo $this->formInput($form->get('id'));
+echo $this->formRow($form->get('name'));
+
+echo $this->formInput($form->get('submit'));
+
+echo $this->form()->closeTag($form);
