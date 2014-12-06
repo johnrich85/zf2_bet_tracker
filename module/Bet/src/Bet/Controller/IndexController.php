@@ -1,11 +1,4 @@
 <?php
-/**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
 
 namespace Bet\Controller;
 
@@ -22,20 +15,25 @@ class IndexController extends AbstractActionController
         $this->service = $service;
     }
 
+    //Todo : create users & restrict results & add/edit permissions to existing users.
     public function indexAction()
     {
         $pageNum = $this->params()->fromQuery('p');
-        $bets = $this->service->getPaginatedList($pageNum, 10);
 
-        $betCount = array (
-            "winning" => $this->service->getBetCount(1),
-            "losing" => $this->service->getBetCount(0)
-        );
+        //Todo: different action for successful betz
+        $params = array();
+        if($this->params()->fromQuery('successful'))
+        {
+            $params['successful'] = $this->params()->fromQuery('successful');
+        }
+
+        $bets = $this->service->getPaginatedList($pageNum,$params);
 
         return new ViewModel(
             array(
                 "bets" => $bets,
-                'betCount' => $betCount
+                "winning" => $this->service->getBetCount(1),
+                "losing" => $this->service->getBetCount(0)
             )
         );
     }

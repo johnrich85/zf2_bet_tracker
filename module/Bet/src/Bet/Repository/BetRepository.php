@@ -8,9 +8,11 @@
 
 namespace Bet\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Application\AppClasses\Repository as AppRepository;
 
-class BetRepository extends EntityRepository{
+class BetRepository extends AppRepository\TaRepository{
+
+    protected $entitySimpleName = 'bet';
 
     /**
      * Overrides doctrine 'findAll' method, providing the
@@ -18,11 +20,10 @@ class BetRepository extends EntityRepository{
      *
      * @return array
      */
-    public function findAll() {
+    public function findAll()
+    {
         return $this->findBy(array(), array('date' => 'DESC'));
     }
 
-    public function getBetCount() {
 
-    }
 } 

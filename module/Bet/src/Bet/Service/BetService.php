@@ -3,12 +3,13 @@
 namespace Bet\Service;
 
 use Zend\ServiceManager\ServiceManagerAwareInterface;
+use Application\AppInterface\PaginatationProviderInterface;
+use Application\AppTraits\PaginatorProviderTrait;
 
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
-use Zend\Paginator\Paginator;
 
-class BetService implements ServiceManagerAwareInterface{
+class BetService implements ServiceManagerAwareInterface, PaginatationProviderInterface {
+
+    use PaginatorProviderTrait;
 
     protected $sm;
     protected $em;
@@ -28,17 +29,19 @@ class BetService implements ServiceManagerAwareInterface{
         $this->em = $em;
     }
 
-    public function getList() {
-        return $this->em->getRepository('Bet\Entity\Bet')->findAll();
+    public function getRepository() {
+        return $this->em->getRepository('Bet\Entity\Bet');
     }
 
-    public function getPaginatedList($page, $perPage) {
+    public function getList() {
+        $this->getRepository()->findAll();
+    }
 
-        $repository = $this->em->getRepository('Bet\Entity\Bet');
+    public function getPaginatedList($page, $params) {
 
-        $adapter = new DoctrineAdapter( new ORMPaginator( $repository->createQueryBuilder('bet')->add('orderBy', 'bet.date DESC') ) );
-        $paginator = new Paginator($adapter);
-        $paginator->setDefaultItemCountPerPage($perPage);
+        $query = $this->getRepository()->QueryBuilderFindBy($params);
+
+        $paginator = $this->getPaginator($query);
         $paginator->setCurrentPageNumber($page);
 
         return $paginator;

@@ -21,6 +21,10 @@ class Bet implements InputFilterAwareInterface {
      */
     protected $id;
 
+    //TODO - need to implement users :D
+    /** @ORM\Column(name="`userId`",type="integer") */
+    //protected $userId;
+
     /** @ORM\Column(name="`name`", type="string") */
     protected $name;
 
