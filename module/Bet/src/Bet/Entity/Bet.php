@@ -23,7 +23,7 @@ class Bet implements InputFilterAwareInterface {
 
     //TODO - need to implement users :D
     /** @ORM\Column(name="`userId`",type="integer") */
-    //protected $userId;
+    protected $userId;
 
     /** @ORM\Column(name="`name`", type="string") */
     protected $name;
@@ -138,9 +138,34 @@ class Bet implements InputFilterAwareInterface {
         return $this->successful;
     }
 
+    /**
+     * Returns either the profit or loss for a given bet.
+     *
+     * @return double
+     * @throws \Exception
+     */
+    public function calculateProfitOrLoss()
+    {
+        if($this->successful == null || $this->amount == null || $this->return == null)
+        {
+            Throw new \Exception('Unable to calculate the return, bet is not fully populated.');
+        }
+
+        if ($this->successful != 1)
+        {
+            return $this->amount * -1;
+        }
+
+        return $this->return - $this->amount;
+    }
+
+
+    //Todo: Form related methods - need a better way of doing this
     public function exchangeArray($data)
     {
+        var_dump($data);
         $this->id     = (isset($data['id']))     ? $data['id']     : null;
+        $this->userId     = (isset($data['userId']))     ? $data['userId']     : null;
         $this->name = (isset($data['name'])) ? $data['name'] : null;
         $this->date = (isset($data['date'])) ? $data['date'] : null;
         $this->amount = (isset($data['amount'])) ? $data['amount'] : null;

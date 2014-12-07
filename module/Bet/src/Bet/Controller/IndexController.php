@@ -9,10 +9,19 @@ use Bet\Form\EntryForm;
 
 class IndexController extends AbstractActionController
 {
-    protected $service;
+    //Services
+    protected $betService;
+    protected $bankrollService;
 
-    public function __construct($service) {
-        $this->service = $service;
+    protected $viewModel;
+
+    public function __construct($betService, $bankrollService) {
+        $this->betService = $betService;
+        $this->bankrollService = $bankrollService;
+
+        $this->viewModel = new ViewModel(array(
+            'bankroll' => $this->bankrollService->getById(1)
+        ));
     }
 
     //Todo : create users & restrict results & add/edit permissions to existing users.
@@ -27,24 +36,25 @@ class IndexController extends AbstractActionController
             $params['successful'] = $this->params()->fromQuery('successful');
         }
 
-        $bets = $this->service->getPaginatedList($pageNum,$params);
+        $bets = $this->betService->getPaginatedList($pageNum,$params);
 
-        return new ViewModel(
-            array(
-                "bets" => $bets,
-                "winning" => $this->service->getBetCount(1),
-                "losing" => $this->service->getBetCount(0)
-            )
-        );
+        $this->viewModel->setVariables(array(
+            "bets" => $bets,
+            "winning" => $this->betService->getBetCount(1),
+            "losing" => $this->betService->getBetCount(0)
+        ));
+
+        return $this->viewModel;
+
     }
 
     public function addAction() {
 
-        $form = $this->service->getEntryForm();
+        $form = $this->betService->getEntryForm();
         $request = $this->getRequest();
 
         if ( $request->isPost() ) {
-            $result = $this->service->create($request->getPost());
+            $result = $this->betService->create($request->getPost());
 
             if ($result === true) {
                 return $this->redirect()->toRoute('bet');
@@ -55,13 +65,14 @@ class IndexController extends AbstractActionController
 
     }
 
+    //Todo - fix this, add option to UI & add all form fields.
     public function editAction() {
 
         $request = $this->getRequest();
 
         if ( $request->isPost() ) {
-            $form = $this->service->getEntryForm();
-            $result = $this->service->update($request->getPost());
+            $form = $this->betService->getEntryForm();
+            $result = $this->betService->update($request->getPost());
 
             if ($result) {
                 return $this->redirect()->toRoute('bet', array(
@@ -72,7 +83,7 @@ class IndexController extends AbstractActionController
             }
         }
         else {
-            $form = $this->service->getEntryForm($this->params('id'));
+            $form = $this->betService->getEntryForm($this->params('id'));
         }
 
         return new ViewModel(array('form' => $form));
@@ -88,7 +99,7 @@ class IndexController extends AbstractActionController
             return $this->redirect()->toRoute('bet');
         }
 
-        $result = $this->service->delete($this->params('id'));
+        $result = $this->betService->delete($this->params('id'));
         $message = ($result == true ? 'Entry deleted successfully' : 'Unable to delete entry, please try again.');
         $this->flashMessenger()->addMessage($message);
 

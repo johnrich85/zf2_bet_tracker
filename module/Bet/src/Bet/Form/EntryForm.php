@@ -25,6 +25,17 @@ class EntryForm extends Form {
                 )
         ));
 
+        //TODO user_accounts - remove
+        $this->add(array(
+            'name' => 'userId',
+            'attributes' => array(
+                'type'  => 'hidden',
+                'placeholder' => 'ID',
+                'value' => '1',
+            ),
+            'value' => '1',
+        ));
+
         $this->add(array(
             'name' => 'name',
             'attributes' => array(

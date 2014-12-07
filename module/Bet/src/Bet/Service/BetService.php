@@ -2,32 +2,17 @@
 
 namespace Bet\Service;
 
-use Zend\ServiceManager\ServiceManagerAwareInterface;
+use Application\AppClasses\Service as TaService;
 use Application\AppInterface\PaginatationProviderInterface;
 use Application\AppTraits\PaginatorProviderTrait;
 
 
-class BetService implements ServiceManagerAwareInterface, PaginatationProviderInterface {
+class BetService extends TaService\TaService implements PaginatationProviderInterface {
 
     use PaginatorProviderTrait;
 
-    protected $sm;
-    protected $em;
-
-    public function setServiceManager(\Zend\ServiceManager\ServiceManager $serviceManager)
-    {
-        $this->sm = $serviceManager;
-        return $this;
-    }
-
-    public function getServiceManager()
-    {
-        return $this->sm;
-    }
-
-    public function setEntityManager(\Doctrine\ORM\EntityManager $em) {
-        $this->em = $em;
-    }
+    //TODO: remove once user login in implemented.
+    protected $userId = 1;
 
     public function getRepository() {
         return $this->em->getRepository('Bet\Entity\Bet');
@@ -55,8 +40,8 @@ class BetService implements ServiceManagerAwareInterface, PaginatationProviderIn
             return $this->form;
         }
 
-        if ($Bet = $this->em->find('Bet\Entity\Bet', $id) ) {
-            $this->form->bind($Bet);
+        if ($bet = $this->em->find('Bet\Entity\Bet', $id) ) {
+            $this->form->bind($bet);
         }
 
         return $this->form;
@@ -67,16 +52,30 @@ class BetService implements ServiceManagerAwareInterface, PaginatationProviderIn
 
         if ( !$this->form ) $this->getEntryForm();
 
-        $Bet = $this->sm->get('BetEntity');
-        $this->form->setInputFilter($Bet->getInputFilter());
+        $bet = $this->sm->get('BetEntity');
 
+        $this->form->setInputFilter($bet->getInputFilter());
         $this->form->setData($data);
 
         if ( $this->form->isValid() ) {
 
-            $Bet->exchangeArray($this->form->getData());
-            $this->em->persist($Bet);
-            $this->em->flush();
+            $bet->exchangeArray($this->form->getData());
+            $betValue = $bet->calculateProfitOrLoss();
+
+            $bankroll = $this->em->getRepository('Bankroll\Entity\Bankroll')->findOneById($this->userId);
+            $bankroll->amendAmount($betValue);
+
+            $this->em->getConnection()->beginTransaction(); // suspend auto-commit
+            try {
+                $this->em->persist($bet);
+                $this->em->persist($bankroll);
+                $this->em->flush();
+                $this->em->getConnection()->commit();
+            } catch (Exception $e) {
+                //Todo: need logging & graceful handling of exceptions
+                $this->em->getConnection()->rollback();
+                throw $e;
+            }
 
             return true;
         }
@@ -88,18 +87,31 @@ class BetService implements ServiceManagerAwareInterface, PaginatationProviderIn
 
         if ( !$this->form ) $this->getEntryForm();
 
-        if ( !$Bet = $this->em->find('Bet\Entity\Bet', $data->id) ) {
+        if ( !$bet = $this->em->find('Bet\Entity\Bet', $data->id) ) {
             throw new \Exception("Error, trying to update non-existent Bet with id of: " . $data->id);
         }
 
-        $this->form->setInputFilter($Bet->getInputFilter());
+        $this->form->setInputFilter($bet->getInputFilter());
         $this->form->setData($data);
 
         if ( $this->form->isValid() ) {
-            $Bet->exchangeArray($this->form->getData());
+            $bet->exchangeArray($this->form->getData());
+            $betValue = $bet->calculateProfitOrLoss();
 
-            $this->em->persist($Bet);
-            $this->em->flush();
+            $bankroll = $this->em->getRepository('Bankroll\Entity\Bankroll')->findOneById($this->userId);
+            $bankroll->amendAmount($betValue);
+
+            $this->em->getConnection()->beginTransaction(); // suspend auto-commit
+            try {
+                $this->em->persist($bet);
+                $this->em->persist($bankroll);
+                $this->em->flush();
+                $this->em->getConnection()->commit();
+            } catch (Exception $e) {
+                //Todo: need logging & graceful handling of exceptions
+                $this->em->getConnection()->rollback();
+                throw $e;
+            }
 
             return true;
         }

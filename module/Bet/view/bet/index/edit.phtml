@@ -9,6 +9,8 @@ $form->prepare();
 
 
 echo $this->formInput($form->get('id'));
+//TODO user_accounts - remove
+echo $this->formHidden($form->get('userId'));
 echo $this->formRow($form->get('name'));
 
 echo $this->formInput($form->get('submit'));

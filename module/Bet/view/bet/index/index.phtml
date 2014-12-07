@@ -66,12 +66,12 @@ echo $this->flashMessenger()->render();
                         <i class="fa fa-money fa-5x"></i>
                     </div>
                     <div class="col-xs-6 text-right">
-                        <p class="announcement-heading">£200</p>
+                        <p class="announcement-heading"><?php echo $bankroll->getAmount() ?></p>
                         <p class="announcement-text">Bankroll</p>
                     </div>
                 </div>
             </div>
-            <a href="#">
+            <a href="/bankroll/history/<?php echo $bankroll->getId() ?>">
                 <div class="panel-footer announcement-bottom">
                     <div class="row">
                         <div class="col-xs-6">
