@@ -9,12 +9,25 @@ use Bet\Form\EntryForm;
 
 class IndexController extends AbstractActionController
 {
-    //Services
+    /**
+     * @var \Bet\Service\BetService
+     */
     protected $betService;
+
+    /**
+     * @var \Bankroll\Service\BankrollService
+     */
     protected $bankrollService;
 
+    /**
+     * @var ViewModel
+     */
     protected $viewModel;
 
+    /**
+     * @param $betService
+     * @param $bankrollService
+     */
     public function __construct($betService, $bankrollService) {
         $this->betService = $betService;
         $this->bankrollService = $bankrollService;
@@ -24,16 +37,21 @@ class IndexController extends AbstractActionController
         ));
     }
 
-    //Todo : create users & restrict results & add/edit permissions to existing users.
+    /**
+     * Lists bets.
+     *
+     * @todo create users & add ACL.
+     * @return ViewModel
+     */
     public function indexAction()
     {
         $pageNum = $this->params()->fromQuery('p');
-
-        //Todo: different action for successful betz
         $params = array();
-        if($this->params()->fromQuery('successful'))
+
+        $successfulFilter = $this->params()->fromQuery('successful');
+        if($successfulFilter)
         {
-            $params['successful'] = $this->params()->fromQuery('successful');
+            $params['successful'] = $successfulFilter;
         }
 
         $bets = $this->betService->getPaginatedList($pageNum,$params);
@@ -48,6 +66,11 @@ class IndexController extends AbstractActionController
 
     }
 
+    /**
+     * Add bets.
+     *
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function addAction() {
 
         $form = $this->betService->getEntryForm();
@@ -56,7 +79,7 @@ class IndexController extends AbstractActionController
         if ( $request->isPost() ) {
             $result = $this->betService->create($request->getPost());
 
-            if ($result === true) {
+            if ($result) {
                 return $this->redirect()->toRoute('bet');
             }
         }
@@ -65,7 +88,12 @@ class IndexController extends AbstractActionController
 
     }
 
-    //Todo - fix this, add option to UI & add all form fields.
+    /**
+     * Update bets.
+     *
+     * @todo fix this, add option to UI & add all form fields.
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function editAction() {
 
         $request = $this->getRequest();
@@ -90,6 +118,12 @@ class IndexController extends AbstractActionController
 
     }
 
+    /**
+     * Remove bets.
+     *
+     * @todo implement service method, add to ui.
+     * @return \Zend\Http\Response
+     */
     public function deleteAction() {
 
         $request = $this->getRequest();

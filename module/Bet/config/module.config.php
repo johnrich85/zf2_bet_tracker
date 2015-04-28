@@ -1,4 +1,5 @@
 <?php
+namespace Bet;
 
 return array(
 
@@ -46,7 +47,7 @@ return array(
             'bet_entities' => array(
                 'class' =>'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
-                'paths' => array(__DIR__ . '../../src/Bet/Entity')
+                'paths' => array(__DIR__ . '/../src/' . __NAMESPACE__ . '/Entity')
             ),
 
             'orm_default' => array(
