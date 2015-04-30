@@ -12,8 +12,16 @@ use Application\AppClasses\Service as TaService;
 
 class BankrollService extends TaService\TaService {
 
-    public function getRepository() {
-        return $this->em->getRepository('Bankroll\Entity\Bankroll');
+    /**
+     * @var \Bankroll\Repository\BankrollRepository
+     */
+    protected $bankrollRepository;
+
+    /**
+     * Constructor
+     */
+    public function __construct($bankrollRepository) {
+        $this->bankrollRepository = $bankrollRepository;
     }
 
     public function create()
@@ -28,6 +36,6 @@ class BankrollService extends TaService\TaService {
 
     public function getById($id)
     {
-        return $this->getRepository()->find($id);
+        return $this->bankrollRepository->find($id);
     }
 } 

@@ -28,7 +28,9 @@ return array(
         ),
         'invokables' => array (
             'BetEntity'   => 'Bet\Entity\Bet',
-            'BetForm'     => 'Bet\Form\EntryForm'
+            'BetEntryForm'     => 'Bet\Form\EntryForm',
+            'BetDeleteForm'     => 'Bet\Form\DeleteForm',
+            'MessageBag'  => 'Illuminate\Support\MessageBag'
         )
     ),
 
@@ -39,6 +41,7 @@ return array(
             'bet/index/add' => __DIR__ . '/../view/bet/index/add.phtml',
             'bet/index/edit' => __DIR__ . '/../view/bet/index/edit.phtml',
             'bet/index/delete' => __DIR__ . '/../view/bet/index/delete.phtml',
+            'partials/bet/form'     => __DIR__ . '/../view/partials/form.phtml',
         ),
     ),
 

@@ -2,9 +2,12 @@
 
 namespace Bet\Service;
 
+use Bet\Repository\BetRepository;
+use Bankroll\Repository\BankrollRepository;
 use Application\AppClasses\Service as TaService;
 use Application\AppInterface\PaginatationProviderInterface;
 use Application\AppTraits\PaginatorProviderTrait;
+use Doctrine\ORM\EntityRepository;
 
 class BetService extends TaService\TaService implements PaginatationProviderInterface {
 
@@ -17,10 +20,21 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
     protected $userId = 1;
 
     /**
+     * @var \Bet\Repository\BetRepository
+     */
+    protected $betRepository;
+
+    /**
+     * @var \Bankroll\Repository\BankrollRepository
+     */
+    protected $bankrollRepository;
+
+    /**
      * Constructor
      */
-    public function __construct() {
-        parent::__construct();
+    public function __construct($betRepository, $bankrollRepository) {
+        $this->betRepository = $betRepository;
+        $this->bankrollRepository = $bankrollRepository;
     }
 
     /**
@@ -43,12 +57,11 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
             $bet->exchangeArray($this->form->getData());
             $betValue = $bet->calculateProfitOrLoss();
 
-            $bankroll = $this->em->getRepository('Bankroll\Entity\Bankroll')->findOneById($this->userId);
+            $bankroll = $this->bankrollRepository->findOneById($this->userId);
             $bankroll->amendAmount($betValue);
 
             $this->em->getConnection()->beginTransaction(); // suspend auto-commit
             try {
-
                 $this->em->persist($bet);
                 $this->em->persist($bankroll);
                 $this->em->flush();
@@ -75,7 +88,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
 
         $this->getEntryForm();
 
-        if ( !$bet = $this->em->find('Bet\Entity\Bet', $data->id) ) {
+        if ( !$bet = $this->betRepository->find($data->id) ) {
             throw new \Exception("Error, trying to update non-existent Bet with id of: " . $data->id);
         }
 
@@ -86,7 +99,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
             $bet->exchangeArray($this->form->getData());
             $betValue = $bet->calculateProfitOrLoss();
 
-            $bankroll = $this->em->getRepository('Bankroll\Entity\Bankroll')->findOneById($this->userId);
+            $bankroll = $this->bankrollRepository->findOneById($this->userId);
             $bankroll->amendAmount($betValue);
 
             $this->em->getConnection()->beginTransaction(); // suspend auto-commit
@@ -114,17 +127,8 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @param $successful int
      * @return mixed
      */
-    public function getBetCount($successful) {
-
-        $qb = $this->em->createQueryBuilder();
-        $qb->select('count(bet)')
-            ->from('Bet\Entity\Bet', 'bet')
-            ->where('bet.successful = :successful')
-            ->setParameters(array('successful' => $successful));
-
-        $count = $qb->getQuery()->getSingleScalarResult();
-
-        return $count;
+    public function getBetCountByStatus($successful) {
+        return $this->betRepository->getBetCountByStatus($successful);
     }
 
     /**
@@ -133,7 +137,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @return Bet\Repository\BetRepository
      */
     public function getRepository() {
-        return $this->em->getRepository('Bet\Entity\Bet');
+        return $this->betRepository;
     }
 
     /**
@@ -142,7 +146,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @return array[Bet/Entity]
      */
     public function getList() {
-        return $this->getRepository()->findAll();
+        return $this->betRepository->findAll();
     }
 
     /**
@@ -154,7 +158,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      */
     public function getPaginatedList($page, $params) {
 
-        $query = $this->getRepository()->QueryBuilderFindBy($params);
+        $query = $this->betRepository->QueryBuilderFindBy($params);
 
         $paginator = $this->getPaginator($query);
         $paginator->setCurrentPageNumber($page);
@@ -172,17 +176,29 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @return mixed
      */
     public function getEntryForm($id = null) {
-        $this->form = $this->sm->get('BetForm');
+        $this->form = $this->sm->get('BetEntryForm');
 
         if (!$id) {
             return $this->form;
         }
 
-        if ($bet = $this->em->find('Bet\Entity\Bet', $id) ) {
+        if ($bet = $this->betRepository->find($id) ) {
             $this->form->bind($bet);
         }
 
         return $this->form;
+    }
 
+
+    public function getDeleteForm($id) {
+
+        if ($bet = $this->betRepository->find($id) ) {
+            $this->form = $this->sm->get('BetDeleteForm');
+            $this->form->bind($bet);
+
+            return $this->form;
+        }
+
+        return false;
     }
 } 

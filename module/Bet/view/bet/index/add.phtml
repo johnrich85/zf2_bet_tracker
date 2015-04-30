@@ -1,52 +1,15 @@
 <h1> Submit a new bet</h1>
 
-<?php echo $this->form()->openTag($form);?>
+<?php
 
-        <?php
-            $form->setAttribute('action', $this->url('bet', array('action' => 'add')));
-            $form->prepare();
+echo $this->form()->openTag($form);
 
-            echo $this->formHidden($form->get('id'));
-            //TODO user_accounts - remove
-            echo $this->formHidden($form->get('userId'));
-        ?>
+$form->setAttribute('action', $this->url('bet', array('action' => 'add')));
+$form->prepare();
 
-            <div class="form-group">
-                <?php
-                echo $this->formRow($form->get('name'));
-                ?>
-            </div>
+echo $this->formHidden($form->get('id'));
+//TODO user_accounts - remove
+echo $this->formHidden($form->get('userId'));
 
-            <div class="form-group">
-                <?php
-                echo $this->formRow($form->get('date'));
-                ?>
-            </div>
-
-            <div class="form-group">
-                <?php
-                echo $this->formRow($form->get('amount'));
-                ?>
-            </div>
-
-            <div class="form-group">
-                <?php
-                echo $this->formRow($form->get('return'));
-                ?>
-            </div>
-
-
-        <div class="checkbox">
-            <?php
-                echo $this->formLabel($form->get('successful'));
-                echo $this->formCheckbox($form->get('successful'));
-            ?>
-        </div>
-
-
-        <?php
-        echo $this->formInput($form->get('submit'));
-        ?>
-
-
-<?php echo $this->form()->closeTag($form);
+echo $this->partial('partials/bet/form', array('form' => $form));
+echo $this->form()->closeTag($form);

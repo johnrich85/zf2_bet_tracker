@@ -10,11 +10,11 @@ namespace Bet\Form;
 
 use Zend\Form\Form;
 
-class EntryForm extends Form {
+class DeleteForm extends Form {
 
     public function __construct($name = null) {
 
-        parent::__construct('entry');
+        parent::__construct('delete');
         $this->setAttribute('method', 'post');
 
         $this->add(array(
@@ -25,74 +25,38 @@ class EntryForm extends Form {
                 )
         ));
 
-        //TODO user_accounts - remove
         $this->add(array(
             'name' => 'userId',
             'attributes' => array(
                 'type'  => 'hidden',
-                'placeholder' => 'ID',
-                'value' => '1',
-            ),
-            'value' => '1',
+                'placeholder' => 'userId'
+            )
         ));
 
         $this->add(array(
             'name' => 'name',
             'attributes' => array(
                 'type'  => 'text',
-                'placeholder' => 'Name / Title',
                 'class' => 'form-control'
             )
         ));
 
         $this->add(array(
-            'name' => 'date',
-            'type' => 'date',
-            'options' => array(
-                'format' => 'Y-m-d',
-            ),
-            'attributes' => array(
-                'required'  => 'required',
-                'class' => 'form-control'
-            ),
-        ));
-
-        $this->add(array(
-            'name' => 'amount',
+            'name' => 'confirmation',
             'attributes' => array(
                 'type'  => 'text',
-                'placeholder' => 'Bet amount',
+                'placeholder' => 'Enter The bet name here.',
                 'class' => 'form-control'
             )
-        ));
-
-        $this->add(array(
-            'name' => 'return',
-            'attributes' => array(
-                'type'  => 'text',
-                'placeholder' => 'Total return',
-                'class' => 'form-control'
-            )
-        ));
-
-        $this->add(array(
-            'name' => 'successful',
-            'type'  => 'checkbox',
-            'options' => array(
-                'label' => 'Enter as a winning bet?',
-                'use_hidden_element' => true,
-                'checked_value' => '1',
-                'unchecked_value' => '0'
-            )
-
         ));
 
         $this->add(array(
             'name' => 'submit',
             'attributes' => array(
                 'type'  => 'submit',
-                'value' => 'Add',
-                'id' => 'submitbutton',
+                'value' => 'Delete',
+                'id' => 'submitbutton btn btn-danger',
+                'class' => 'btn btn-danger',
             ),
         ));
     }

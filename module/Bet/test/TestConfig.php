@@ -1,7 +1,19 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: john
- * Date: 29/04/15
- * Time: 15:43
- */
+return array(
+    'modules' => array(
+        'Application',
+        'Bankroll',
+        'Bet',
+        'DoctrineModule',
+        'DoctrineORMModule',
+    ),
+    'module_listener_options' => array(
+        'config_glob_paths'    => array(
+            '../../../config/autoload/{,*.}{global,local}.php',
+        ),
+        'module_paths' => array(
+            'module',
+            'vendor',
+        ),
+    ),
+);

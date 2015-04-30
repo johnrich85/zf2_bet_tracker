@@ -101,7 +101,7 @@ echo $this->flashMessenger()->render();
 
         <?php foreach($bets as $bet) : ?>
             <tr>
-                <td><?php echo $bet->getName() ?></td>
+                <td><a href="/bet/edit/<?php echo $bet->getId() ?>"><?php echo $bet->getName() ?></a></td>
                 <td><?php echo $bet->getSuccessful() == 1 ? '<span class="label label-success">Win</span>' : '<span class="label label-danger">Lose</span>' ?></td>
                 <td><?php echo $bet->getDate() ?></td>
                 <td><?php echo $bet->getAmount() ?></td>

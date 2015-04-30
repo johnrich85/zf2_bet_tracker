@@ -3,11 +3,11 @@
 namespace Bet\Controller;
 
 use Bet\Entity\Bet;
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\AppClasses\Controller\TaController;
 use Zend\View\Model\ViewModel;
 use Bet\Form\EntryForm;
 
-class IndexController extends AbstractActionController
+class IndexController extends TaController
 {
     /**
      * @var \Bet\Service\BetService
@@ -20,21 +20,17 @@ class IndexController extends AbstractActionController
     protected $bankrollService;
 
     /**
-     * @var ViewModel
-     */
-    protected $viewModel;
-
-    /**
      * @param $betService
      * @param $bankrollService
+     * @param $messageBag
      */
-    public function __construct($betService, $bankrollService) {
+    public function __construct(\Bet\Service\BetService $betService,
+                                \Bankroll\Service\BankrollService $bankrollService,
+                                \Illuminate\Support\MessageBag $messageBag) {
+
         $this->betService = $betService;
         $this->bankrollService = $bankrollService;
-
-        $this->viewModel = new ViewModel(array(
-            'bankroll' => $this->bankrollService->getById(1)
-        ));
+        $this->messageBag = $messageBag;
     }
 
     /**
@@ -56,13 +52,12 @@ class IndexController extends AbstractActionController
 
         $bets = $this->betService->getPaginatedList($pageNum,$params);
 
-        $this->viewModel->setVariables(array(
+        return $this->fetchView(array(
             "bets" => $bets,
-            "winning" => $this->betService->getBetCount(1),
-            "losing" => $this->betService->getBetCount(0)
+            "winning" => $this->betService->getBetCountByStatus(1),
+            "losing" => $this->betService->getBetCountByStatus(0),
+            "bankroll" => $this->bankrollService->getById(1)
         ));
-
-        return $this->viewModel;
 
     }
 
@@ -84,14 +79,13 @@ class IndexController extends AbstractActionController
             }
         }
 
-        return new ViewModel(array('form' => $form));
+        return $this->fetchView(array('form' => $form));
 
     }
 
     /**
      * Update bets.
      *
-     * @todo fix this, add option to UI & add all form fields.
      * @return \Zend\Http\Response|ViewModel
      */
     public function editAction() {
@@ -103,18 +97,14 @@ class IndexController extends AbstractActionController
             $result = $this->betService->update($request->getPost());
 
             if ($result) {
-                return $this->redirect()->toRoute('bet', array(
-                    'controller' => 'index',
-                    'action' =>  'edit',
-                    'id' => $this->params('id')
-                ));
+                $this->messageBag->add('info','Great Success! Bet updated...');
             }
         }
         else {
             $form = $this->betService->getEntryForm($this->params('id'));
         }
 
-        return new ViewModel(array('form' => $form));
+        return $this->fetchView(array('form' => $form));
 
     }
 
@@ -127,17 +117,20 @@ class IndexController extends AbstractActionController
     public function deleteAction() {
 
         $request = $this->getRequest();
+        $id = $this->params('id');
+        $form = $this->betService->getDeleteForm($id);
 
-        if ( !$this->params('id') || !$request->getPost('confirm') ) {
-            $this->flashMessenger()->addMessage('To delete an entry, please browse to the management page, press delete & click "ok" to confirm you wish to delete it');
+        if(!$id) {
+            return $this->notFoundAction();
+        }
+        elseif(!$form) {
             return $this->redirect()->toRoute('bet');
         }
 
-        $result = $this->betService->delete($this->params('id'));
-        $message = ($result == true ? 'Entry deleted successfully' : 'Unable to delete entry, please try again.');
-        $this->flashMessenger()->addMessage($message);
+        if ( $request->isPost() ) {
+            //TODO
+        }
 
-        return $this->redirect()->toRoute('bet');
-
+        return $this->fetchView(array('form' => $form));
     }
 }
