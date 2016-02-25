@@ -1,0 +1,21 @@
+<?php if ($messages->has('info')) : ?>
+<div class="messages alert alert-info">
+    <ul class="pagination">
+        <?php foreach($messages->get('info') as $msg) : ?>
+            <li> <?php echo $msg ?></li>
+        <?php endforeach; ?>
+    </ul>
+    <a href="#" class="close" data-dismiss="alert">&times;</a>
+</div>
+<?php endif; ?>
+
+<?php if ($messages->has('error')) : ?>
+    <div class="messages alert alert-danger">
+        <ul class="pagination">
+            <?php foreach($messages->get('info') as $msg) : ?>
+                <li> <?php echo $msg ?></li>
+            <?php endforeach; ?>
+        </ul>
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+    </div>
+<?php endif; ?>

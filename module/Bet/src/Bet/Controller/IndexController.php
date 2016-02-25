@@ -3,52 +3,67 @@
 namespace Bet\Controller;
 
 use Bet\Entity\Bet;
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\AppClasses\Controller\TaController;
 use Zend\View\Model\ViewModel;
 use Bet\Form\EntryForm;
 
-class IndexController extends AbstractActionController
+class IndexController extends TaController
 {
-    //Services
+    /**
+     * @var \Bet\Service\BetService
+     */
     protected $betService;
+
+    /**
+     * @var \Bankroll\Service\BankrollService
+     */
     protected $bankrollService;
 
-    protected $viewModel;
+    /**
+     * @param $betService
+     * @param $bankrollService
+     * @param $messageBag
+     */
+    public function __construct(\Bet\Service\BetService $betService,
+                                \Bankroll\Service\BankrollService $bankrollService,
+                                \Illuminate\Support\MessageBag $messageBag) {
 
-    public function __construct($betService, $bankrollService) {
         $this->betService = $betService;
         $this->bankrollService = $bankrollService;
-
-        $this->viewModel = new ViewModel(array(
-            'bankroll' => $this->bankrollService->getById(1)
-        ));
+        $this->messageBag = $messageBag;
     }
 
-    //Todo : create users & restrict results & add/edit permissions to existing users.
+    /**
+     * Lists bets.
+     *
+     * @todo create users & add ACL.
+     * @return ViewModel
+     */
     public function indexAction()
     {
         $pageNum = $this->params()->fromQuery('p');
-
-        //Todo: different action for successful betz
         $params = array();
-        if($this->params()->fromQuery('successful'))
+
+        $successfulFilter = $this->params()->fromQuery('successful');
+        if($successfulFilter)
         {
-            $params['successful'] = $this->params()->fromQuery('successful');
+            $params['successful'] = $successfulFilter;
         }
 
         $bets = $this->betService->getPaginatedList($pageNum,$params);
 
-        $this->viewModel->setVariables(array(
+        return $this->fetchView(array(
             "bets" => $bets,
             "winning" => $this->betService->getBetCount(1),
-            "losing" => $this->betService->getBetCount(0)
+            "losing" => $this->betService->getBetCount(0),
+            "bankroll" => $this->bankrollService->getById(1)
         ));
-
-        return $this->viewModel;
 
     }
 
     /**
+     * Add bets.
+     *
      * @return \Zend\Http\Response|ViewModel
      */
     public function addAction() {
@@ -59,7 +74,7 @@ class IndexController extends AbstractActionController
             $result = $this->betService
                 ->create($request->getPost());
 
-            if ($result === true) {
+            if ($result) {
                 return $this->redirect()->toRoute('bet');
             }
         }
@@ -78,6 +93,8 @@ class IndexController extends AbstractActionController
     }
 
     /**
+     * Update bets.
+     *
      * @return \Zend\Http\Response|ViewModel
      */
     public function editAction() {
@@ -90,11 +107,7 @@ class IndexController extends AbstractActionController
                 ->update($request->getPost());
 
             if ($result) {
-                return $this->redirect()->toRoute('bet', array(
-                    'controller' => 'index',
-                    'action' =>  'edit',
-                    'id' => $this->params('id')
-                ));
+                $this->messageBag->add('info','Great Success! Bet updated...');
             }
         }
         else {
@@ -117,20 +130,29 @@ class IndexController extends AbstractActionController
         return $view;
     }
 
+    /**
+     * Remove bets.
+     *
+     * @todo implement service method, add to ui.
+     * @return \Zend\Http\Response
+     */
     public function deleteAction() {
 
         $request = $this->getRequest();
+        $id = $this->params('id');
+        $form = $this->betService->getDeleteForm($id);
 
-        if ( !$this->params('id') || !$request->getPost('confirm') ) {
-            $this->flashMessenger()->addMessage('To delete an entry, please browse to the management page, press delete & click "ok" to confirm you wish to delete it');
+        if(!$id) {
+            return $this->notFoundAction();
+        }
+        elseif(!$form) {
             return $this->redirect()->toRoute('bet');
         }
 
-        $result = $this->betService->delete($this->params('id'));
-        $message = ($result == true ? 'Entry deleted successfully' : 'Unable to delete entry, please try again.');
-        $this->flashMessenger()->addMessage($message);
+        if ( $request->isPost() ) {
+            //TODO
+        }
 
-        return $this->redirect()->toRoute('bet');
-
+        return $this->fetchView(array('form' => $form));
     }
 }

@@ -1,4 +1,4 @@
-nbproject
+r nbproject
 ._*
 .~lock.*
 .buildpath
@@ -7,5 +7,5 @@ nbproject
 .project
 .settings
 composer.lock
-vendor/bin
+vendor/*
 config/autoload/doctrine.local.php

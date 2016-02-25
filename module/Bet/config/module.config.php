@@ -1,4 +1,5 @@
 <?php
+namespace Bet;
 
 return array(
 
@@ -27,7 +28,9 @@ return array(
         ),
         'invokables' => array (
             'BetEntity'   => 'Bet\Entity\Bet',
-            'BetForm'     => 'Bet\Form\EntryForm'
+            'BetEntryForm'     => 'Bet\Form\EntryForm',
+            'BetDeleteForm'     => 'Bet\Form\DeleteForm',
+            'MessageBag'  => 'Illuminate\Support\MessageBag'
         )
     ),
 
@@ -37,6 +40,7 @@ return array(
             'bet/index/index' => __DIR__ . '/../view/bet/index/index.phtml',
             'bet/index/update' => __DIR__ . '/../view/bet/index/update.phtml',
             'bet/index/delete' => __DIR__ . '/../view/bet/index/delete.phtml',
+            'partials/bet/form'     => __DIR__ . '/../view/partials/form.phtml',
         ),
     ),
 
@@ -45,7 +49,7 @@ return array(
             'bet_entities' => array(
                 'class' =>'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
-                'paths' => array(__DIR__ . '../../src/Bet/Entity')
+                'paths' => array(__DIR__ . '/../src/' . __NAMESPACE__ . '/Entity')
             ),
 
             'orm_default' => array(

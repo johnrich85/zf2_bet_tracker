@@ -2,12 +2,12 @@
 
 namespace Bet\Service;
 
+use Bet\Repository\BetRepository;
+use Bankroll\Repository\BankrollRepository;
 use Application\AppClasses\Service as TaService;
 use Application\AppInterface\PaginatationProviderInterface;
 use Application\AppTraits\PaginatorProviderTrait;
-use Bankroll\Entity\Bankroll;
-use Bet\Entity\Bet;
-
+use Doctrine\ORM\EntityRepository;
 
 class BetService extends TaService\TaService implements PaginatationProviderInterface {
 
@@ -19,31 +19,21 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
     protected $userId = 1;
 
     /**
-     * @return mixed
+     * @var \Bet\Repository\BetRepository
      */
-    public function getRepository() {
-        return $this->em->getRepository('Bet\Entity\Bet');
-    }
+    protected $betRepository;
 
     /**
-     * @return mixed
+     * @var \Bankroll\Repository\BankrollRepository
      */
-    public function getList() {
-        return $this->getRepository()->findAll();
-    }
+    protected $bankrollRepository;
 
     /**
-     * @param $page
-     * @param $params
-     * @return \Zend\Paginator\Paginator
+     * Constructor
      */
-    public function getPaginatedList($page, $params) {
-        $query = $this->getRepository()->QueryBuilderFindBy($params);
-
-        $paginator = $this->getPaginator($query);
-        $paginator->setCurrentPageNumber($page);
-
-        return $paginator;
+    public function __construct($betRepository, $bankrollRepository) {
+        $this->betRepository = $betRepository;
+        $this->bankrollRepository = $bankrollRepository;
     }
 
     /**
@@ -51,7 +41,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @return mixed
      */
     public function getEntryForm($id = null) {
-        $this->form = $this->sm->get('BetForm');
+        $this->form = $this->sm->get('BetEntryForm');
 
         if (!$id) {
             return $this->form;
@@ -82,7 +72,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
             $bet->exchangeArray($this->form->getData());
             $betValue = $bet->calculateProfitOrLoss();
 
-            $bankroll = $this->em->getRepository('Bankroll\Entity\Bankroll')
+            $bankroll = $this->bankrollRepository
                 ->findOneById($this->userId);
 
             $bankroll->amendAmount($betValue);
@@ -122,7 +112,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
 
             $difference = $bet->calculateProfileLossDifference($oldPL);
 
-            $bankroll = $this->em->getRepository('Bankroll\Entity\Bankroll')
+            $bankroll = $this->bankrollRepository
                 ->findOneById($this->userId);
 
             $bankroll->amendAmount($difference);
@@ -141,6 +131,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      */
     public function getBetCount($successful) {
         $qb = $this->em->createQueryBuilder();
+
         $qb->select('count(bet)')
             ->from('Bet\Entity\Bet', 'bet')
             ->where('bet.successful = :successful')
@@ -157,7 +148,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @throws Exception
      * @todo need logging & graceful handling of exceptions
      */
-    protected function persistBetAndBankroll(Bet $bet, Bankroll $bankroll) {
+    protected function persistBetAndBankroll(\Bet\Entity\Bet $bet, \Bankroll\Entity\Bankroll $bankroll) {
         $this->em->getConnection()->beginTransaction();
 
         try {
@@ -169,5 +160,21 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
             $this->em->getConnection()->rollback();
             throw $e;
         }
+    }
+
+    /**
+     * @param $page
+     * @param $params
+     * @return \Zend\Paginator\Paginator
+     * @throws \Exception
+     */
+    public function getPaginatedList($page, $params) {
+        $query = $this->betRepository
+            ->QueryBuilderFindBy($params);
+
+        $paginator = $this->getPaginator($query);
+        $paginator->setCurrentPageNumber($page);
+
+        return $paginator;
     }
 } 

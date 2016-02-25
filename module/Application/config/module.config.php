@@ -7,6 +7,8 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
+namespace Application;
+
 return array(
     'router' => array(
         'routes' => array(
@@ -99,5 +101,5 @@ return array(
             'routes' => array(
             ),
         ),
-    ),
+    )
 );

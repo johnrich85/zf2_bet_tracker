@@ -177,7 +177,6 @@ class Bet implements InputFilterAwareInterface {
     //Todo: Form related methods - need a better way of doing this
     public function exchangeArray($data)
     {
-        var_dump($data);
         $this->id     = (isset($data['id']))     ? $data['id']     : null;
         $this->userId     = (isset($data['userId']))     ? $data['userId']     : null;
         $this->name = (isset($data['name'])) ? $data['name'] : null;

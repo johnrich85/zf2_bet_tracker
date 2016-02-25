@@ -1,0 +1,34 @@
+<div class="form-group">
+    <?php
+    echo $this->formRow($form->get('name'));
+    ?>
+</div>
+
+<div class="form-group">
+    <?php
+    echo $this->formRow($form->get('date'));
+    ?>
+</div>
+
+<div class="form-group">
+    <?php
+    echo $this->formRow($form->get('amount'));
+    ?>
+</div>
+
+<div class="form-group">
+    <?php
+    echo $this->formRow($form->get('return'));
+    ?>
+</div>
+
+<div class="checkbox">
+    <?php
+    echo $this->formLabel($form->get('successful'));
+    echo $this->formCheckbox($form->get('successful'));
+    ?>
+</div>
+
+<?php
+echo $this->formInput($form->get('submit'));
+?>
