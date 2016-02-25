@@ -146,9 +146,13 @@ class Bet implements InputFilterAwareInterface {
      */
     public function calculateProfitOrLoss()
     {
-        if($this->successful == null || $this->amount == null || $this->return == null)
+        if($this->successful === null ||
+            $this->amount === null ||
+            $this->return === null)
         {
-            Throw new \Exception('Unable to calculate the return, bet is not fully populated.');
+            $message = 'Unable to calculate the return, bet is not fully populated.';
+
+            Throw new \Exception($message);
         }
 
         if ($this->successful != 1)
@@ -157,6 +161,16 @@ class Bet implements InputFilterAwareInterface {
         }
 
         return $this->return - $this->amount;
+    }
+
+    /**
+     * Returns the difference between $value
+     * and the current P/L
+     *
+     * @param $value
+     */
+    public function calculateProfileLossDifference($value) {
+        return  $this->calculateProfitOrLoss() - $value;
     }
 
 

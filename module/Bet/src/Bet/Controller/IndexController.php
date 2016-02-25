@@ -48,31 +48,46 @@ class IndexController extends AbstractActionController
 
     }
 
+    /**
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function addAction() {
-
         $form = $this->betService->getEntryForm();
         $request = $this->getRequest();
 
-        if ( $request->isPost() ) {
-            $result = $this->betService->create($request->getPost());
+        if ($request->isPost()) {
+            $result = $this->betService
+                ->create($request->getPost());
 
             if ($result === true) {
                 return $this->redirect()->toRoute('bet');
             }
         }
 
-        return new ViewModel(array('form' => $form));
+        $view = new ViewModel(
+            array(
+                'form' => $form,
+                'title' => 'Create a new bet'
+            )
+        );
+
+        $view->setTemplate('bet/index/update');
+
+        return $view;
 
     }
 
-    //Todo - fix this, add option to UI & add all form fields.
+    /**
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function editAction() {
-
         $request = $this->getRequest();
 
-        if ( $request->isPost() ) {
+        if ($request->isPost()) {
             $form = $this->betService->getEntryForm();
-            $result = $this->betService->update($request->getPost());
+
+            $result = $this->betService
+                ->update($request->getPost());
 
             if ($result) {
                 return $this->redirect()->toRoute('bet', array(
@@ -83,11 +98,23 @@ class IndexController extends AbstractActionController
             }
         }
         else {
-            $form = $this->betService->getEntryForm($this->params('id'));
+            $form = $this->betService
+                ->getEntryForm($this->params('id'));
         }
 
-        return new ViewModel(array('form' => $form));
+        $form->editMode();
+        $form->prepare();
 
+        $view = new ViewModel(
+            array(
+                'form' => $form,
+                'title' => 'Update bet'
+            )
+        );
+
+        $view->setTemplate('bet/index/update');
+
+        return $view;
     }
 
     public function deleteAction() {

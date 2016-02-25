@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: John
- * Date: 01/05/14
- * Time: 20:47
- */
 
 namespace Bet\Form;
 
@@ -13,8 +7,8 @@ use Zend\Form\Form;
 class EntryForm extends Form {
 
     public function __construct($name = null) {
-
         parent::__construct('entry');
+
         $this->setAttribute('method', 'post');
 
         $this->add(array(
@@ -25,7 +19,6 @@ class EntryForm extends Form {
                 )
         ));
 
-        //TODO user_accounts - remove
         $this->add(array(
             'name' => 'userId',
             'attributes' => array(
@@ -95,5 +88,18 @@ class EntryForm extends Form {
                 'id' => 'submitbutton',
             ),
         ));
+
+        $this->setAttribute('action', '/bet/add');
+    }
+
+    /**
+     * Switches the form to edit mode.
+     */
+    public function editMode() {
+        $ele = $this->get('id');
+        $id = $ele->getValue();
+
+        $this->setAttribute('action', '/bet/edit/'.$id);
+        $this->get('submit')->setValue('Edit');
     }
 } 

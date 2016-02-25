@@ -35,8 +35,7 @@ return array(
         'template_map' => array(
             'layout/layout'           => __DIR__ . '/../../Application/view/layout/layout.phtml',
             'bet/index/index' => __DIR__ . '/../view/bet/index/index.phtml',
-            'bet/index/add' => __DIR__ . '/../view/bet/index/add.phtml',
-            'bet/index/edit' => __DIR__ . '/../view/bet/index/edit.phtml',
+            'bet/index/update' => __DIR__ . '/../view/bet/index/update.phtml',
             'bet/index/delete' => __DIR__ . '/../view/bet/index/delete.phtml',
         ),
     ),
