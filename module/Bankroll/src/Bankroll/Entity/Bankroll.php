@@ -24,6 +24,12 @@ class Bankroll {
     /** @ORM\Column(name="`userId`",type="integer") */
     protected $userId;
 
+    /** @ORM\Column(name="`lastChange`",type="datetime") */
+    protected $lastChange;
+
+    /** @ORM\Column(name="`amount`",type="float") */
+    protected $amount;
+
     /**
      * @return mixed
      */
@@ -31,12 +37,6 @@ class Bankroll {
     {
         return $this->id;
     }
-
-    /** @ORM\Column(name="`lastChange`",type="datetime") */
-    protected $lastChange;
-
-    /** @ORM\Column(name="`amount`",type="float") */
-    protected $amount;
 
     /**
      * @param mixed $amount
@@ -68,6 +68,18 @@ class Bankroll {
     public function getLastChange()
     {
         return $this->lastChange;
+    }
+
+    /**
+     * @param $data
+     */
+    public function populate($data)
+    {
+        foreach($data as $key=>$value) {
+            if(property_exists($this, $key)) {
+                $this->{$key} = $value;
+            }
+        }
     }
 
 

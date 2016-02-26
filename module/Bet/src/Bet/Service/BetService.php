@@ -2,6 +2,8 @@
 
 namespace Bet\Service;
 
+use Bankroll\Entity\Bankroll;
+use Bet\Entity\Bet;
 use Bet\Repository\BetRepository;
 use Bankroll\Repository\BankrollRepository;
 use Application\AppClasses\Service as TaService;
@@ -24,16 +26,16 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
     protected $betRepository;
 
     /**
-     * @var \Bankroll\Repository\BankrollRepository
+     * @var \Bankroll\Service\BankrollService
      */
-    protected $bankrollRepository;
+    protected $bankrollService;
 
     /**
      * Constructor
      */
-    public function __construct($betRepository, $bankrollRepository) {
+    public function __construct($betRepository, $bankrollService) {
         $this->betRepository = $betRepository;
-        $this->bankrollRepository = $bankrollRepository;
+        $this->bankrollService = $bankrollService;
     }
 
     /**
@@ -60,24 +62,21 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @throws Exception
      */
     public function create($data) {
-        if ( !$this->form ) $this->getEntryForm();
+        if (!$this->form) $this->getEntryForm();
 
         $bet = $this->sm->get('BetEntity');
 
         $this->form->setInputFilter($bet->getInputFilter());
         $this->form->setData($data);
 
-        if ( $this->form->isValid() ) {
-
+        if ($this->form->isValid()) {
             $bet->exchangeArray($this->form->getData());
             $betValue = $bet->calculateProfitOrLoss();
 
-            $bankroll = $this->bankrollRepository
-                ->findOneById($this->userId);
+            $bankroll = $this->bankrollService
+                ->amendAmount($this->userId, $betValue);
 
-            $bankroll->amendAmount($betValue);
-
-            $this->persistBetAndBankroll($bet, $bankroll);
+            $this->persistTransactional($bet, $bankroll);
 
             return true;
         }
@@ -112,12 +111,10 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
 
             $difference = $bet->calculateProfileLossDifference($oldPL);
 
-            $bankroll = $this->bankrollRepository
-                ->findOneById($this->userId);
+            $bankroll = $this->bankrollService
+                ->amendAmount($this->userId, $difference);
 
-            $bankroll->amendAmount($difference);
-
-            $this->persistBetAndBankroll($bet, $bankroll);
+            $this->persistTransactional($bet, $bankroll);
 
             return true;
         }
@@ -148,18 +145,27 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @throws Exception
      * @todo need logging & graceful handling of exceptions
      */
-    protected function persistBetAndBankroll(\Bet\Entity\Bet $bet, \Bankroll\Entity\Bankroll $bankroll) {
-        $this->em->getConnection()->beginTransaction();
-
+    public function persist(\Bet\Entity\Bet $bet) {
         try {
             $this->em->persist($bet);
-            $this->em->persist($bankroll);
             $this->em->flush();
-            $this->em->getConnection()->commit();
         } catch (Exception $e) {
             $this->em->getConnection()->rollback();
-            throw $e;
         }
+    }
+
+    /**
+     * @param Bet $bet
+     * @param Bankroll $bankroll
+     */
+    protected function persistTransactional(Bet $bet, Bankroll $bankroll) {
+        $this->em->getConnection()->beginTransaction();
+
+        $this->persist($bet);
+
+        $this->bankrollService->persist($bankroll);
+
+        $this->em->getConnection()->commit();
     }
 
     /**

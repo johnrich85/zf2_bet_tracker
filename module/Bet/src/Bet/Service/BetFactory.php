@@ -10,11 +10,15 @@ class BetFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
 
-        $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
+        $entityManager = $serviceLocator
+            ->get('doctrine.entitymanager.orm_default');
+
+        $bankrollService = $serviceLocator
+            ->get('BankrollService');
 
         $BetService = new BetService(
             $entityManager->getRepository('Bet\Entity\Bet'),
-            $entityManager->getRepository('Bankroll\Entity\Bankroll')
+            $bankrollService
         );
         $BetService->setServiceManager($serviceLocator);
         $BetService->setEntityManager($entityManager);

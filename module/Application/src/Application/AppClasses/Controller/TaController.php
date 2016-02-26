@@ -28,10 +28,10 @@ class TaController extends AbstractActionController{
      * @return ViewModel
      */
     public function fetchView($data = array()) {
-
         if(!$this->messageBag) {
             $this->messageBag = $this->getServiceLocator()->get('MessageBag');
         }
+
         $this->layout()->messages = $this->messageBag;
 
         return new ViewModel($data);
