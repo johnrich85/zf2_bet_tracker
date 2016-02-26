@@ -25,9 +25,21 @@ class BankrollService extends TaService\TaService {
         $this->bankrollRepository = $bankrollRepository;
     }
 
-    public function create()
+    /**
+     * @param array $data
+     * @todo validation
+     * @return Bankroll
+     */
+    public function create($data = array())
     {
+        $bankroll = $this->sm
+            ->get('BankrollEntity');
 
+        $bankroll->populate($data);
+
+        $this->persist($bankroll);
+
+        return $bankroll;
     }
 
     /**

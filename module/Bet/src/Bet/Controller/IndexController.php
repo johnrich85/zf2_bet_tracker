@@ -137,16 +137,17 @@ class IndexController extends TaController
      * @return \Zend\Http\Response
      */
     public function deleteAction() {
-
         $request = $this->getRequest();
         $id = $this->params('id');
+
         $form = $this->betService->getDeleteForm($id);
 
         if(!$id) {
             return $this->notFoundAction();
         }
         elseif(!$form) {
-            return $this->redirect()->toRoute('bet');
+            return $this->redirect()
+                ->toRoute('bet');
         }
 
         if ( $request->isPost() ) {

@@ -95,6 +95,7 @@ echo $this->flashMessenger()->render();
             <th>Date <i class="fa fa-sort"></i></th>
             <th>Bet amount <i class="fa fa-sort"></i></th>
             <th>Potential Return <i class="fa fa-sort"></i></th>
+            <th>Actions <i class="fa fa-cogs"></i></th>
         </tr>
         </thead>
         <tbody>
@@ -106,6 +107,10 @@ echo $this->flashMessenger()->render();
                 <td><?php echo $bet->getDate() ?></td>
                 <td><?php echo $bet->getAmount() ?></td>
                 <td><?php echo $bet->getReturn() ?></td>
+                <td>
+                    <a href="/bet/edit/<?php echo $bet->getId() ?>">Edit</a> |
+                    <a href="/bet/delete/<?php echo $bet->getId() ?>">Delete</a>
+                </td>
             </tr>
         <?php endforeach; ?>
 
