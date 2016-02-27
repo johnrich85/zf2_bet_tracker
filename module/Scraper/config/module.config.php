@@ -18,9 +18,28 @@ return array(
             )
         )
     ),
+    'router' => array(
+        'routes' => array(
+            'scraper' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route' => '/scraper',
+                    'defaults' => array(
+                        'controller' => 'ScraperController',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
+        ),
+    ),
     'service_manager' => array(
         'factories' => array(
-            'GuzzleScraper'     => 'Scraper\Scraper\GuzzleScraper',
+            'GuzzleScraper'     => 'Scraper\Scraper\GuzzleScraper'
+        ),
+    ),
+    'view_manager' => array(
+        'template_map' => array(
+            'scraper/index/index' => __DIR__ . '/../view/scraper/index/index.phtml',
         ),
     ),
 );

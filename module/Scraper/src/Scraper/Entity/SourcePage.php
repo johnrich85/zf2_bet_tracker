@@ -1,11 +1,10 @@
-<?php
-
-namespace Scraper\Entity;
+<?php namespace Scraper\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Scraper\Repository\SourcePageRepository")
  */
 
 class SourcePage {
