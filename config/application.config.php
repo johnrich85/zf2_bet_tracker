@@ -7,6 +7,7 @@ return array(
         'Bet',
         'DoctrineModule',
         'DoctrineORMModule',
+        'Scraper',
         'ZendDeveloperTools',
     ),
 

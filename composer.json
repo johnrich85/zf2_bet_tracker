@@ -12,6 +12,7 @@
         "zendframework/zendframework": "2.3.*",
         "doctrine/doctrine-orm-module": "0.7.*",
         "zendframework/zend-developer-tools": "dev-master",
-        "illuminate/support": "5.0.28"
+        "illuminate/support": "5.0.28",
+        "guzzlehttp/guzzle": "~6.0"
     }
 }

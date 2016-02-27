@@ -61,8 +61,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @return mixed
      */
     public function getDeleteForm($id = null) {
-        $this->form = $this->sm
-            ->get('BetDeleteForm');
+        $this->form = $this->sm->get('BetDeleteForm');
 
         if (!$id) {
             return $this->form;
