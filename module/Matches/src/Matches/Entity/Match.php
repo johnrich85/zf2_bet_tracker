@@ -39,7 +39,7 @@ class Match {
     protected $sport_id;
 
     /** @ORM\Column(name="`event`",type="integer") */
-    protected $event;
+    protected $event_id;
 
     /** @ORM\Column(name="`winner`",type="integer") */
     protected $winner;
@@ -61,6 +61,12 @@ class Match {
      * @ORM\JoinColumn(name="sport_id", referencedColumnName="id")
      */
     protected $sport;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Event", inversedBy="matches")
+     * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
+     */
+    protected $event;
 
     /**
      * @return mixed
