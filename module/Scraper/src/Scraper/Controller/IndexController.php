@@ -1,7 +1,7 @@
 <?php namespace Scraper\Controller;
 
 use Application\AppClasses\Controller\TaController;
-use Scraper\Parser\GosuLoLParser;
+use Scraper\Parsers\GosuLoLParser;
 use Scraper\Repository\SourcePageRepository;
 use Scraper\Scraper\GuzzleScraper;
 

@@ -13,6 +13,8 @@
         "doctrine/doctrine-orm-module": "0.7.*",
         "zendframework/zend-developer-tools": "dev-master",
         "illuminate/support": "5.0.28",
-        "guzzlehttp/guzzle": "~6.0"
+        "guzzlehttp/guzzle": "~6.0",
+        "symfony/dom-crawler": "~3.0",
+        "symfony/css-selector": "~3.0"
     }
 }

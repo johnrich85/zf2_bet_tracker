@@ -1,4 +1,4 @@
-<?php namespace Scraper\Parser\Contract;
+<?php namespace Scraper\Parsers\Contract;
 
 /**
  * Defines the public interface for
