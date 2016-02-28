@@ -5,7 +5,7 @@ use Application\AppClasses\Service as TaService;
 class MatchesService extends TaService\TaService {
 
     /**
-     * @var \Bankroll\Repository\MatchesRepository
+     * @var
      */
     protected $matchesRepository;
 
@@ -14,5 +14,20 @@ class MatchesService extends TaService\TaService {
      */
     public function __construct($matchesRepository) {
         $this->matchesRepository = $matchesRepository;
+    }
+
+    /**
+     * Persists a given match
+     *
+     * @throws Exception
+     * @todo need logging & graceful handling of exceptions
+     */
+    public function persist(\Matches\Entity\Match $match) {
+        try {
+            $this->em->persist($match);
+            $this->em->flush();
+        } catch (Exception $e) {
+            $this->em->getConnection()->rollback();
+        }
     }
 } 

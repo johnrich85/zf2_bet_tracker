@@ -38,7 +38,7 @@ class Match {
     /** @ORM\Column(name="`sport_id`",type="integer") */
     protected $sport_id;
 
-    /** @ORM\Column(name="`event`",type="integer") */
+    /** @ORM\Column(name="`event_id`",type="integer") */
     protected $event_id;
 
     /** @ORM\Column(name="`winner`",type="integer") */
@@ -46,25 +46,25 @@ class Match {
 
     /**
      * @ORM\ManyToOne(targetEntity="Team", inversedBy="matches_home")
-     * @ORM\JoinColumn(name="first_team_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="`first_team_id`", referencedColumnName="id")
      */
     protected $first_team;
 
     /**
      * @ORM\ManyToOne(targetEntity="Team", inversedBy="matches_away")
-     * @ORM\JoinColumn(name="second_team_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="`second_team_id`", referencedColumnName="id")
      */
     protected $second_team;
 
     /**
      * @ORM\ManyToOne(targetEntity="Sport", inversedBy="matches")
-     * @ORM\JoinColumn(name="sport_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="`sport_id`", referencedColumnName="id")
      */
     protected $sport;
 
     /**
      * @ORM\ManyToOne(targetEntity="Event", inversedBy="matches")
-     * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="`event_id`", referencedColumnName="id")
      */
     protected $event;
 

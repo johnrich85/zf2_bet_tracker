@@ -34,7 +34,8 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'GuzzleScraper'     => 'Scraper\Scraper\GuzzleScraper'
+            'GuzzleScraper'     => 'Scraper\Scraper\GuzzleScraper',
+            'GosuLoLCaster'     => 'Scraper\Casters\Factory\GosuLoLFactory'
         ),
     ),
     'view_manager' => array(

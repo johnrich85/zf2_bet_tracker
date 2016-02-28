@@ -3,6 +3,7 @@
 use Psr\Http\Message\ResponseInterface;
 use Scraper\Parsers\Contract\Parser;
 use Symfony\Component\DomCrawler\Crawler;
+use Zend\Form\Element\DateTime;
 
 class GosuLoLParser implements Parser
 {
@@ -13,24 +14,35 @@ class GosuLoLParser implements Parser
     protected $response;
 
     /**
+     * @var DateTime
+     */
+    protected $start_time;
+
+    /**
      * GosuLoLParser constructor.
      * @param ResponseInterface $response
      */
     public function __construct(ResponseInterface $response) {
         $this->response = $response;
+        $this->start_time = new DateTime();
     }
 
     /**
-     * @return array
+     * @return array|bool
      */
     public function parse() {
         $crawler = new Crawler($this->getContent());
 
         $filter = $crawler
-            ->filter('table.simple')
-            ->eq(1);
+            ->filter('#col1 .box')
+            ->eq(1)
+            ->filter('table.simple');
 
         $rows = $filter->filter('tr');
+
+        if($rows->count() == 0) {
+            return false;
+        }
 
         return $this->getMatches($rows);
     }
@@ -48,24 +60,69 @@ class GosuLoLParser implements Parser
             return $payload;
         }
 
+        $sport = 1;
+
         foreach($rows as $i=>$content) {
             $crawler = new Crawler($content);
 
-            $opponent1 = $crawler->filter('.opp1 span')
-                ->first()
-                ->text();
+            $opponent1 = $this->getFirstText($crawler, '.opp1 span');
+            $opponent2 = $this->getLastText($crawler, '.opp2 span');
+            $date = $this->getLiveInTimer($crawler);
+            $event = $this->getEventHref($crawler);
 
-            $opponent2 = $crawler->filter('.opp2 span')
-                ->last()
-                ->text();
+            $match = compact('opponent1', 'opponent2', 'date', 'event','sport');
 
-            $payload[] = array(
-                'opponent_1' => $opponent1,
-                'opponent_2' => $opponent2,
-            );
+            $payload[] = $match;
         }
 
         return $payload;
+    }
+
+    /**
+     * @param $crawler
+     * @param $selector
+     * @return mixed
+     */
+    protected function getLastText($crawler, $selector) {
+        $text = $crawler->filter($selector)
+            ->last()
+            ->text();
+
+        return trim($text);
+    }
+
+    /**
+     * @param $crawler
+     * @param $selector
+     * @return mixed
+     */
+    protected function getFirstText($crawler, $selector) {
+        $text = $crawler->filter($selector)
+            ->first()
+            ->text();
+
+        return trim($text);
+    }
+
+    /**
+     * @param $crawler
+     * @return mixed
+     */
+    protected function getEventHref($crawler) {
+        return $crawler->filter('.tournament a')
+            ->first()
+            ->attr('href');
+    }
+
+    /**
+     * @param $crawler
+     * @return mixed
+     */
+    protected function getLiveInTimer($crawler) {
+        $date = $crawler->filter('.live-in')
+            ->text();
+
+        return trim($date);
     }
 
     /**
