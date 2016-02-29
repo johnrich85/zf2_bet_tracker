@@ -11,6 +11,22 @@ class ScraperService extends TaService\TaService {
 
     }
 
+    /**
+     * @param $entities
+     * @todo validation
+     */
+    public function persistEntities($entities) {
+        foreach($entities as $entity) {
+            try {
+                $this->em->persist($entity);
+            } catch (Exception $e) {
+                continue;
+            }
+        }
+
+        $this->em->flush();
+    }
+
     public function persist(\Doctrine\Entity $entity) {
         try {
             $this->em->persist($entity);

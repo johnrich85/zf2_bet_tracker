@@ -1,6 +1,8 @@
 <?php namespace Matches\Repository;
 
 use Application\AppClasses\Repository as AppRepository;
+use Doctrine\ORM\Query\Expr\Join;
+use Matches\Entity\Event;
 
 class EventRepository extends AppRepository\TaRepository {
 
@@ -13,15 +15,37 @@ class EventRepository extends AppRepository\TaRepository {
     public function findEventBySource($source) {
         $qb = $this->_em->createQueryBuilder();
 
-        $qb->select('Event')
-            ->from('Matches\Entity\Event', 'Event')
-            ->join('Matches\Entity\EventSource', 'es')
-            ->where('es.name = :source')
+        $qb->select('e')
+            ->from('Matches\Entity\Event', 'e')
+            ->join('Matches\Entity\EventSource', 'es', Join::WITH, $qb->expr()->eq('e.id', 'es.event'))
+            ->where('es.url = :source')
             ->setParameters(array('source' => $source));
 
-        $event = $qb->getQuery()->getSingleScalarResult();
+        $event = $qb->getQuery()->getOneOrNullResult();
 
         return $event;
     }
 
+    /**
+     * @return Event|mixed
+     */
+    public function findDefault() {
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('e')
+            ->from('Matches\Entity\Event', 'e')
+            ->where("e.name = 'Default'");
+
+        $event = $qb->getQuery()->getOneOrNullResult();
+
+        if(!$event) {
+            $event = new Event();
+            $event->setName('Default');
+
+            $this->_em->persist($event);
+            $this->_em->flush();
+        }
+
+        return $event;
+    }
 }

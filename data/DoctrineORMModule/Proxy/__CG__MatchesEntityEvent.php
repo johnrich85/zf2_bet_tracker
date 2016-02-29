@@ -64,10 +64,10 @@ class Event extends \Matches\Entity\Event implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'id', 'name', 'matches');
+            return array('__isInitialized__', 'id', 'name', 'matches', 'sources');
         }
 
-        return array('__isInitialized__', 'id', 'name', 'matches');
+        return array('__isInitialized__', 'id', 'name', 'matches', 'sources');
     }
 
     /**

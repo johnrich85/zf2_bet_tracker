@@ -7,6 +7,7 @@ use Scraper\Casters\GosuLoLCaster;
 use Scraper\Parsers\GosuLoLParser;
 use Scraper\Repository\SourcePageRepository;
 use Scraper\Scraper\GuzzleScraper;
+use Scraper\Service\ScraperService;
 
 class IndexController extends TaController
 {
@@ -18,13 +19,20 @@ class IndexController extends TaController
     /**
      * @var MatchesService
      */
-    protected $matchesService;
+    protected $scraperService;
 
-    public function __construct(SourcePageRepository $repo, MatchesService $matchesService) {
+    /**
+     * @param SourcePageRepository $repo
+     * @param ScraperService $scraperService
+     */
+    public function __construct(SourcePageRepository $repo,ScraperService $scraperService) {
         $this->sourcePageRepo = $repo;
-        $this->matchesService = $matchesService;
+        $this->scraperService = $scraperService;
     }
 
+    /**
+     *
+     */
     public function indexAction()
     {
         $page = $this->sourcePageRepo
@@ -40,18 +48,15 @@ class IndexController extends TaController
             die();
         }
 
-        $parser = new GosuLoLParser($response);
+        $caster = $this->getServiceLocator()
+            ->get('GosuLoLCaster');
+
+        $parser = new GosuLoLParser($response, $caster);
 
         $data = $parser->parse();
 
         if($data) {
-            $caster = $this->getServiceLocator()
-                ->get('GosuLoLCaster');
-
-            $caster->cast($data);
-
-            $entities = $caster->getEntities();
-
+            $this->scraperService->persistEntities($data);
         }
         else {
             echo "Parser returned no data";

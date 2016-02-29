@@ -41,10 +41,10 @@ class Module
                     $repo = $entityManager
                         ->getRepository('Scraper\Entity\SourcePage');
 
-                    $matchesService = $cm->getServiceLocator()
-                        ->get('MatchesService');
+                    $scraperService = $cm->getServiceLocator()
+                        ->get('ScraperService');
 
-                    return new IndexController($repo, $matchesService);
+                    return new IndexController($repo, $scraperService);
                 },
             ),
         );

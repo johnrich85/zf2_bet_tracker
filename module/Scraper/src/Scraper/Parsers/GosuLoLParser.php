@@ -1,6 +1,7 @@
 <?php namespace Scraper\Parsers;
 
 use Psr\Http\Message\ResponseInterface;
+use Scraper\Casters\Contract\Caster;
 use Scraper\Parsers\Contract\Parser;
 use Symfony\Component\DomCrawler\Crawler;
 use Zend\Form\Element\DateTime;
@@ -14,6 +15,11 @@ class GosuLoLParser implements Parser
     protected $response;
 
     /**
+     * @var
+     */
+    protected $entityCaster;
+
+    /**
      * @var DateTime
      */
     protected $start_time;
@@ -22,8 +28,9 @@ class GosuLoLParser implements Parser
      * GosuLoLParser constructor.
      * @param ResponseInterface $response
      */
-    public function __construct(ResponseInterface $response) {
+    public function __construct(ResponseInterface $response, Caster $entityCaster) {
         $this->response = $response;
+        $this->entityCaster = $entityCaster;
         $this->start_time = new DateTime();
     }
 
@@ -54,10 +61,8 @@ class GosuLoLParser implements Parser
      * @return array
      */
     protected function getMatches($rows) {
-        $payload = array();
-
         if(iterator_count($rows) == 0) {
-            return $payload;
+            return array();
         }
 
         $sport = 1;
@@ -65,17 +70,17 @@ class GosuLoLParser implements Parser
         foreach($rows as $i=>$content) {
             $crawler = new Crawler($content);
 
-            $opponent1 = $this->getFirstText($crawler, '.opp1 span');
-            $opponent2 = $this->getLastText($crawler, '.opp2 span');
+            $first_team = $this->getFirstText($crawler, '.opp1 span');
+            $second_team = $this->getLastText($crawler, '.opp2 span');
             $date = $this->getLiveInTimer($crawler);
             $event = $this->getEventHref($crawler);
 
-            $match = compact('opponent1', 'opponent2', 'date', 'event','sport');
+            $match = compact('first_team', 'second_team', 'date', 'event','sport');
 
-            $payload[] = $match;
+            $this->entityCaster->cast($match);
         }
 
-        return $payload;
+        return $this->entityCaster->getEntities();
     }
 
     /**

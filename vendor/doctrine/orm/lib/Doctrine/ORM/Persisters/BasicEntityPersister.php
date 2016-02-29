@@ -1468,8 +1468,6 @@ class BasicEntityPersister
             }
         }
 
-
-
         return $columns;
     }
 

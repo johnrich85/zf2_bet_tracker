@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(name="match_event")
+ * @ORM\Entity(repositoryClass="Matches\Repository\EventRepository")
  */
 
 class Event {
@@ -23,6 +24,11 @@ class Event {
      * @ORM\OneToMany(targetEntity="Match", mappedBy="event", fetch="EAGER")
      */
     protected $matches;
+
+    /**
+     * @ORM\OneToMany(targetEntity="EventSource", mappedBy="event", fetch="EAGER")
+     */
+    protected $sources;
 
     /**
      * @return mixed

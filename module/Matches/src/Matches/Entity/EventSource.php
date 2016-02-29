@@ -5,7 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="match_event")
+ * @ORM\Table(name="match_event_source")
  */
 
 class EventSource {
@@ -16,11 +16,12 @@ class EventSource {
      */
     protected $id;
 
-    /** @ORM\Column(name="`name`",type="string") */
-    protected $name;
+    /** @ORM\Column(name="`url`",type="string") */
+    protected $url;
 
     /**
-     * @ORM\OneToMany(targetEntity="Match", mappedBy="event", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Event", inversedBy="sources")
+     * @ORM\JoinColumn(name="`event_id`", referencedColumnName="id")
      */
-    protected $matches;
+    protected $event;
 }
