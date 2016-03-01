@@ -1,7 +1,7 @@
 <?php namespace Matches\Service;
 
 use Application\AppClasses\Service as TaService;
-use Matches\Validator\Match;
+use Matches\Validator\Contract\Validator;
 
 class MatchesService extends TaService\TaService {
 
@@ -18,7 +18,7 @@ class MatchesService extends TaService\TaService {
     /**
      * Constructor
      */
-    public function __construct($matchesRepository, Match $matchValidator) {
+    public function __construct($matchesRepository, Validator $matchValidator) {
         $this->matchesRepository = $matchesRepository;
         $this->matchValidator = $matchValidator;
     }
