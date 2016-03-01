@@ -38,14 +38,17 @@ class IndexController extends TaController
         $page = $this->sourcePageRepo
             ->eagerFind(1);
 
+        $variables = [];
+
         try{
             $scraper = new GuzzleScraper($page);
             $scraper->connect();
             $response = $scraper->get();
         }
         catch(\Exception $e) {
-            echo $e->getMessage();
-            die();
+            $variables['message'] = $e->getMessage();
+
+            return $this->fetchView($variables, 'scraper/connection-error');
         }
 
         $caster = $this->getServiceLocator()
@@ -61,5 +64,7 @@ class IndexController extends TaController
         else {
             echo "Parser returned no data";
         }
+
+        return $this->fetchView($variables);
     }
 }

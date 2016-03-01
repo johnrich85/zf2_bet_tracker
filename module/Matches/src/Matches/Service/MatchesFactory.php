@@ -15,7 +15,8 @@ class MatchesFactory implements FactoryInterface
             ->get('doctrine.entitymanager.orm_default');
 
         $matchesService = new MatchesService(
-            $entityManager->getRepository('Matches\Entity\Match')
+            $entityManager->getRepository('Matches\Entity\Match'),
+            $serviceLocator->get('MatchValidator')
         );
 
         $matchesService->setServiceManager($serviceLocator);

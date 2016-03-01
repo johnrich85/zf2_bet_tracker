@@ -11,8 +11,12 @@ class GosuLoLFactory implements FactoryInterface
         $entityManager = $serviceLocator
             ->get('doctrine.entitymanager.orm_default');
 
+        $matchesService = $serviceLocator
+            ->get('MatchesService');
+
         $caster = new GosuLoLCaster(
-            $entityManager
+            $entityManager,
+            $matchesService
         );
 
         return $caster;

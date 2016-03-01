@@ -15,7 +15,7 @@ class GosuLoLCaster implements Caster
     /**
      * @var
      */
-    protected $matchRepo;
+    protected $matchesService;
 
     /**
      * @var
@@ -33,14 +33,13 @@ class GosuLoLCaster implements Caster
     protected $startTime;
 
     /**
-     * GosuLoLCaster constructor.
-     * @param EntityRepository $matchRepo
-     * @param EntityRepository $teamRepo
+     * @param \Doctrine\ORM\EntityManager $em
+     * @param $matchesService
      */
-    public function __construct(\Doctrine\ORM\EntityManager $em) {
+    public function __construct(\Doctrine\ORM\EntityManager $em, $matchesService) {
         $this->em = $em;
 
-        $this->matchRepo = $this->em->getRepository('Matches\Entity\Match');
+        $this->matchesService = $matchesService;
         $this->teamRepo = $this->em->getRepository('Matches\Entity\Team');
 
         $this->startTime = $now = new \DateTime();
@@ -59,29 +58,33 @@ class GosuLoLCaster implements Caster
     /**
      * @param array $data
      * @return null
+     * @todo notify/log if fail
      */
     public function cast(array $data)
     {
-        $sport = $this->em->getRepository('Matches\Entity\Sport')
+        $sport = $this->em
+            ->getRepository('Matches\Entity\Sport')
             ->find(1);
 
-        $event = $this->getEvent($data['event']);
+        $data['sport'] = $sport;
+        $data['event'] = $this->getEvent($data['event']);
+        $data['first_team'] = $this->getTeam($data['first_team']);
+        $data['second_team'] = $this->getTeam($data['second_team']);
+        $data['date'] = $this->timeRemainingToDate($data['date']);
+        $data['created_at'] = $this->startTime;
+        $data['updated_at'] = $this->startTime;
+        $data['winner'] = 0;
 
-        $first_team = $this->getTeam($data['first_team']);
-        $second_team = $this->getTeam($data['second_team']);
-        $date = $this->timeRemainingToDate($data['date']);
+        $match = $this->matchesService
+            ->newInstance($data);
 
-        $match = new Match();
-        $match->setFirstTeam($first_team);
-        $match->setSecondTeam($second_team);
-        $match->setSport($sport);
-        $match->setCreatedAt($this->startTime);
-        $match->setUpdatedAt($this->startTime);
-        $match->setWinner(0);
-        $match->setDate($date);
-        $match->setEvent($event);
+        if($match) {
+            $this->entities[] = $match;
+        }
+        else {
+            //todo notify/log
+        }
 
-        $this->entities[] = $match;
     }
 
     /**

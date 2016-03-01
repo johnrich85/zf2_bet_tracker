@@ -42,6 +42,7 @@ return array(
     'view_manager' => array(
         'template_map' => array(
             'scraper/index/index' => __DIR__ . '/../view/scraper/index/index.phtml',
+            'scraper/connection-error' => __DIR__ . '/../view/scraper/error/connection-error.phtml',
         ),
     ),
 );
