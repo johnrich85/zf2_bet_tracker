@@ -4,7 +4,8 @@ use Application\AppClasses\Repository as AppRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Matches\Entity\Event;
 
-class EventRepository extends AppRepository\TaRepository {
+class EventRepository extends AppRepository\TaRepository
+{
 
     protected $entitySimpleName = 'Event';
 
@@ -12,7 +13,8 @@ class EventRepository extends AppRepository\TaRepository {
      * @param $source
      * @return mixed
      */
-    public function findEventBySource($source) {
+    public function findEventBySource($source)
+    {
         $qb = $this->_em->createQueryBuilder();
 
         $qb->select('e')
@@ -29,7 +31,8 @@ class EventRepository extends AppRepository\TaRepository {
     /**
      * @return Event|mixed
      */
-    public function findDefault() {
+    public function findDefault()
+    {
         $qb = $this->_em->createQueryBuilder();
 
         $qb->select('e')
@@ -37,14 +40,6 @@ class EventRepository extends AppRepository\TaRepository {
             ->where("e.name = 'Default'");
 
         $event = $qb->getQuery()->getOneOrNullResult();
-
-        if(!$event) {
-            $event = new Event();
-            $event->setName('Default');
-
-            $this->_em->persist($event);
-            $this->_em->flush();
-        }
 
         return $event;
     }

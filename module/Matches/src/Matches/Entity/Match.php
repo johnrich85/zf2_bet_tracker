@@ -212,8 +212,6 @@ class Match {
         $this->event = $event;
     }
 
-
-
     /**
      * @param $data
      */

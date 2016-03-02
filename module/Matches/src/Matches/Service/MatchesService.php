@@ -45,7 +45,6 @@ class MatchesService extends TaService\TaService {
      * Persists a given match
      *
      * @throws Exception
-     * @todo need logging & graceful handling of exceptions
      */
     public function persist(\Matches\Entity\Match $match) {
         try {

@@ -287,4 +287,15 @@ class Team extends \Matches\Entity\Team implements \Doctrine\ORM\Proxy\Proxy
         return parent::setMatchesAway($matches_away);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function populate($data)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'populate', array($data));
+
+        return parent::populate($data);
+    }
+
 }

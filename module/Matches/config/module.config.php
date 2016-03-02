@@ -2,6 +2,7 @@
 
 use Illuminate\Support\MessageBag;
 use Matches\Validator\Match;
+use Matches\Validator\Team;
 use Zend\InputFilter\InputFilter;
 
 return array(
@@ -22,12 +23,21 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'MatchesService'     => 'Matches\Service\MatchesFactory',
-            'MatchValidator'     => function($sm) {
+            'MatchesService'     => 'Matches\Service\Factory\Matches',
+            'TeamService'     => 'Matches\Service\Factory\Team',
+            'SportService'     => 'Matches\Service\Factory\Sport',
+            'EventService'     => 'Matches\Service\Factory\Event',
+            'MatchValidator'     => function ($sm) {
                 $inputFilter = new InputFilter();
                 $messageBag = new MessageBag();
 
                 return new Match($inputFilter, $messageBag);
+            },
+            'TeamValidator'     => function ($sm) {
+                $inputFilter = new InputFilter();
+                $messageBag = new MessageBag();
+
+                return new Team($inputFilter, $messageBag);
             }
         ),
     ),

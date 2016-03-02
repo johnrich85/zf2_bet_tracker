@@ -1,26 +1,32 @@
 <?php namespace Scraper\Casters;
 
-use \Doctrine\ORM\EntityRepository;
-use Matches\Entity\Match;
-use Matches\Entity\Team;
+use Matches\Service\Event;
+use Matches\Service\MatchesService;
+use Matches\Service\Sport;
+use Matches\Service\Team;
 use Scraper\Casters\Contract\Caster;
 
 class GosuLoLCaster implements Caster
 {
     /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    protected $em;
-
-    /**
-     * @var
+     * @var MatchesService
      */
     protected $matchesService;
 
     /**
-     * @var
+     * @var Team
      */
-    protected $teamRepo;
+    protected $teamService;
+
+    /**
+     * @var Sport
+     */
+    protected $sportService;
+
+    /**
+     * @var Event
+     */
+    protected $eventService;
 
     /**
      * @var array
@@ -33,18 +39,23 @@ class GosuLoLCaster implements Caster
     protected $startTime;
 
     /**
-     * @param \Doctrine\ORM\EntityManager $em
-     * @param $matchesService
+     * @param MatchesService $matchesService
+     * @param Team $teamService
+     * @param Sport $sportService
+     * @param Event $eventService
      */
-    public function __construct(\Doctrine\ORM\EntityManager $em, $matchesService) {
-        $this->em = $em;
-
+    public function __construct(
+        MatchesService $matchesService,
+        Team $teamService,
+        Sport $sportService,
+        Event $eventService
+    ) {
         $this->matchesService = $matchesService;
-        $this->teamRepo = $this->em->getRepository('Matches\Entity\Team');
+        $this->teamService = $teamService;
+        $this->sportService = $sportService;
+        $this->eventService = $eventService;
 
         $this->startTime = $now = new \DateTime();
-
-        $this->em->clear();
     }
 
     /**
@@ -62,8 +73,7 @@ class GosuLoLCaster implements Caster
      */
     public function cast(array $data)
     {
-        $sport = $this->em
-            ->getRepository('Matches\Entity\Sport')
+        $sport = $this->sportService
             ->find(1);
 
         $data['sport'] = $sport;
@@ -78,10 +88,9 @@ class GosuLoLCaster implements Caster
         $match = $this->matchesService
             ->newInstance($data);
 
-        if($match) {
+        if ($match) {
             $this->entities[] = $match;
-        }
-        else {
+        } else {
             //todo notify/log
         }
 
@@ -91,8 +100,9 @@ class GosuLoLCaster implements Caster
      * @param $date
      * @return \DateTime|null
      */
-    protected function timeRemainingToDate($date) {
-        if($date == false) {
+    protected function timeRemainingToDate($date)
+    {
+        if ($date == false) {
             return;
         }
 
@@ -102,15 +112,16 @@ class GosuLoLCaster implements Caster
 
         $countDownParts = explode(' ', $date);
 
-        if(count($countDownParts) == 0) {
+        if (count($countDownParts) == 0) {
             return;
         }
 
-        foreach($countDownParts as $interval) {
+        foreach ($countDownParts as $interval) {
             $interval = $this->formatInterval($interval);
 
-            if(!$interval)
+            if (!$interval) {
                 break;
+            }
 
             $dateTime->modify('+' . $interval);
         }
@@ -125,20 +136,17 @@ class GosuLoLCaster implements Caster
      * @param $interval
      * @return string|void
      */
-    protected function formatInterval($interval) {
-        if(strpos($interval, 'd')) {
+    protected function formatInterval($interval)
+    {
+        if (strpos($interval, 'd')) {
             $period = ' days';
-        }
-        elseif(strpos($interval, 'h')) {
+        } elseif (strpos($interval, 'h')) {
             $period = ' hours';
-        }
-        elseif(strpos($interval, 'm')) {
+        } elseif (strpos($interval, 'm')) {
             $period = ' minutes';
-        }
-        elseif(strpos($interval, 's')) {
+        } elseif (strpos($interval, 's')) {
             $period = ' seconds';
-        }
-        else {
+        } else {
             return;
         }
 
@@ -149,13 +157,14 @@ class GosuLoLCaster implements Caster
      * @param $source
      * @return mixed
      */
-    protected function getEvent($source) {
-        $repo = $this->em->getRepository('Matches\Entity\Event');
+    protected function getEvent($source)
+    {
+        $event = $this->eventService
+            ->findEventBySource($source);
 
-        $event = $repo->findEventBySource($source);
-
-        if(!$event) {
-            $event = $repo->findDefault();
+        if (!$event) {
+            $event = $this->eventService
+                ->findDefault();
         }
 
         return $event;
@@ -165,16 +174,19 @@ class GosuLoLCaster implements Caster
      * @param $name
      * @return Team|null|object
      */
-    protected function getTeam($name) {
-        $team = $this->teamRepo
-            ->findOneBy(array('name'=>$name));
+    protected function getTeam($name)
+    {
+        $team = $this->teamService
+            ->findOneBy(array('name' => $name));
 
-        if($team == null) {
-            $team = new Team();
-            $team->setName($name);
-            $team->setSport(1);
+        if ($team == null) {
+            $data = [
+                'name' => $name,
+                'sport' => 1
+            ];
 
-            $this->em->persist($team);
+            $team = $this->teamService
+                ->create($data);
         }
 
         return $team;

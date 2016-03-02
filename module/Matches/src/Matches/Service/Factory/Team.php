@@ -1,22 +1,22 @@
-<?php namespace Matches\Service;
+<?php namespace Matches\Service\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class MatchesFactory implements FactoryInterface
+class Team implements FactoryInterface
 {
     /**
      * @param ServiceLocatorInterface $serviceLocator
-     * @return MatchesService
+     * @return \Matches\Service\Team
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $entityManager = $serviceLocator
             ->get('doctrine.entitymanager.orm_default');
 
-        $matchesService = new MatchesService(
-            $entityManager->getRepository('Matches\Entity\Match'),
-            $serviceLocator->get('MatchValidator')
+        $matchesService = new \Matches\Service\Team(
+            $entityManager->getRepository('Matches\Entity\Team'),
+            $serviceLocator->get('TeamValidator')
         );
 
         $matchesService->setServiceManager($serviceLocator);
