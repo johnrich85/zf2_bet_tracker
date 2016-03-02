@@ -44,6 +44,9 @@ class Match {
     /** @ORM\Column(name="`winner`",type="integer") */
     protected $winner;
 
+    /** @ORM\Column(name="`hash`", type="string", nullable=true) */
+    protected $hash;
+
     /**
      * @ORM\ManyToOne(targetEntity="Team", inversedBy="matches_home")
      * @ORM\JoinColumn(name="`first_team_id`", referencedColumnName="id")
@@ -213,6 +216,22 @@ class Match {
     }
 
     /**
+     * @return mixed
+     */
+    public function getHash()
+    {
+        return $this->hash;
+    }
+
+    /**
+     * @param mixed $hash
+     */
+    public function setHash($hash)
+    {
+        $this->hash = $hash;
+    }
+
+    /**
      * @param $data
      */
     public function populate($data)
@@ -222,5 +241,25 @@ class Match {
                 $this->{$key} = $value;
             }
         }
+    }
+
+    /**
+     * Generates a hash which can be used
+     * to identify the match.
+     *
+     * @return string
+     */
+    public function toHash() {
+        $string = $this->first_team
+                ->getName();
+
+        $string .= $this->second_team
+            ->getName();
+
+        $date = $this->date->format('d-m-y H');
+
+        $string .= $date;
+
+        return md5($string);
     }
 }

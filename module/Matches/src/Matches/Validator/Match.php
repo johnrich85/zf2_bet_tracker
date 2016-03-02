@@ -1,6 +1,5 @@
 <?php namespace Matches\Validator;
 
-use DoctrineORMModule\Proxy\__CG__\Matches\Entity\Event;
 use Illuminate\Contracts\Support\MessageBag;
 use Matches\Entity\Sport;
 use Matches\Entity\Team;
@@ -173,7 +172,7 @@ class Match extends Base implements Validator {
             $data['date'] = $data['date']->format('Y-m-d H:i:s');
         }
 
-        if($data['event'] instanceof Event) {
+        if($data['event'] instanceof \Matches\Entity\Event) {
             $data['event'] = $data['event']->getName();
         }
 

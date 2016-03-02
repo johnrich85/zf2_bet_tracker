@@ -42,7 +42,12 @@ class Base {
             return true;
         }
         else {
-            var_dump($this->inputFilter->getMessages()); die();
+            foreach ($this->inputFilter->getMessages() as $field => $errors) {
+                foreach($errors as $errorType => $error) {
+                    $key = $field . ":" .$errorType;
+                    $this->messageBag->add($key, $error);
+                }
+            }
             return false;
         }
     }

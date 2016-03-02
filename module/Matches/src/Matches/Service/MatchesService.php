@@ -24,6 +24,15 @@ class MatchesService extends TaService\TaService {
     }
 
     /**
+     * @param $hash
+     * @return mixed
+     */
+    public function getByHash($hash) {
+        return $this->matchesRepository
+            ->findOneBy(array('hash'=>$hash));
+    }
+
+    /**
      * @param array $data
      * @return bool|\Matches\Entity\Match
      */
@@ -33,6 +42,7 @@ class MatchesService extends TaService\TaService {
         if($this->matchValidator->isValid()) {
             $match = new \Matches\Entity\Match();
             $match->populate($data);
+            $match->setHash($match->toHash());
 
             return $match;
         }

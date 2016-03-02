@@ -41,8 +41,8 @@ class Event extends TaService\TaService
             $event = new \Matches\Entity\Event();
             $event->setName('Default');
 
-            $this->_em->persist($event);
-            $this->_em->flush();
+            $this->em->persist($event);
+            $this->em->flush();
         }
 
         return $event;

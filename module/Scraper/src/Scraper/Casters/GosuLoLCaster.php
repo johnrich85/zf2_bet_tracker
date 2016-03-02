@@ -90,12 +90,13 @@ class GosuLoLCaster implements Caster
         $match = $this->matchesService
             ->newInstance($data);
 
-        if ($match) {
+        $exists = $this->isExsitingMatch($match);
+
+        if ($match && !$exists) {
             $this->entities[] = $match;
         } else {
             //todo notify/log
         }
-
     }
 
     /**
@@ -129,6 +130,17 @@ class GosuLoLCaster implements Caster
         }
 
         return $dateTime;
+    }
+
+    /**
+     * @param $match
+     * @return mixed
+     */
+    protected function isExsitingMatch($match) {
+        $hash = $match->toHash();
+
+        return $existingMatch = $this->matchesService
+            ->getByHash($hash);
     }
 
     /**
