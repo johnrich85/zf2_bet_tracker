@@ -1,6 +1,8 @@
 <?php namespace Scraper\Repository;
 
 use Application\AppClasses\Repository as AppRepository;
+use Doctrine\ORM\Query\Expr\Join;
+use Scraper\Entity\Source;
 
 class SourcePageRepository extends AppRepository\TaRepository {
 
@@ -33,6 +35,22 @@ class SourcePageRepository extends AppRepository\TaRepository {
         $page->setSource($source);
 
         return $page;
+    }
+
+    /**
+     * @param Source $source
+     * @return array
+     */
+    public function allForSource(Source $source) {
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('sp')
+            ->from('Scraper\Entity\Source', 'p')
+            ->join('Scraper\Entity\SourcePage', 'sp', Join::WITH, $qb->expr()->eq('p.id', 'sp.source'))
+            ->where('p = :source')
+            ->setParameters(array('source' => $source));
+
+        return $qb->getQuery()->getResult();
     }
 
 }

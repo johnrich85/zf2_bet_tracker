@@ -21,11 +21,15 @@ return array(
     'router' => array(
         'routes' => array(
             'scraper' => array(
-                'type' => 'literal',
+                'type'    => 'segment',
                 'options' => array(
-                    'route' => '/scraper',
+                    'route'    => '/scraper[/][:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ),
                     'defaults' => array(
-                        'controller' => 'ScraperController',
+                        'controller' => 'scraperController',
                         'action'     => 'index',
                     ),
                 ),
@@ -42,6 +46,8 @@ return array(
     'view_manager' => array(
         'template_map' => array(
             'scraper/index/index' => __DIR__ . '/../view/scraper/index/index.phtml',
+            'scraper/index/pages' => __DIR__ . '/../view/scraper/index/pages.phtml',
+            'scraper/index/scrape' => __DIR__ . '/../view/scraper/index/scrape.phtml',
             'scraper/connection-error' => __DIR__ . '/../view/scraper/error/connection-error.phtml',
         ),
     ),

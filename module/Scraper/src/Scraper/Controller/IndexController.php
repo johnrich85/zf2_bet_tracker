@@ -1,13 +1,12 @@
 <?php namespace Scraper\Controller;
 
 use Application\AppClasses\Controller\TaController;
-use Matches\Entity\Match;
 use Matches\Service\MatchesService;
-use Scraper\Casters\GosuLoLCaster;
-use Scraper\Parsers\GosuLoLParser;
+use Scraper\Form\Source;
+use Scraper\Form\SourcePages;
 use Scraper\Repository\SourcePageRepository;
-use Scraper\Scraper\GuzzleScraper;
 use Scraper\Service\ScraperService;
+use Scraper\Scraper\Facade\GuzzleScraper;
 
 class IndexController extends TaController
 {
@@ -25,44 +24,94 @@ class IndexController extends TaController
      * @param SourcePageRepository $repo
      * @param ScraperService $scraperService
      */
-    public function __construct(SourcePageRepository $repo,ScraperService $scraperService) {
+    public function __construct(SourcePageRepository $repo, ScraperService $scraperService)
+    {
         $this->sourcePageRepo = $repo;
         $this->scraperService = $scraperService;
     }
 
     /**
+     * Shows list of Sources
      *
+     * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $page = $this->sourcePageRepo
-            ->eagerFind(1);
+        $form = new Source();
+
+        $sources = $this->scraperService
+            ->getSourceNames();
+
+        $form->setSources($sources);
+        $form->init();
+
+        return $this->fetchView([
+            'form' => $form
+        ]);
+    }
+
+    /**
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function pagesAction()
+    {
+        $id = $this->params()
+            ->fromPost('source');
+
+        if (!$id) {
+            $this->notFoundAction();
+        }
+
+        $form = new SourcePages();
+
+        $pages = $this->scraperService->getPageTitles(
+            $this->scraperService->getPagesForSource($id)
+        );
+
+        $form->setPages($pages);
+        $form->init();
+
+        return $this->fetchView([
+            'form' => $form
+        ]);
+    }
+
+    /**
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function scrapeAction()
+    {
+        $id = $this->params()->fromPost('page');
 
         $variables = [];
 
-        try{
-            $scraper = new GuzzleScraper($page);
-            $scraper->connect();
-            $response = $scraper->get();
-        }
-        catch(\Exception $e) {
-            $variables['message'] = $e->getMessage();
-
-            return $this->fetchView($variables, 'scraper/connection-error');
+        if (!$id) {
+            $this->notFoundAction();
         }
 
-        $caster = $this->getServiceLocator()
-            ->get('GosuLoLCaster');
+        $page = $this->sourcePageRepo
+            ->eagerFind($id);
 
-        $parser = new GosuLoLParser($response, $caster);
+        try {
+            $sm = $this->getServiceLocator();
+            $scraper = new GuzzleScraper($sm);
 
-        $data = $parser->parse();
+            $data = $scraper->fetch($page);
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            $variables['message'] = $error;
 
-        if($data) {
+            return $this->fetchView(
+                $variables,
+                'scraper/connection-error'
+            );
+        }
+
+        if ($data) {
             $this->scraperService->persistEntities($data);
+
             $variables['message'] = 'New data added.';
-        }
-        else {
+        } else {
             $variables['message'] = 'Nothing new to add.';
         }
 

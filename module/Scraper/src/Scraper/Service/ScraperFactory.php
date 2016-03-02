@@ -14,7 +14,10 @@ class ScraperFactory implements FactoryInterface
         $entityManager = $serviceLocator
             ->get('doctrine.entitymanager.orm_default');
 
-        $ScraperService = new ScraperService();
+        $ScraperService = new ScraperService(
+            $entityManager->getRepository('Scraper\Entity\Source'),
+            $entityManager->getRepository('Scraper\Entity\SourcePage')
+        );
 
         $ScraperService->setServiceManager($serviceLocator);
         $ScraperService->setEntityManager($entityManager);

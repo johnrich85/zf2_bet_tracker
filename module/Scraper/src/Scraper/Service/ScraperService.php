@@ -1,22 +1,91 @@
 <?php namespace Scraper\Service;
 
 use Application\AppClasses\Service as TaService;
+use Doctrine\ORM\EntityRepository;
+use Scraper\Entity\Source;
+use Scraper\Repository\SourcePageRepository;
 
-class ScraperService extends TaService\TaService {
+class ScraperService extends TaService\TaService
+{
+
+    /**
+     * @var EntityRepository
+     */
+    protected $sourceRepo;
+
+    /**
+     * @var SourcePageRepository
+     */
+    protected $pageRepo;
 
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct(EntityRepository $repo, SourcePageRepository $pageRepo)
+    {
+        $this->sourceRepo = $repo;
+        $this->pageRepo = $pageRepo;
+    }
 
+    /**
+     * @return array
+     */
+    public function allSources()
+    {
+        return $this->sourceRepo->findAll();
+    }
+
+    /**
+     * @return array
+     */
+    public function getSourceNames()
+    {
+        $payload = [];
+
+        $sources = $this->allSources();
+
+        foreach ($sources as $source) {
+            $payload[$source->getId()] = $source->getName();
+        }
+
+        return $payload;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPagesForSource($source)
+    {
+        if (!$source instanceof Source) {
+            $source = $this->sourceRepo
+                ->find($source);
+        }
+
+        $pages = $this->pageRepo
+            ->allForSource($source);
+
+        return $pages;
+    }
+
+    /**
+     * @param array[SourcePage] $pages
+     */
+    public function getPageTitles(array $pages) {
+        $payload = [];
+
+        foreach ($pages as $page) {
+            $payload[$page->getId()] = $page->getTitle();
+        }
+
+        return $payload;
     }
 
     /**
      * @param $entities
-     * @todo validation
      */
-    public function persistEntities($entities) {
-        foreach($entities as $entity) {
+    public function persistEntities($entities)
+    {
+        foreach ($entities as $entity) {
             try {
                 $this->em->persist($entity);
             } catch (Exception $e) {
@@ -27,7 +96,8 @@ class ScraperService extends TaService\TaService {
         $this->em->flush();
     }
 
-    public function persist(\Doctrine\Entity $entity) {
+    public function persist(\Doctrine\Entity $entity)
+    {
         try {
             $this->em->persist($entity);
             $this->em->flush();
