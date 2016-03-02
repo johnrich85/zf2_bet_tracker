@@ -60,9 +60,10 @@ class IndexController extends TaController
 
         if($data) {
             $this->scraperService->persistEntities($data);
+            $variables['message'] = 'New data added.';
         }
         else {
-            echo "Parser returned no data";
+            $variables['message'] = 'Nothing new to add.';
         }
 
         return $this->fetchView($variables);
