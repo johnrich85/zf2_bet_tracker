@@ -82,20 +82,17 @@ class IndexController extends TaController
     public function scrapeAction()
     {
         $id = $this->params()->fromPost('page');
-
+        $sm = $this->getServiceLocator();
         $variables = [];
 
         if (!$id) {
             $this->notFoundAction();
         }
 
-        $page = $this->sourcePageRepo
-            ->eagerFind($id);
+        $page = $this->sourcePageRepo->eagerFind($id);
 
         try {
-            $sm = $this->getServiceLocator();
             $scraper = new GuzzleScraper($sm);
-
             $data = $scraper->fetch($page);
         } catch (\Exception $e) {
             $error = $e->getMessage();
@@ -107,12 +104,11 @@ class IndexController extends TaController
             );
         }
 
+        $variables['message'] = 'Nothing new to add.';
+
         if ($data) {
             $this->scraperService->persistEntities($data);
-
             $variables['message'] = 'New data added.';
-        } else {
-            $variables['message'] = 'Nothing new to add.';
         }
 
         return $this->fetchView($variables);
