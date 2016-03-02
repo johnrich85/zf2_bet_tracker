@@ -24,8 +24,17 @@ class TaService implements ServiceManagerAwareInterface {
         return $this->sm;
     }
 
-    public function setEntityManager(\Doctrine\ORM\EntityManager $em) {
+    public function setEntityManager(\Doctrine\ORM\EntityManager $em)
+    {
         $this->em = $em;
+    }
+
+    /**
+     * Clears entity manager
+     */
+    public function clearEm()
+    {
+        $this->em->clear();
     }
 
 } 

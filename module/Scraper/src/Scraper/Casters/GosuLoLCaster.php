@@ -56,6 +56,8 @@ class GosuLoLCaster implements Caster
         $this->eventService = $eventService;
 
         $this->startTime = $now = new \DateTime();
+
+        $this->matchesService->clearEm();
     }
 
     /**
