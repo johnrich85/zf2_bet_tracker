@@ -21,6 +21,26 @@ return array(
             )
         )
     ),
+
+    'router' => array(
+        'routes' => array(
+            'matches' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/matches/ajax[/][:action][/:id]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'matchesAjaxController',
+                        'action'     => 'index',
+                    ),
+                ),
+            ),
+        ),
+    ),
+
     'service_manager' => array(
         'factories' => array(
             'MatchesService'     => 'Matches\Service\Factory\Matches',

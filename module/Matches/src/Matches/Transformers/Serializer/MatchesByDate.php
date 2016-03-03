@@ -17,8 +17,14 @@ class MatchesByDate extends DataArraySerializer
     {
         $payload = [];
 
-        foreach ($data as $match) {
-            $payload[$match['group']][] = $match;
+        foreach ($data as $key => $match) {
+            $group = $match['group'];
+            $id = $match['id'];
+            $name = $match['name'] . ", " . $match['date'];
+
+            $payload[$group][$id] = $name;
+
+            unset($data[$key]);
         }
 
         return $payload;

@@ -265,4 +265,14 @@ class Match
 
         return md5($string);
     }
+
+    /**
+     * @return string
+     */
+    public function toString()
+    {
+        $name = $this->first_team->getName() . " vs " . $this->second_team->getName();
+
+        return $name;
+    }
 }

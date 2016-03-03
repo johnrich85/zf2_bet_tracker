@@ -6,11 +6,7 @@ use Application\AppClasses\Controller\TaController;
 use \Bet\Service\BetService;
 use \Bankroll\Service\BankrollService;
 use \Illuminate\Support\MessageBag;
-use League\Fractal\Manager;
-use League\Fractal\Resource\Collection;
-use \Matches\Transformers\Serializer\MatchesByDate as DateSerializer;
 use \Matches\Service\MatchesService;
-use Matches\Transformers\MatchesByDate;
 use Zend\View\Model\ViewModel;
 
 class IndexController extends TaController
@@ -85,10 +81,6 @@ class IndexController extends TaController
         $form = $this->betService->getEntryForm();
 
         $request = $this->getRequest();
-
-        $matches = $this->getUpcomingMatches();
-
-        var_dump($matches);
 
         if ($request->isPost()) {
             $result = $this->betService
@@ -166,8 +158,7 @@ class IndexController extends TaController
         if (!$id) {
             return $this->notFoundAction();
         } elseif (!$form) {
-            return $this->redirect()
-                ->toRoute('bet');
+            return $this->redirect()->toRoute('bet');
         }
 
         if ($request->isPost()) {
@@ -175,25 +166,5 @@ class IndexController extends TaController
         }
 
         return $this->fetchView(array('form' => $form));
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function getUpcomingMatches()
-    {
-        $from = new \DateTime();
-
-        $to = new \DateTime();
-        $to->modify('+ 1 week');
-
-        $matches = $this->matchesService
-            ->allBetween($from, $to);
-
-        $manager = new Manager();
-        $manager->setSerializer(new DateSerializer());
-        $resource = new Collection($matches, new MatchesByDate());
-
-        return $manager->createData($resource)->toArray();
     }
 }

@@ -21,6 +21,15 @@ class Module
 
     public function getControllerConfig()
     {
+        return array(
+            'factories' => array(
+                'matchesAjaxController' => function (\Zend\Mvc\Controller\ControllerManager $cm) {
+                    $matchesService = $cm->getServiceLocator()
+                        ->get('MatchesService');
 
+                    return new Controller\AjaxController($matchesService);
+                },
+            ),
+        );
     }
 }

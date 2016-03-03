@@ -13,6 +13,7 @@ class MatchesByDate extends TransformerAbstract
     {
         return [
             'id' => $match->getId(),
+            'name' => $match->toString(),
             'first_team' => $match->getFirstTeam()->getName(),
             'second_team' => $match->getSecondTeam()->getName(),
             'sport' => $match->getSport()->getName(),
@@ -27,7 +28,7 @@ class MatchesByDate extends TransformerAbstract
      */
     protected function formatDate($date)
     {
-        return $date->format('F jS Y, H:i');
+        return $date->format('H:i:s');
     }
 
     /**

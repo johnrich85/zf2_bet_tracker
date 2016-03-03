@@ -6,6 +6,7 @@ use Zend\Form\Form;
 
 class EntryForm extends Form
 {
+    protected $matches;
 
     public function __construct($name = null)
     {
@@ -107,7 +108,8 @@ class EntryForm extends Form
     /**
      * Switches the form to edit mode.
      */
-    public function editMode() {
+    public function editMode()
+    {
         $ele = $this->get('id');
         $id = $ele->getValue();
 

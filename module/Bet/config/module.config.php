@@ -2,7 +2,6 @@
 namespace Bet;
 
 return array(
-
     'router' => array(
         'routes' => array(
             'bet' => array(
@@ -42,6 +41,9 @@ return array(
             'bet/index/delete' => __DIR__ . '/../view/bet/index/delete.phtml',
             'partials/bet/form'     => __DIR__ . '/../view/partials/form.phtml',
         ),
+        'strategies' => array(
+            'ViewJsonStrategy',
+        ),
     ),
 
     'doctrine' => array(
@@ -59,6 +61,4 @@ return array(
             )
         )
     )
-
-
 );
