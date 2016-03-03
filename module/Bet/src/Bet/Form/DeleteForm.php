@@ -10,9 +10,10 @@ namespace Bet\Form;
 
 use Zend\Form\Form;
 
-class DeleteForm extends Form {
-
-    public function __construct($name = null) {
+class DeleteForm extends Form
+{
+    public function __construct($name = null)
+    {
 
         parent::__construct('delete');
         $this->setAttribute('method', 'post');
@@ -58,6 +59,16 @@ class DeleteForm extends Form {
                 'id' => 'submitbutton btn btn-danger',
                 'class' => 'btn btn-danger',
             ),
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Csrf',
+            'name' => 'secret',
+            'options' => array(
+                'csrf_options' => array(
+                    'timeout' => 600
+                )
+            )
         ));
     }
 } 

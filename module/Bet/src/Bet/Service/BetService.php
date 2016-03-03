@@ -11,7 +11,8 @@ use Application\AppInterface\PaginatationProviderInterface;
 use Application\AppTraits\PaginatorProviderTrait;
 use Doctrine\ORM\EntityRepository;
 
-class BetService extends TaService\TaService implements PaginatationProviderInterface {
+class BetService extends TaService\TaService implements PaginatationProviderInterface
+{
 
     use PaginatorProviderTrait;
 
@@ -33,7 +34,8 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
     /**
      * Constructor
      */
-    public function __construct($betRepository, $bankrollService) {
+    public function __construct($betRepository, $bankrollService)
+    {
         $this->betRepository = $betRepository;
         $this->bankrollService = $bankrollService;
     }
@@ -42,14 +44,15 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @param null $id
      * @return mixed
      */
-    public function getEntryForm($id = null) {
+    public function getEntryForm($id = null)
+    {
         $this->form = $this->sm->get('BetEntryForm');
 
         if (!$id) {
             return $this->form;
         }
 
-        if ($bet = $this->em->find('Bet\Entity\Bet', $id) ) {
+        if ($bet = $this->em->find('Bet\Entity\Bet', $id)) {
             $this->form->bind($bet);
         }
 
@@ -60,14 +63,15 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @param null $id
      * @return mixed
      */
-    public function getDeleteForm($id = null) {
+    public function getDeleteForm($id = null)
+    {
         $this->form = $this->sm->get('BetDeleteForm');
 
         if (!$id) {
             return $this->form;
         }
 
-        if ($bet = $this->em->find('Bet\Entity\Bet', $id) ) {
+        if ($bet = $this->em->find('Bet\Entity\Bet', $id)) {
             $this->form->bind($bet);
         }
 
@@ -79,8 +83,11 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @return bool
      * @throws Exception
      */
-    public function create($data) {
-        if (!$this->form) $this->getEntryForm();
+    public function create($data)
+    {
+        if (!$this->form) {
+            $this->getEntryForm();
+        }
 
         $bet = $this->sm->get('BetEntity');
 
@@ -108,9 +115,11 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @throws Exception
      * @throws \Exception
      */
-    public function update($data) {
-        if (!$this->form)
+    public function update($data)
+    {
+        if (!$this->form) {
             $this->getEntryForm();
+        }
 
         $bet = $this->em->find('Bet\Entity\Bet', $data->id);
 
@@ -144,7 +153,8 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @param $successful
      * @return mixed
      */
-    public function getBetCount($successful) {
+    public function getBetCount($successful)
+    {
         $qb = $this->em->createQueryBuilder();
 
         $qb->select('count(bet)')
@@ -163,7 +173,8 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @throws Exception
      * @todo need logging & graceful handling of exceptions
      */
-    public function persist(\Bet\Entity\Bet $bet) {
+    public function persist(\Bet\Entity\Bet $bet)
+    {
         try {
             $this->em->persist($bet);
             $this->em->flush();
@@ -176,7 +187,8 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @param Bet $bet
      * @param Bankroll $bankroll
      */
-    protected function persistTransactional(Bet $bet, Bankroll $bankroll) {
+    protected function persistTransactional(Bet $bet, Bankroll $bankroll)
+    {
         $this->em->getConnection()->beginTransaction();
 
         $this->persist($bet);
@@ -192,7 +204,8 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @return \Zend\Paginator\Paginator
      * @throws \Exception
      */
-    public function getPaginatedList($page, $params) {
+    public function getPaginatedList($page, $params)
+    {
         $query = $this->betRepository
             ->QueryBuilderFindBy($params);
 

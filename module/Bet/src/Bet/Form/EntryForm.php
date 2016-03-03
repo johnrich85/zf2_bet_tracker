@@ -4,9 +4,11 @@ namespace Bet\Form;
 
 use Zend\Form\Form;
 
-class EntryForm extends Form {
+class EntryForm extends Form
+{
 
-    public function __construct($name = null) {
+    public function __construct($name = null)
+    {
         parent::__construct('entry');
 
         $this->setAttribute('method', 'post');
@@ -87,6 +89,16 @@ class EntryForm extends Form {
                 'value' => 'Add',
                 'id' => 'submitbutton',
             ),
+        ));
+
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Csrf',
+            'name' => 'secret',
+            'options' => array(
+                'csrf_options' => array(
+                    'timeout' => 600
+                )
+            )
         ));
 
         $this->setAttribute('action', '/bet/add');
