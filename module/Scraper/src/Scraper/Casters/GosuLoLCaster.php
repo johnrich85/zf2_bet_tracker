@@ -136,7 +136,8 @@ class GosuLoLCaster implements Caster
      * @param $match
      * @return mixed
      */
-    protected function isExsitingMatch($match) {
+    protected function isExsitingMatch($match)
+    {
         $hash = $match->toHash();
 
         return $existingMatch = $this->matchesService

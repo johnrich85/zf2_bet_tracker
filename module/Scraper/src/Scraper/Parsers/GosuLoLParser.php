@@ -25,10 +25,11 @@ class GosuLoLParser implements Parser
     protected $start_time;
 
     /**
-     * GosuLoLParser constructor.
      * @param ResponseInterface $response
+     * @param Caster $entityCaster
      */
-    public function __construct(ResponseInterface $response, Caster $entityCaster) {
+    public function __construct(ResponseInterface $response, Caster $entityCaster)
+    {
         $this->response = $response;
         $this->entityCaster = $entityCaster;
         $this->start_time = new DateTime();
@@ -37,7 +38,8 @@ class GosuLoLParser implements Parser
     /**
      * @return array|bool
      */
-    public function parse() {
+    public function parse()
+    {
         $crawler = new Crawler($this->getContent());
 
         $filter = $crawler
@@ -47,7 +49,7 @@ class GosuLoLParser implements Parser
 
         $rows = $filter->filter('tr');
 
-        if($rows->count() == 0) {
+        if ($rows->count() == 0) {
             return false;
         }
 
@@ -60,14 +62,15 @@ class GosuLoLParser implements Parser
      * @param $rows
      * @return array
      */
-    protected function getMatches($rows) {
-        if(iterator_count($rows) == 0) {
+    protected function getMatches($rows)
+    {
+        if (iterator_count($rows) == 0) {
             return array();
         }
 
         $sport = 1;
 
-        foreach($rows as $i=>$content) {
+        foreach ($rows as $i => $content) {
             $crawler = new Crawler($content);
 
             $first_team = $this->getFirstText($crawler, '.opp1 span');
@@ -75,7 +78,7 @@ class GosuLoLParser implements Parser
             $date = $this->getLiveInTimer($crawler);
             $event = $this->getEventHref($crawler);
 
-            $match = compact('first_team', 'second_team', 'date', 'event','sport');
+            $match = compact('first_team', 'second_team', 'date', 'event', 'sport');
 
             $this->entityCaster->cast($match);
         }
@@ -88,7 +91,8 @@ class GosuLoLParser implements Parser
      * @param $selector
      * @return mixed
      */
-    protected function getLastText($crawler, $selector) {
+    protected function getLastText($crawler, $selector)
+    {
         $text = $crawler->filter($selector)
             ->last()
             ->text();
@@ -101,7 +105,8 @@ class GosuLoLParser implements Parser
      * @param $selector
      * @return mixed
      */
-    protected function getFirstText($crawler, $selector) {
+    protected function getFirstText($crawler, $selector)
+    {
         $text = $crawler->filter($selector)
             ->first()
             ->text();
@@ -113,7 +118,8 @@ class GosuLoLParser implements Parser
      * @param $crawler
      * @return mixed
      */
-    protected function getEventHref($crawler) {
+    protected function getEventHref($crawler)
+    {
         return $crawler->filter('.tournament a')
             ->first()
             ->attr('href');
@@ -123,7 +129,8 @@ class GosuLoLParser implements Parser
      * @param $crawler
      * @return mixed
      */
-    protected function getLiveInTimer($crawler) {
+    protected function getLiveInTimer($crawler)
+    {
         $date = $crawler->filter('.live-in')
             ->text();
 
@@ -133,7 +140,8 @@ class GosuLoLParser implements Parser
     /**
      * @return string
      */
-    protected function getContent() {
+    protected function getContent()
+    {
         $body = $this->response->getBody();
 
         return $body->getContents();

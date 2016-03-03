@@ -25,6 +25,12 @@ class SourcePage {
     /** @ORM\Column(name="`title`",type="string") */
     protected $title;
 
+    /** @ORM\Column(name="`caster`",type="string") */
+    protected $caster;
+
+    /** @ORM\Column(name="`parser`",type="string") */
+    protected $parser;
+
     /** @ORM\Column(name="`uri`",type="string") */
     protected $uri;
 
@@ -90,5 +96,37 @@ class SourcePage {
     public function setUri($uri)
     {
         $this->uri = $uri;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCaster()
+    {
+        return $this->caster;
+    }
+
+    /**
+     * @param mixed $caster
+     */
+    public function setCaster($caster)
+    {
+        $this->caster = $caster;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParser()
+    {
+        return $this->parser;
+    }
+
+    /**
+     * @param mixed $parser
+     */
+    public function setParser($parser)
+    {
+        $this->parser = $parser;
     }
 }
