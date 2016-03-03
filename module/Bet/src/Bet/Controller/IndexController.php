@@ -2,10 +2,16 @@
 
 namespace Bet\Controller;
 
-use Bet\Entity\Bet;
 use Application\AppClasses\Controller\TaController;
+use \Bet\Service\BetService;
+use \Bankroll\Service\BankrollService;
+use \Illuminate\Support\MessageBag;
+use League\Fractal\Manager;
+use League\Fractal\Resource\Collection;
+use \Matches\Transformers\Serializer\MatchesByDate as DateSerializer;
+use \Matches\Service\MatchesService;
+use Matches\Transformers\MatchesByDate;
 use Zend\View\Model\ViewModel;
-use Bet\Form\EntryForm;
 
 class IndexController extends TaController
 {
@@ -20,23 +26,32 @@ class IndexController extends TaController
     protected $bankrollService;
 
     /**
-     * @param $betService
-     * @param $bankrollService
-     * @param $messageBag
+     * @var MatchesService
      */
-    public function __construct(\Bet\Service\BetService $betService,
-                                \Bankroll\Service\BankrollService $bankrollService,
-                                \Illuminate\Support\MessageBag $messageBag) {
+    protected $matchesService;
+
+    /**
+     * @param BetService $betService
+     * @param BankrollService $bankrollService
+     * @param MatchesService $matchesService
+     * @param MessageBag $messageBag
+     */
+    public function __construct(
+        BetService $betService,
+        BankrollService $bankrollService,
+        MatchesService $matchesService,
+        MessageBag $messageBag
+    ) {
 
         $this->betService = $betService;
         $this->bankrollService = $bankrollService;
+        $this->matchesService = $matchesService;
         $this->messageBag = $messageBag;
     }
 
     /**
      * Lists bets.
      *
-     * @todo create users & add ACL.
      * @return ViewModel
      */
     public function indexAction()
@@ -45,12 +60,11 @@ class IndexController extends TaController
         $params = array();
 
         $successfulFilter = $this->params()->fromQuery('successful');
-        if($successfulFilter)
-        {
+        if ($successfulFilter) {
             $params['successful'] = $successfulFilter;
         }
 
-        $bets = $this->betService->getPaginatedList($pageNum,$params);
+        $bets = $this->betService->getPaginatedList($pageNum, $params);
 
         return $this->fetchView(array(
             "bets" => $bets,
@@ -66,9 +80,15 @@ class IndexController extends TaController
      *
      * @return \Zend\Http\Response|ViewModel
      */
-    public function addAction() {
+    public function addAction()
+    {
         $form = $this->betService->getEntryForm();
+
         $request = $this->getRequest();
+
+        $matches = $this->getUpcomingMatches();
+
+        var_dump($matches);
 
         if ($request->isPost()) {
             $result = $this->betService
@@ -97,7 +117,8 @@ class IndexController extends TaController
      *
      * @return \Zend\Http\Response|ViewModel
      */
-    public function editAction() {
+    public function editAction()
+    {
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -107,10 +128,9 @@ class IndexController extends TaController
                 ->update($request->getPost());
 
             if ($result) {
-                $this->messageBag->add('info','Great Success! Bet updated...');
+                $this->messageBag->add('info', 'Great Success! Bet updated...');
             }
-        }
-        else {
+        } else {
             $form = $this->betService
                 ->getEntryForm($this->params('id'));
         }
@@ -136,24 +156,44 @@ class IndexController extends TaController
      * @todo implement service method, add to ui.
      * @return \Zend\Http\Response
      */
-    public function deleteAction() {
+    public function deleteAction()
+    {
         $request = $this->getRequest();
         $id = $this->params('id');
 
         $form = $this->betService->getDeleteForm($id);
 
-        if(!$id) {
+        if (!$id) {
             return $this->notFoundAction();
-        }
-        elseif(!$form) {
+        } elseif (!$form) {
             return $this->redirect()
                 ->toRoute('bet');
         }
 
-        if ( $request->isPost() ) {
+        if ($request->isPost()) {
             //TODO
         }
 
         return $this->fetchView(array('form' => $form));
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getUpcomingMatches()
+    {
+        $from = new \DateTime();
+
+        $to = new \DateTime();
+        $to->modify('+ 1 week');
+
+        $matches = $this->matchesService
+            ->allBetween($from, $to);
+
+        $manager = new Manager();
+        $manager->setSerializer(new DateSerializer());
+        $resource = new Collection($matches, new MatchesByDate());
+
+        return $manager->createData($resource)->toArray();
     }
 }

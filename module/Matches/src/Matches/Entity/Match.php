@@ -6,9 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(name="match_match")
+ * @ORM\Entity(repositoryClass="Matches\Repository\MatchRepository")
  */
-
-class Match {
+class Match
+{
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -235,9 +236,10 @@ class Match {
      * @param $data
      */
     public function populate($data)
-    {;
-        foreach($data as $key=>$value) {
-            if(property_exists($this, $key)) {
+    {
+        ;
+        foreach ($data as $key => $value) {
+            if (property_exists($this, $key)) {
                 $this->{$key} = $value;
             }
         }
@@ -249,9 +251,10 @@ class Match {
      *
      * @return string
      */
-    public function toHash() {
+    public function toHash()
+    {
         $string = $this->first_team
-                ->getName();
+            ->getName();
 
         $string .= $this->second_team
             ->getName();

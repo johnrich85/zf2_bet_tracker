@@ -32,17 +32,25 @@ class Module
     {
         return array(
             'factories' => array(
-                'betController' => function(\Zend\Mvc\Controller\ControllerManager $cm) {
+                'betController' => function (\Zend\Mvc\Controller\ControllerManager $cm) {
                     $betService = $cm->getServiceLocator()
                         ->get('BetService');
 
                     $bankrollService = $cm->getServiceLocator()
                         ->get('BankrollService');
 
+                    $matchesService = $cm->getServiceLocator()
+                        ->get('MatchesService');
+
                     $messageBag = $cm->getServiceLocator()
                         ->get('MessageBag');
 
-                    return new Controller\IndexController($betService,$bankrollService,$messageBag);
+                    return new Controller\IndexController(
+                        $betService,
+                        $bankrollService,
+                        $matchesService,
+                        $messageBag
+                    );
                 },
             ),
         );

@@ -15,6 +15,7 @@
         "illuminate/support": "5.0.28",
         "guzzlehttp/guzzle": "~6.0",
         "symfony/dom-crawler": "~3.0",
-        "symfony/css-selector": "~3.0"
+        "symfony/css-selector": "~3.0",
+        "league/fractal": "^0.13.0"
     }
 }

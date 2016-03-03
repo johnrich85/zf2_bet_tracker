@@ -3,7 +3,8 @@
 use Application\AppClasses\Service as TaService;
 use Matches\Validator\Contract\Validator;
 
-class MatchesService extends TaService\TaService {
+class MatchesService extends TaService\TaService
+{
 
     /**
      * @var
@@ -18,7 +19,8 @@ class MatchesService extends TaService\TaService {
     /**
      * Constructor
      */
-    public function __construct($matchesRepository, Validator $matchValidator) {
+    public function __construct($matchesRepository, Validator $matchValidator)
+    {
         $this->matchesRepository = $matchesRepository;
         $this->matchValidator = $matchValidator;
     }
@@ -27,26 +29,37 @@ class MatchesService extends TaService\TaService {
      * @param $hash
      * @return mixed
      */
-    public function getByHash($hash) {
+    public function getByHash($hash)
+    {
         return $this->matchesRepository
-            ->findOneBy(array('hash'=>$hash));
+            ->findOneBy(array('hash' => $hash));
+    }
+
+    /**
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @return mixed
+     */
+    public function allBetween(\DateTime $from, \DateTime $to)
+    {
+        return $this->matchesRepository->allBetween($from, $to);
     }
 
     /**
      * @param array $data
      * @return bool|\Matches\Entity\Match
      */
-    public function newInstance(array $data) {
+    public function newInstance(array $data)
+    {
         $this->matchValidator->setData($data);
 
-        if($this->matchValidator->isValid()) {
+        if ($this->matchValidator->isValid()) {
             $match = new \Matches\Entity\Match();
             $match->populate($data);
             $match->setHash($match->toHash());
 
             return $match;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -56,7 +69,8 @@ class MatchesService extends TaService\TaService {
      *
      * @throws Exception
      */
-    public function persist(\Matches\Entity\Match $match) {
+    public function persist(\Matches\Entity\Match $match)
+    {
         try {
             $this->em->persist($match);
             $this->em->flush();
