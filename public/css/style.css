@@ -39,3 +39,12 @@ div.container a.brand {
 .messages.alert ul {
     margin:0;
 }
+
+.form-group {
+    position: relative;
+}
+.form-group .show-alt-option {
+    position:absolute;
+    right:0;
+    top:0;
+}
