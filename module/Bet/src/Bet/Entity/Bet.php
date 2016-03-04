@@ -223,7 +223,7 @@ class Bet implements InputFilterAwareInterface {
                     array(
                         'name'      => 'DateTimeFormatter',
                         'options'   => array(
-                            'format' => 'Y-m-d',
+                            'format' => 'Y-m-d H:i:s',
                         ),
                     ),
                 ),

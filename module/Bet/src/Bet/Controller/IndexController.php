@@ -6,7 +6,7 @@ use Application\AppClasses\Controller\TaController;
 use \Bet\Service\BetService;
 use \Bankroll\Service\BankrollService;
 use \Illuminate\Support\MessageBag;
-use League\Fractal\Manager;
+use \League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use \Matches\Service\MatchesService;
 use Matches\Transformers\Serializer\MatchesByDate;
@@ -180,6 +180,7 @@ class IndexController extends TaController
     protected function getUpcomingMatches()
     {
         $from = new \DateTime();
+        $from->modify('- 2 hours');
 
         $to = new \DateTime();
         $to->modify('+ 1 week');

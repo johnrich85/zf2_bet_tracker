@@ -48,6 +48,9 @@ class Match
     /** @ORM\Column(name="`hash`", type="string", nullable=true) */
     protected $hash;
 
+    /** @ORM\Column(name="`match_source`", type="string", nullable=true) */
+    protected $match_source;
+
     /**
      * @ORM\ManyToOne(targetEntity="Team", inversedBy="matches_home")
      * @ORM\JoinColumn(name="`first_team_id`", referencedColumnName="id")
@@ -253,17 +256,7 @@ class Match
      */
     public function toHash()
     {
-        $string = $this->first_team
-            ->getName();
-
-        $string .= $this->second_team
-            ->getName();
-
-        $date = $this->date->format('d-m-y H');
-
-        $string .= $date;
-
-        return md5($string);
+        return md5($this->match_source);
     }
 
     /**

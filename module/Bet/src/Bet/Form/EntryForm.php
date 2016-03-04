@@ -43,14 +43,11 @@ class EntryForm extends Form
 
         $this->add(array(
             'name' => 'date',
-            'type' => 'date',
-            'options' => array(
-                'format' => 'Y-m-d',
-            ),
+            'type' => 'text',
             'attributes' => array(
                 'required'  => 'required',
-                'class' => 'form-control'
-            ),
+                'class' => 'form-control',
+            )
         ));
 
         $this->add(array(
@@ -103,6 +100,8 @@ class EntryForm extends Form
         ));
 
         $this->setAttribute('action', '/bet/add');
+
+        $this->setDefaults();
     }
 
     /**
@@ -115,5 +114,19 @@ class EntryForm extends Form
 
         $this->setAttribute('action', '/bet/edit/'.$id);
         $this->get('submit')->setValue('Edit');
+    }
+
+    /**
+     * Sets default values
+     */
+    public function setDefaults() {
+        $date = $this->get('date')->getValue();
+
+        $now = new \DateTime();
+
+        if(empty($date)) {
+            $this->get('date')
+                ->setValue($now->format('Y-m-d H:i:s'));
+        }
     }
 } 

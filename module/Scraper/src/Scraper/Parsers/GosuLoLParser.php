@@ -75,10 +75,18 @@ class GosuLoLParser implements Parser
 
             $first_team = $this->getFirstText($crawler, '.opp1 span');
             $second_team = $this->getLastText($crawler, '.opp2 span');
+            $match_source = $this->getMatchHref($crawler);
             $date = $this->getLiveInTimer($crawler);
             $event = $this->getEventHref($crawler);
 
-            $match = compact('first_team', 'second_team', 'date', 'event', 'sport');
+            $match = compact(
+                'first_team',
+                'second_team',
+                'date',
+                'event',
+                'sport',
+                'match_source'
+            );
 
             $this->entityCaster->cast($match);
         }
@@ -96,6 +104,19 @@ class GosuLoLParser implements Parser
         $text = $crawler->filter($selector)
             ->last()
             ->text();
+
+        return trim($text);
+    }
+
+    /**
+     * @param $crawler
+     * @return string
+     */
+    protected function getMatchHref($crawler)
+    {
+        $text = $crawler->filter('a')
+            ->last()
+            ->attr('href');
 
         return trim($text);
     }
