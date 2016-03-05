@@ -23,4 +23,4 @@ Bet tracker made using ZF2
 
 ##### Bugs
 
-1. Match date being calculated wrong, results in match being scraped multiple times.
+1. ~~Match date being calculated wrong, results in match being scraped multiple times.~~

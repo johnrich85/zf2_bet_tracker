@@ -180,7 +180,7 @@ class IndexController extends TaController
     protected function getUpcomingMatches()
     {
         $from = new \DateTime();
-        $from->modify('- 2 hours');
+        $from->setTime(0,0,0);
 
         $to = new \DateTime();
         $to->modify('+ 1 week');

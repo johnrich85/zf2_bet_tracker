@@ -43,7 +43,7 @@ class GuzzleScraper implements Scraper
     {
         $this->client = new Client([
             'base_uri' => $this->source->getHostname(),
-            'timeout'  => 4.0,
+            'timeout'  => 10.0,
         ]);
 
         return true;
