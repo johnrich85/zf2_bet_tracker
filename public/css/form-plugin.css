@@ -1,0 +1,25 @@
+/* Generic */
+.form-group {
+    position: relative;
+}
+.form-group .show-alt-option {
+    position:absolute;
+    right:0;
+    top:0;
+}
+
+/* Odds field */
+.odds-field {
+    position:absolute;
+    right:0;
+    top:0;
+
+    border-radius:5px 0px 0px 5px;
+    height:34px;
+    width:116px;
+    padding:10px;
+    text-align: center;
+}
+.odds-field:focus {
+    cursor: default !important;
+}

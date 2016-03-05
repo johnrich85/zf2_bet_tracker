@@ -1,5 +1,6 @@
 <?php
-    $this->HeadScript()->prependFile($this->basePath() . '/js/form/alternative-option.js')
+    $this->HeadScript()->prependFile($this->basePath() . '/js/form/alternative-option.js');
+    $this->HeadScript()->prependFile($this->basePath() . '/js/form/bet-value.js')
 ?>
 
 <h1><?php echo $this->title; ?></h1>
@@ -48,7 +49,7 @@
                 <?php echo $this->formRow($form->get('date')); ?>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="bet-value">
                 <?php echo $this->formRow($form->get('amount')); ?>
             </div>
 

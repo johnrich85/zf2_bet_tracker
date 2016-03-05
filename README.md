@@ -11,6 +11,8 @@ Bet tracker made using ZF2
 3. Events defaulting when source not found - currently no way to rectify this (Need to scrape events, also Need to record URL against matches & resolve during event scrape.)
 4. GosuLoLCaster to extend base MatchCaster
 5. When selecting a match from db, link bet to db.
+6. Multiple matches per bet.
+7. Odds field, rather than return entry.
 
 ##### Next up
 
