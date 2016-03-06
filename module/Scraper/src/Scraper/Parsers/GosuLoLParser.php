@@ -115,7 +115,7 @@ class GosuLoLParser implements Parser
     protected function getMatchHref($crawler)
     {
         $text = $crawler->filter('a')
-            ->last()
+            ->first()
             ->attr('href');
 
         return trim($text);

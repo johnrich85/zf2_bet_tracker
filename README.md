@@ -12,7 +12,7 @@ Bet tracker made using ZF2
 4. GosuLoLCaster to extend base MatchCaster
 5. When selecting a match from db, link bet to db.
 6. Multiple matches per bet.
-7. Odds field, rather than return entry.
+7. Finish Odds field (need to handle delete key, shoudl reset timer)
 
 ##### Next up
 
