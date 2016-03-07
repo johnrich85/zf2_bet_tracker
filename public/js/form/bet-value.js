@@ -137,8 +137,3 @@
     });
 
 })(jQuery);
-
-//todo: move to separate file.
-$(function($) {
-    $("#bet-value").betValue({});
-});

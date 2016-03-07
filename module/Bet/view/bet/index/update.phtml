@@ -1,6 +1,5 @@
 <?php
-    $this->HeadScript()->prependFile($this->basePath() . '/js/form/alternative-option.js');
-    $this->HeadScript()->prependFile($this->basePath() . '/js/form/bet-value.js')
+    $this->HeadScript()->appendFile($this->basePath() . '/js/bet/form.js');
 ?>
 
 <h1><?php echo $this->title; ?></h1>

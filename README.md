@@ -13,6 +13,9 @@ Bet tracker made using ZF2
 5. When selecting a match from db, link bet to db.
 6. Multiple matches per bet.
 7. Finish Odds field (need to handle delete key, shoudl reset timer)
+8. Get vue.js working.
+9. Rewrite custom jquery plugins as vue.js models.
+10. remove bootstrap css & replace with bower_component counterpart
 
 ##### Next up
 
@@ -21,8 +24,19 @@ Bet tracker made using ZF2
 3. XSS escaping.
 4. ~~CSRF for forms.~~
 5. Users, Authentication & ACL.
+6. ~~Frontend modules/dependency manager ~~
 
 
 ##### Bugs
 
 1. ~~Match date being calculated wrong, results in match being scraped multiple times.~~
+
+
+
+
+##### Installation
+
+1. Clone repo.
+2. Install dependencies via composer (composer.phar install)
+3. Install frontend dependencies (bower install)
+4. Build schema (vendor/doctrine/doctrine-module/bin/doctrine-module orm:schema-tool:update

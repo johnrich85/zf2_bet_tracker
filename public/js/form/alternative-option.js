@@ -85,8 +85,3 @@
     });
 
 })(jQuery);
-
-//todo: move to separate file.
-$(function($) {
-    $("#match-name").alternativeOption({});
-});

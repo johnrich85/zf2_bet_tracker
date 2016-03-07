@@ -9,3 +9,4 @@ r nbproject
 composer.lock
 vendor/*
 config/autoload/doctrine.local.php
+public/bower_components/*

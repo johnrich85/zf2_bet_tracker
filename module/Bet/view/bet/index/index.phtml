@@ -1,5 +1,7 @@
 <?php
-echo $this->flashMessenger()->render();
+    $this->headScript()->appendFile($this->basePath() . '/js/bet/table.js');
+
+    echo $this->flashMessenger()->render();
 ?>
 <div class="row">
 
