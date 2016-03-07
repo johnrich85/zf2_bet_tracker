@@ -3,6 +3,9 @@
 ?>
 
 <h1><?php echo $this->title; ?></h1>
+    <div id="example">
+        <my-component></my-component>
+    </div>
 
 <?php echo $this->form()->openTag($form);?>
 
@@ -67,4 +70,4 @@
         <?php echo $this->formRow($form->get('secret')); ?>
         <?php echo $this->formInput($form->get('submit')); ?>
 
-<?php echo $this->form()->closeTag($form);
+<?php echo $this->form()->closeTag($form); ?>

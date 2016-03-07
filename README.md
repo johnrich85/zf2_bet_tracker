@@ -24,7 +24,7 @@ Bet tracker made using ZF2
 3. XSS escaping.
 4. ~~CSRF for forms.~~
 5. Users, Authentication & ACL.
-6. ~~Frontend modules/dependency manager ~~
+6. ~~Frontend modules/dependency manager~~
 
 
 ##### Bugs
