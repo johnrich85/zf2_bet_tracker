@@ -69,7 +69,7 @@
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
-        <div class="container">
+        <div class="container" id="content-section">
             <?php
                 if(isset($messages) && $messages->any()) {
                     echo $this->partial('partials/messages', array('messages' => $messages));

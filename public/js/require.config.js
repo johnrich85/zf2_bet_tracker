@@ -7,7 +7,9 @@ var require = {
         "bootstrap": "/bower_components/bootstrap/dist/js/bootstrap.min",
         "vue": "/bower_components/vue/dist/vue",
         "form_alternative_ele": "/js/form/alternative-option",
-        "form_bet_value": "/js/form/bet-value"
+        "form_bet_value": "/js/form/bet-value",
+        "fraction": "/bower_components/fraction.js/fraction.min",
+        "component_bet_entry": "/js/vuejs/components/bet-entry"
     }
     ,
     shim: {

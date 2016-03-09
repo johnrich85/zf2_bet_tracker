@@ -3,9 +3,6 @@
 ?>
 
 <h1><?php echo $this->title; ?></h1>
-    <div id="example">
-        <my-component></my-component>
-    </div>
 
 <?php echo $this->form()->openTag($form);?>
 
@@ -51,12 +48,10 @@
                 <?php echo $this->formRow($form->get('date')); ?>
             </div>
 
-            <div class="form-group" id="bet-value">
-                <?php echo $this->formRow($form->get('amount')); ?>
-            </div>
-
-            <div class="form-group">
-                <?php echo $this->formRow($form->get('return')); ?>
+            <div id="bet-entry">
+                <bet-entry amount="<?php echo $form->get('amount')->getValue() ?>"
+                           winnings="<?php echo $form->get('return')->getValue() ?>">
+                </bet-entry>
             </div>
 
 

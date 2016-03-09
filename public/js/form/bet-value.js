@@ -113,6 +113,8 @@
                  * @param settings
                  */
                 this.construct = function (settings) {
+
+                    return;
                     var ele = $(this)
                         .find('input[type=text]');
 
