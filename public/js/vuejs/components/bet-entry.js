@@ -5,36 +5,64 @@ require(
         "bootstrap"
     ],
     function(Vue, Fraction) {
-
         var BetAmount = Vue.extend({
-            template: '<div class="form-group" id="bet-value"><input name="amount" type="text" placeholder="Bet amount" class="form-control" v-model="value"> <input class="odds-field btn btn-small btn-default" name="odds" type="text" v-model="odds" v-on:focus="handleFocus" data-toggle="tooltip" data-placement="top" title="" data-original-title="Example: 5/2 (pause for a second to automatically add the /)"></div>',
+            template: '<div class="form-group" id="bet-value"><input name="amount" type="text" placeholder="Bet amount" class="form-control" v-model="value"> <input class="odds-field btn btn-small btn-default" name="odds" type="text" v-model="odds" v-on:focus="handleFocus" v-on:keyup="handleKeyup" data-toggle="tooltip" data-placement="top" title="" data-original-title="Example: 5/2 (pause for a second to automatically add the /)"></div>',
 
             props: [
                 'value',
                 'odds'
             ],
 
-            methods: {
-                notify: function () {
-                    if (this.msg.trim()) {
-                        this.$dispatch('child-msg', this.msg)
-                        this.msg = ''
-                    }
-                }
-            },
-
             ready: function() {
                 $('.odds-field').tooltip();
             },
 
             methods: {
-                'handleFocus' : function() {
+                /**
+                 * Removes default text
+                 */
+                handleFocus : function() {
                     if(this.odds == 'Enter odds') {
                         this.odds = '';
                     }
+                },
+
+                /**
+                 * Adds forward slash to odds after
+                 * 500ms pause.
+                 */
+                handleKeyup : function() {
+                    var self = this;
+
+                    var now = new Date()
+                        .getTime();
+
+                    if(now - this.last < 500) {
+                        return;
+                    }
+
+                    this.last = now;
+
+                    setTimeout(function () {
+                        self.appendForwardSlash();
+                    }, 200);
+                },
+
+                /**
+                 * Adds forward slash to odds string
+                 */
+                appendForwardSlash: function() {
+                    var oddsLength = this.odds.length;
+                    var hasSlash = this.odds.search('[\/]') == 1;
+
+                    if(hasSlash || oddsLength == 0 || oddsLength > 3) {
+                        return;
+                    }
+
+                    this.odds = this.odds + "/";
                 }
             }
-        })
+        });
 
         var BetReturn = Vue.extend({
             template: '<div class="form-group"> <input name="return" type="text" placeholder="Total return" class="form-control" v-model="value"> </div>',
@@ -94,9 +122,10 @@ require(
                  * bet amount & odds.
                  */
                 calculateReturns : function() {
-                    var patt = new RegExp("[0-9]{1,3}\/[0-9]{1,3}");
 
-                    var isFraction = patt.test(this.odds);
+                    var pattern = new RegExp("[0-9]{1,3}\/[0-9]{1,3}");
+
+                    var isFraction = pattern.test(this.odds);
 
                     if(isFraction == false) {
                         $('.odds-field').addClass('has-error');
