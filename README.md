@@ -12,8 +12,8 @@ Bet tracker made using ZF2
 4. GosuLoLCaster to extend base MatchCaster
 5. When selecting a match from db, link bet to db.
 6. Multiple matches per bet.
-7. Finish Odds field (need to handle delete key, shoudl reset timer)
-8. Get vue.js working.
+7. ~~Finish Odds field (need to handle delete key, shoudl reset timer)~~
+8. ~~Get vue.js working.~~
 9. Rewrite custom jquery plugins as vue.js models.
 10. remove bootstrap css & replace with bower_component counterpart
 

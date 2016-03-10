@@ -31,13 +31,13 @@ require(
                  * Adds forward slash to odds after
                  * 500ms pause.
                  */
-                handleKeyup : function() {
+                handleKeyup : function(e) {
                     var self = this;
 
                     var now = new Date()
                         .getTime();
 
-                    if(now - this.last < 500) {
+                    if(e.keyCode == 8 || now - this.last < 500) {
                         return;
                     }
 
