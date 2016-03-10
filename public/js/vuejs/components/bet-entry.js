@@ -105,6 +105,14 @@ require(
                 }
             },
 
+            ready : function() {
+                if(this.winnings == false || this.amount == false) {
+                    return;
+                }
+
+                this.odds = this.calculateOdds();
+            },
+
             /**
              * Watch declarations
              */
@@ -122,7 +130,6 @@ require(
                  * bet amount & odds.
                  */
                 calculateReturns : function() {
-
                     var pattern = new RegExp("[0-9]{1,3}\/[0-9]{1,3}");
 
                     var isFraction = pattern.test(this.odds);
@@ -140,6 +147,26 @@ require(
                     var multiplier = fraction.valueOf() + 1;
 
                     this.winnings = this.amount * multiplier;
+                },
+
+                /**
+                 * Calculates odds from winnings and bet
+                 * amount.
+                 *
+                 * @returns {*}
+                 */
+                calculateOdds : function() {
+                    var decimal = this.winnings / this.amount - 1;
+
+                    var f = new Fraction(decimal);
+
+                    var fraction = f.toFraction();
+
+                    if(fraction.length == 1) {
+                        fraction += "/1";
+                    }
+
+                    return fraction;
                 }
             }
         })
