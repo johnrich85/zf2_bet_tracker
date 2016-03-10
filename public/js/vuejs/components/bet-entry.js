@@ -109,7 +109,7 @@ require(
                 if(this.winnings == false || this.amount == false) {
                     return;
                 }
-
+                
                 this.odds = this.calculateOdds();
             },
 
@@ -153,7 +153,9 @@ require(
                  * Calculates odds from winnings and bet
                  * amount.
                  *
-                 * @returns {*}
+                 *
+                 *
+                 * @returns {string}
                  */
                 calculateOdds : function() {
                     var decimal = this.winnings / this.amount - 1;
@@ -162,7 +164,7 @@ require(
 
                     var fraction = f.toFraction();
 
-                    if(fraction.length == 1) {
+                    if(fraction.match(/\//) == null) {
                         fraction += "/1";
                     }
 
