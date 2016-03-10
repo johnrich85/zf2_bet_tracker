@@ -4,7 +4,7 @@ zf2_bet_tracker
 Bet tracker made using ZF2
 
 
-##### Current Task list
+##### Misc Task list
 
 1. ~~Match scraping~~
 2. ~~Resolve casters/parsers based on page.~~
@@ -16,6 +16,26 @@ Bet tracker made using ZF2
 8. ~~Get vue.js working.~~
 9. Rewrite custom jquery plugins as vue.js models.
 10. remove bootstrap css & replace with bower_component counterpart
+
+
+####  Priority 1: Improved betting
+
+1. Scrape match sources, update winner.
+2. Update bet model/form so that it's possible to enter multiple lines per bet.
+2. When selecting a match (on bet add/edit form), link that match to the bet.
+3. When a bet result is scraped, mark associated bets as winners/losers.
+
+####  Priority 2: Match history
+
+1. Add new section to interface - Matches (filterable by sport).
+2. Add new team section to interface. Show recent match history.
+3. Two new pages for matches section - Upcoming match (recent patches, win %, key facts) / Match results.
+
+####  Priority 3: Improved team model
+
+1. Extend team model - current rating, notes, key facts, key players etc. Allow allow user input (key facts with tags: weight, plus/negative, expiry_date)
+2. New Player model, linked to team.# - player recent stats, current rating, injured/suspended etc.
+
 
 ##### Next up
 
@@ -30,7 +50,6 @@ Bet tracker made using ZF2
 ##### Bugs
 
 1. ~~Match date being calculated wrong, results in match being scraped multiple times.~~
-
 
 
 
