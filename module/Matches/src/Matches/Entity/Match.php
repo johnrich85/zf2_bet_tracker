@@ -2,7 +2,6 @@
 
 use Doctrine\ORM\Mapping as ORM;
 
-
 /**
  * @ORM\Entity
  * @ORM\Table(name="match_match")
@@ -42,14 +41,14 @@ class Match
     /** @ORM\Column(name="`event_id`",type="integer") */
     protected $event_id;
 
-    /** @ORM\Column(name="`winner`",type="integer") */
-    protected $winner;
-
     /** @ORM\Column(name="`hash`", type="string", nullable=true) */
     protected $hash;
 
     /** @ORM\Column(name="`match_source`", type="string", nullable=true) */
     protected $match_source;
+
+    /** @ORM\Column(name="`winner`",type="integer") */
+    protected $winner;
 
     /**
      * @ORM\ManyToOne(targetEntity="Team", inversedBy="matches_home")
@@ -74,6 +73,12 @@ class Match
      * @ORM\JoinColumn(name="`event_id`", referencedColumnName="id")
      */
     protected $event;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Game", mappedBy="match", fetch="EAGER")
+     */
+    protected $games;
+
 
     /**
      * @return mixed
@@ -233,6 +238,38 @@ class Match
     public function setHash($hash)
     {
         $this->hash = $hash;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSecondTeamScore()
+    {
+        return $this->second_team_score;
+    }
+
+    /**
+     * @param mixed $second_team_score
+     */
+    public function setSecondTeamScore($second_team_score)
+    {
+        $this->second_team_score = $second_team_score;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFirstTeamScore()
+    {
+        return $this->first_team_score;
+    }
+
+    /**
+     * @param mixed $first_team_score
+     */
+    public function setFirstTeamScore($first_team_score)
+    {
+        $this->first_team_score = $first_team_score;
     }
 
     /**
