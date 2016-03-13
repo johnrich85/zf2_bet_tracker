@@ -85,7 +85,6 @@ class GosuLoLCaster implements Caster
         $data['date'] = $this->timeRemainingToDate($data['date']);
         $data['created_at'] = $this->startTime;
         $data['updated_at'] = $this->startTime;
-        $data['winner'] = 0;
 
         $match = $this->matchesService
             ->newInstance($data);

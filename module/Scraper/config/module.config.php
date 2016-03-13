@@ -40,6 +40,7 @@ return array(
         'factories' => array(
             'GuzzleScraper'     => 'Scraper\Scraper\GuzzleScraper',
             'GosuLoLCaster'     => 'Scraper\Casters\Factory\GosuLoLFactory',
+            'GosuMatchCaster'     => 'Scraper\Casters\Factory\GosuMatchCaster',
             'ScraperService'     => 'Scraper\Service\ScraperFactory',
         ),
     ),

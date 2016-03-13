@@ -54,6 +54,12 @@ class GuzzleScraper implements Scraper
      */
     public function get()
     {
-        return $this->client->request('GET', $this->page->getUri());
+        $uri = $this->page->getUri();
+
+        $response =  $this->client
+            ->request('GET', $uri);
+
+        return $response
+            ->withAddedHeader('REQUEST_URI', $uri);
     }
 }

@@ -47,7 +47,7 @@ class Match
     /** @ORM\Column(name="`match_source`", type="string", nullable=true) */
     protected $match_source;
 
-    /** @ORM\Column(name="`winner`",type="integer") */
+    /** @ORM\Column(name="`winner`",type="integer", nullable=true) */
     protected $winner;
 
     /**
@@ -295,7 +295,6 @@ class Match
      */
     public function populate($data)
     {
-        ;
         foreach ($data as $key => $value) {
             if (property_exists($this, $key)) {
                 $this->{$key} = $value;

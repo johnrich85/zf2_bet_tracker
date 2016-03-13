@@ -1,6 +1,7 @@
 <?php namespace Matches\Service;
 
 use Application\AppClasses\Service as TaService;
+use Matches\Entity\Match;
 use Matches\Validator\Contract\Validator;
 
 class MatchesService extends TaService\TaService
@@ -23,6 +24,16 @@ class MatchesService extends TaService\TaService
     {
         $this->matchesRepository = $matchesRepository;
         $this->matchValidator = $matchValidator;
+    }
+
+    /**
+     * @param array $params
+     * @return null|object
+     */
+    public function findOneBy(array $params)
+    {
+        return $this->matchesRepository
+            ->findOneBy($params);
     }
 
     /**
@@ -57,6 +68,28 @@ class MatchesService extends TaService\TaService
             $match = new \Matches\Entity\Match();
             $match->populate($data);
             $match->setHash($match->toHash());
+
+            return $match;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Creates an instance if data is valid.
+     *
+     * @param array $data
+     * @return bool|Match
+     */
+    public function create(array $data)
+    {
+        $this->matchValidator->setData($data);
+
+        if ($this->matchValidator->isValid()) {
+            $match = new Match();
+            $match->populate($data);
+
+            $this->em->persist($match);
 
             return $match;
         } else {
