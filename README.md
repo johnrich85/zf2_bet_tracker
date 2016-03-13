@@ -25,6 +25,8 @@ Bet tracker made using ZF2
 2. Update bet model/form so that it's possible to enter multiple lines per bet.
 2. When selecting a match (on bet add/edit form), link that match to the bet.
 3. When a bet result is scraped, mark associated bets as winners/losers.
+4. Bet status extension (win/lose/pending)
+5. List bets by day/week/month - group w/l for period
 
 ####  Priority 2: Match history
 
