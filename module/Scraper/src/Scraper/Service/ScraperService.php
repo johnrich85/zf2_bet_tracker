@@ -3,6 +3,7 @@
 use Application\AppClasses\Service as TaService;
 use Doctrine\ORM\EntityRepository;
 use Scraper\Entity\Source;
+use Scraper\Entity\SourcePage;
 use Scraper\Repository\SourcePageRepository;
 
 class ScraperService extends TaService\TaService
@@ -52,6 +53,14 @@ class ScraperService extends TaService\TaService
     }
 
     /**
+     * @param $id
+     * @return null|object
+     */
+    public function findSource($id) {
+        return $this->sourceRepo->find($id);
+    }
+
+    /**
      * @return array
      */
     public function getPagesForSource($source)
@@ -94,6 +103,27 @@ class ScraperService extends TaService\TaService
         }
 
         $this->em->flush();
+    }
+
+    /**
+     * @param Source $source
+     * @param array $matches
+     */
+    public function addPageForMatches(Source $source, array $matches) {
+        $sourcePages = [];
+
+        foreach($matches as $match) {
+            $sourcePage = new SourcePage();
+            $sourcePage->setUri($match->getMatchSource());
+            $sourcePage->setCaster('GosuMatchCaster');
+            $sourcePage->setParser('\Scraper\Parsers\GosuMatchParser');
+            $sourcePage->setTitle($match->toString());
+            $sourcePage->setSource($source);
+
+            $sourcePages[] = $sourcePage;
+        }
+
+        $this->persistEntities($sourcePages);
     }
 
     public function persist(\Doctrine\Entity $entity)

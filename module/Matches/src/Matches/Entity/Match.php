@@ -273,6 +273,24 @@ class Match
     }
 
     /**
+     * @return mixed
+     */
+    public function getMatchSource()
+    {
+        return $this->match_source;
+    }
+
+    /**
+     * @param mixed $match_source
+     */
+    public function setMatchSource($match_source)
+    {
+        $this->match_source = $match_source;
+    }
+
+
+
+    /**
      * @param $data
      */
     public function populate($data)

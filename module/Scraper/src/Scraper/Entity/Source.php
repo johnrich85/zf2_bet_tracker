@@ -27,6 +27,11 @@ class Source {
     protected $hostname;
 
     /**
+     * @ORM\OneToMany(targetEntity="SourcePage", mappedBy="source", fetch="EAGER")
+     */
+    protected $pages;
+
+    /**
      * @return mixed
      */
     public function getHostname()

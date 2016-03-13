@@ -43,16 +43,23 @@ class GuzzleScraper
     {
         $this->page = $page;
 
-        $this->scraper = new \Scraper\Scraper\GuzzleScraper($page);
-        $this->scraper->connect();
+        $this->scraper = $this->fetchScraper();
 
         $response = $this->scraper->get();
 
-        $caster = $this->getCaster();
-
-        $parser = $this->getParser($response, $caster);
+        $parser = $this->getParser($response);
 
         return $parser->parse();
+    }
+
+    /**
+     * @return \Scraper\Scraper\GuzzleScraper
+     */
+    protected function fetchScraper() {
+        $scraper = new \Scraper\Scraper\GuzzleScraper($this->page);
+        $scraper->connect();
+
+        return $scraper;
     }
 
     /**
@@ -69,13 +76,12 @@ class GuzzleScraper
      * Resolve parser from class name.
      *
      * @param $response
-     * @param $caster
-     * @return GosuLoLParser
+     * @return mixed
      */
-    public function getParser($response, $caster)
+    public function getParser($response)
     {
         $parser = $this->page->getParser();
 
-        return new $parser($response, $caster);
+        return new $parser($response, $this->getCaster());
     }
 }

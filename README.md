@@ -20,7 +20,8 @@ Bet tracker made using ZF2
 
 ####  Priority 1: Improved betting
 
-1. Scrape match sources, update winner.
+0. Move source page generation out of index controller - separate action.
+1. Scrape match sources, update winner. (step 1, create source page for each match, step 2 cron job to scrape matches after completion)
 2. Update bet model/form so that it's possible to enter multiple lines per bet.
 2. When selecting a match (on bet add/edit form), link that match to the bet.
 3. When a bet result is scraped, mark associated bets as winners/losers.

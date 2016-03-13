@@ -17,10 +17,8 @@ class SourcePage {
 
     /**
      *  @ORM\Column(name="`source_id`",type="integer")
-     *  @ORM\ManyToOne(targetEntity="Source", inversedBy="id")
-     *  @ORM\JoinColumn(name="source_id", referencedColumnName="id")
      */
-    protected $source;
+    protected $source_id;
 
     /** @ORM\Column(name="`title`",type="string") */
     protected $title;
@@ -33,6 +31,12 @@ class SourcePage {
 
     /** @ORM\Column(name="`uri`",type="string") */
     protected $uri;
+
+    /**
+     *  @ORM\ManyToOne(targetEntity="Source", inversedBy="pages")
+     *  @ORM\JoinColumn(name="`source_id`", referencedColumnName="id")
+     */
+    protected $source;
 
     /**
      * @return mixed

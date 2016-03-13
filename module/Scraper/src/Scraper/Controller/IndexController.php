@@ -82,8 +82,8 @@ class IndexController extends TaController
     public function scrapeAction()
     {
         $id = $this->params()->fromPost('page');
+
         $sm = $this->getServiceLocator();
-        $variables = [];
 
         if (!$id) {
             $this->notFoundAction();
@@ -96,21 +96,31 @@ class IndexController extends TaController
             $data = $scraper->fetch($page);
         } catch (\Exception $e) {
             $error = $e->getMessage();
-            $variables['message'] = $error;
 
             return $this->fetchView(
-                $variables,
+                [
+                    'message' => $error
+                ],
                 'scraper/connection-error'
             );
         }
 
-        $variables['message'] = 'Nothing new to add.';
-
+        $message = 'Nothing new to add.';
         if ($data) {
             $this->scraperService->persistEntities($data);
-            $variables['message'] = 'New data added.';
+
+            //TODO remove - this is not generic and so can't live here.
+            $source = $this->scraperService
+                ->findSource(2);
+
+            $this->scraperService->addPageForMatches($source, $data);
+            //end todo.
+
+            $message = 'New data added.';
         }
 
-        return $this->fetchView($variables);
+        return $this->fetchView([
+                "message" =>$message
+        ]);
     }
 }
