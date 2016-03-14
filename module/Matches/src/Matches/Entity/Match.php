@@ -1,5 +1,6 @@
 <?php namespace Matches\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -79,6 +80,13 @@ class Match
      */
     protected $games;
 
+    /**
+     * Match constructor.
+     */
+    public function __construct()
+    {
+        $this->games = new ArrayCollection();
+    }
 
     /**
      * @return mixed
@@ -161,7 +169,7 @@ class Match
     }
 
     /**
-     * @return mixed
+     * @return Team
      */
     public function getFirstTeam()
     {
@@ -177,7 +185,7 @@ class Match
     }
 
     /**
-     * @return mixed
+     * @return Team
      */
     public function getSecondTeam()
     {
@@ -288,7 +296,13 @@ class Match
         $this->match_source = $match_source;
     }
 
-
+    /**
+     * @return mixed
+     */
+    public function getGames()
+    {
+        return $this->games;
+    }
 
     /**
      * @param $data

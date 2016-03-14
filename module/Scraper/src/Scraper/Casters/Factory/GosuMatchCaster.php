@@ -14,8 +14,8 @@ class GosuMatchCaster implements FactoryInterface
         $teamService = $serviceLocator
             ->get('TeamService');
 
-        $sportService = $serviceLocator
-            ->get('SportService');
+        $gameService = $serviceLocator
+            ->get('GameService');
 
         $eventService = $serviceLocator
             ->get('EventService');
@@ -23,7 +23,7 @@ class GosuMatchCaster implements FactoryInterface
         $caster = new Caster(
             $matchesService,
             $teamService,
-            $sportService,
+            $gameService,
             $eventService
         );
 

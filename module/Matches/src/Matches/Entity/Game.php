@@ -167,5 +167,15 @@ class Game
         $this->match = $match;
     }
 
-
+    /**
+     * @param $data
+     */
+    public function populate($data)
+    {
+        foreach ($data as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->{$key} = $value;
+            }
+        }
+    }
 }

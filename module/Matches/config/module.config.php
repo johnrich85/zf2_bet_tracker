@@ -1,6 +1,7 @@
 <?php namespace Matches;
 
 use Illuminate\Support\MessageBag;
+use Matches\Validator\Game;
 use Matches\Validator\Match;
 use Matches\Validator\Team;
 use Zend\InputFilter\InputFilter;
@@ -47,6 +48,7 @@ return array(
             'TeamService'     => 'Matches\Service\Factory\Team',
             'SportService'     => 'Matches\Service\Factory\Sport',
             'EventService'     => 'Matches\Service\Factory\Event',
+            'GameService'     => 'Matches\Service\Factory\Game',
             'MatchValidator'     => function ($sm) {
                 $inputFilter = new InputFilter();
                 $messageBag = new MessageBag();
@@ -58,6 +60,12 @@ return array(
                 $messageBag = new MessageBag();
 
                 return new Team($inputFilter, $messageBag);
+            },
+            'GameValidator'     => function ($sm) {
+                $inputFilter = new InputFilter();
+                $messageBag = new MessageBag();
+
+                return new Game($inputFilter, $messageBag);
             }
         ),
     ),
