@@ -109,10 +109,11 @@ class ScraperService extends TaService\TaService
      * @param Source $source
      * @param array $matches
      */
-    public function addPageForMatches(Source $source, array $matches) {
+    public function addPageForMatches(Source $source, array $matches)
+    {
         $sourcePages = [];
 
-        foreach($matches as $match) {
+        foreach ($matches as $match) {
             $sourcePage = new SourcePage();
             $sourcePage->setUri($match->getMatchSource());
             $sourcePage->setCaster('GosuMatchCaster');

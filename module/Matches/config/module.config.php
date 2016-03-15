@@ -49,6 +49,7 @@ return array(
             'SportService'     => 'Matches\Service\Factory\Sport',
             'EventService'     => 'Matches\Service\Factory\Event',
             'GameService'     => 'Matches\Service\Factory\Game',
+
             'MatchValidator'     => function ($sm) {
                 $inputFilter = new InputFilter();
                 $messageBag = new MessageBag();

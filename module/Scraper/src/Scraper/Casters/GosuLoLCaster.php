@@ -1,5 +1,6 @@
 <?php namespace Scraper\Casters;
 
+use Matches\Entity\Match;
 use Matches\Service\Event;
 use Matches\Service\MatchesService;
 use Matches\Service\Sport;
@@ -137,6 +138,10 @@ class GosuLoLCaster implements Caster
      */
     protected function isExsitingMatch($match)
     {
+        if (!$match instanceof Match) {
+            return false;
+        }
+
         $hash = $match->toHash();
 
         return $existingMatch = $this->matchesService

@@ -6,16 +6,19 @@ use Matches\Entity\Team;
 use Matches\Validator\Contract\Validator;
 use Zend\InputFilter\InputFilter;
 
-class Match extends Base implements Validator {
+class Match extends Base implements Validator
+{
 
     /**
      * @param InputFilter $inputFilter
      */
-    public function __construct(InputFilter $inputFilter, MessageBag $bag) {
+    public function __construct(InputFilter $inputFilter, MessageBag $bag)
+    {
         parent::__construct($inputFilter, $bag);
     }
 
-    protected function init() {
+    protected function init()
+    {
         $this->inputFilter->add(array(
             'name'     => 'first_team',
             'required' => true,
@@ -138,7 +141,7 @@ class Match extends Base implements Validator {
 
         $this->inputFilter->add(array(
             'name'     => 'winner',
-            'required' => true,
+            'required' => false,
             'filters'  => array(
                 array('name' => 'StripTags'),
                 array('name' => 'StringTrim'),
@@ -158,25 +161,26 @@ class Match extends Base implements Validator {
     /**
      * @param array $data
      */
-    public function setData(array $data) {
+    public function setData(array $data)
+    {
 
-        if($data['first_team'] instanceof Team) {
+        if ($data['first_team'] instanceof Team) {
             $data['first_team'] = $data['first_team']->getName();
         }
 
-        if($data['second_team'] instanceof Team) {
+        if ($data['second_team'] instanceof Team) {
             $data['second_team'] = $data['second_team']->getName();
         }
 
-        if($data['date'] instanceof \DateTime) {
+        if ($data['date'] instanceof \DateTime) {
             $data['date'] = $data['date']->format('Y-m-d H:i:s');
         }
 
-        if($data['event'] instanceof \Matches\Entity\Event) {
+        if ($data['event'] instanceof \Matches\Entity\Event) {
             $data['event'] = $data['event']->getName();
         }
 
-        if($data['sport'] instanceof Sport) {
+        if ($data['sport'] instanceof Sport) {
             $data['sport'] = $data['sport']->getName();
         }
 

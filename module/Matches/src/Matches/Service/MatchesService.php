@@ -76,6 +76,14 @@ class MatchesService extends TaService\TaService
     }
 
     /**
+     * @return Validator
+     */
+    public function getValidator()
+    {
+        return $this->matchValidator;
+    }
+
+    /**
      * Creates an instance if data is valid.
      *
      * @param array $data

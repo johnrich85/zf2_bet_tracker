@@ -38,11 +38,14 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'GuzzleScraper'     => 'Scraper\Scraper\GuzzleScraper',
-            'GosuLoLCaster'     => 'Scraper\Casters\Factory\GosuLoLFactory',
-            'GosuMatchCaster'     => 'Scraper\Casters\Factory\GosuMatchCaster',
+            'GuzzleScraper'      => 'Scraper\Scraper\GuzzleScraper',
+            'GosuLoLCaster'      => 'Scraper\Casters\Factory\GosuLoLFactory',
+            'GosuMatchCaster'    => 'Scraper\Casters\Factory\GosuMatchCaster',
             'ScraperService'     => 'Scraper\Service\ScraperFactory',
         ),
+        'invokables' => array(
+            'ScrapedHandler'     => 'Scraper\Events\Base'
+        )
     ),
     'view_manager' => array(
         'template_map' => array(

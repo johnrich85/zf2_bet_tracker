@@ -1,9 +1,21 @@
 <?php namespace Scraper;
 
 use Scraper\Controller\IndexController;
+use Zend\Mvc\MvcEvent;
 
 class Module
 {
+    public function onBootstrap(MvcEvent $e)
+    {
+        $eventManager = $e->getApplication()
+            ->getEventManager()
+            ->getSharedManager();
+
+        $sm = $e->getApplication()->getServiceManager();
+
+        $this->registerScrapedHandler($eventManager, $sm);
+    }
+
     /**
      * @return mixed
      */
@@ -33,7 +45,7 @@ class Module
     {
         return array(
             'factories' => array(
-                'ScraperController' => function(\Zend\Mvc\Controller\ControllerManager $cm) {
+                'ScraperController' => function (\Zend\Mvc\Controller\ControllerManager $cm) {
 
                     $entityManager = $cm->getServiceLocator()
                         ->get('doctrine.entitymanager.orm_default');
@@ -47,6 +59,24 @@ class Module
                     return new IndexController($repo, $scraperService);
                 },
             ),
+        );
+    }
+
+    /**
+     * Register event handler that carries out
+     * further tasks after a page has been scraped.
+     *
+     * @param $em
+     * @param $sm
+     */
+    protected function registerScrapedHandler($em, $sm)
+    {
+        $scrapedHandler = $sm->get('ScrapedHandler');
+
+        $em->attach(
+            'Scraper\Controller\IndexController',
+            'Scraper.scraped',
+            array($scrapedHandler, 'handle')
         );
     }
 }

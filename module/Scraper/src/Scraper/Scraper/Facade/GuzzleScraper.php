@@ -55,7 +55,8 @@ class GuzzleScraper
     /**
      * @return \Scraper\Scraper\GuzzleScraper
      */
-    protected function fetchScraper() {
+    protected function fetchScraper()
+    {
         $scraper = new \Scraper\Scraper\GuzzleScraper($this->page);
         $scraper->connect();
 

@@ -4,7 +4,8 @@ namespace Application\AppClasses\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class TaController extends AbstractActionController{
+class TaController extends AbstractActionController
+{
 
     /**
      * @var \Illuminate\Support\MessageBag
@@ -17,7 +18,8 @@ class TaController extends AbstractActionController{
      *
      * @param $message
      */
-    public function addMessage($message) {
+    public function addMessage($message)
+    {
         array_push($this->messages, $message);
     }
 
@@ -27,8 +29,9 @@ class TaController extends AbstractActionController{
      * @param array $data
      * @return ViewModel
      */
-    public function fetchView($data = array(), $template = null) {
-        if(!$this->messageBag) {
+    public function fetchView($data = array(), $template = null)
+    {
+        if (!$this->messageBag) {
             $this->messageBag = $this->getServiceLocator()->get('MessageBag');
         }
 
@@ -36,7 +39,7 @@ class TaController extends AbstractActionController{
 
         $viewModel = new ViewModel($data);
 
-        if($template) {
+        if ($template) {
             $viewModel->setTemplate($template);
         }
 

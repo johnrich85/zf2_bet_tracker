@@ -2,6 +2,7 @@
 
 use Application\AppClasses\Controller\TaController;
 use Matches\Service\MatchesService;
+use Scraper\Entity\SourcePage;
 use Scraper\Form\Source;
 use Scraper\Form\SourcePages;
 use Scraper\Repository\SourcePageRepository;
@@ -108,19 +109,39 @@ class IndexController extends TaController
         $message = 'Nothing new to add.';
         if ($data) {
             $this->scraperService->persistEntities($data);
-
-            //TODO remove - this is not generic and so can't live here.
-            $source = $this->scraperService
-                ->findSource(2);
-
-            $this->scraperService->addPageForMatches($source, $data);
-            //end todo.
-
             $message = 'New data added.';
         }
 
+        $this->triggerScrapedEvent($page, $data);
+
         return $this->fetchView([
-                "message" =>$message
+            "message" => $message
         ]);
+    }
+
+    /**
+     * Triggers 'finished scraping'
+     * event
+     *
+     * @param $data
+     * @param SourcePage $page
+     */
+    protected function triggerScrapedEvent(SourcePage $page, $data)
+    {
+        if ($data == null) {
+            return;
+        }
+
+        $params = [
+            'matches' => $data,
+            'service' => $this->scraperService,
+            'page' => $page
+        ];
+
+        $this->getEventManager()->trigger(
+            'Scraper.scraped',
+            $this,
+            $params
+        );
     }
 }
