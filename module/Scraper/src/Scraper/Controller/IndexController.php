@@ -96,17 +96,13 @@ class IndexController extends TaController
             $scraper = new GuzzleScraper($sm);
             $data = $scraper->fetch($page);
         } catch (\Exception $e) {
-            $error = $e->getMessage();
+            $viewData = ['message' => $e->getMessage()];
 
-            return $this->fetchView(
-                [
-                    'message' => $error
-                ],
-                'scraper/connection-error'
-            );
+            return $this->fetchView($viewData, 'scraper/connection-error');
         }
 
         $message = 'Nothing new to add.';
+
         if ($data) {
             $this->scraperService->persistEntities($data);
             $message = 'New data added.';
