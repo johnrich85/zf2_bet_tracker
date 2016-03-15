@@ -1,6 +1,6 @@
 <?php namespace Scraper\Events\Contract;
 
-use Scraper\Entity\SourcePage;
+use Zend\EventManager\EventInterface;
 
 interface PageScraperHandler
 {
