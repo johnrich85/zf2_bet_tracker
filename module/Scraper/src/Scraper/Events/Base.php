@@ -1,8 +1,9 @@
 <?php namespace Scraper\Events;
 
+use Scraper\Events\Contract\PageScraperHandler;
 use Zend\EventManager\EventInterface;
 
-class Base
+class Base implements PageScraperHandler
 {
     /**
      * @var array
