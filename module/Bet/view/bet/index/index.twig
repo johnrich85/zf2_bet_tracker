@@ -1,10 +1,7 @@
-<?php
-    $this->headScript()->appendFile($this->basePath() . '/js/bet/table.js');
+{{ headScript().appendFile(basePath() ~ '/js/bet/table.js')|raw }}
+{{ flashMessenger().render() }}
 
-    echo $this->flashMessenger()->render();
-?>
 <div class="row">
-
     <div class="col-lg-4">
         <div class="panel panel-danger">
             <div class="panel-heading">
@@ -13,7 +10,7 @@
                         <i class="fa fa-times fa-5x"></i>
                     </div>
                     <div class="col-xs-6 text-right">
-                        <p class="announcement-heading"><?php echo $losing ?></p>
+                        <p class="announcement-heading">{{ losing }}</p>
                         <p class="announcement-text">Losing bets</p>
                     </div>
                 </div>
@@ -40,7 +37,7 @@
                         <i class="fa fa-check-square fa-5x"></i>
                     </div>
                     <div class="col-xs-6 text-right">
-                        <p class="announcement-heading"><?php echo $winning ?></p>
+                        <p class="announcement-heading">{{ winning }}</p>
                         <p class="announcement-text">Winning Bets</p>
                     </div>
                 </div>
@@ -68,12 +65,12 @@
                         <i class="fa fa-money fa-5x"></i>
                     </div>
                     <div class="col-xs-6 text-right">
-                        <p class="announcement-heading"><?php echo $bankroll->getAmount() ?></p>
+                        <p class="announcement-heading">{{ bankroll.getAmount() }}</p>
                         <p class="announcement-text">Bankroll</p>
                     </div>
                 </div>
             </div>
-            <a href="/bankroll/history/<?php echo $bankroll->getId() ?>">
+            <a href="/bankroll/history/{{bankroll.getId() }}">
                 <div class="panel-footer announcement-bottom">
                     <div class="row">
                         <div class="col-xs-6">
@@ -102,21 +99,29 @@
         </thead>
         <tbody>
 
-        <?php foreach ($bets as $bet) : ?>
+        {% for bet in bets %}
             <tr>
-                <td><a href="/bet/edit/<?php echo $bet->getId() ?>"><?php echo $bet->getName() ?></a></td>
-                <td><?php echo $bet->getSuccessful() == 1 ? '<span class="label label-success">Win</span>' : '<span class="label label-danger">Lose</span>' ?></td>
-                <td><?php echo $bet->getDate() ?></td>
-                <td><?php echo $bet->getAmount() ?></td>
-                <td><?php echo $bet->getReturn() ?></td>
+                <td><a href="/bet/edit/{{ bet.getId() }}">{{ bet.getName() }}</a></td>
+
                 <td>
-                    <a href="/bet/edit/<?php echo $bet->getId() ?>">Edit</a> |
-                    <a href="/bet/delete/<?php echo $bet->getId() ?>">Delete</a>
+                    {% if bet.getSuccessful() == 1 %}
+                        <span class="label label-success">Win</span>
+                    {% else %}
+                        <span class="label label-danger">Lose</span>
+                    {% endif %}
+                </td>
+
+                <td>{{ bet.getDate() }}</td>
+                <td>{{ bet.getAmount() }}</td>
+                <td>{{ bet.getReturn() }}</td>
+                <td>
+                    <a href="/bet/edit/{{ bet.getId() }}">Edit</a> |
+                    <a href="/bet/delete/{{ bet.getId() }}">Delete</a>
                 </td>
             </tr>
-        <?php endforeach; ?>
+        {% endfor %}
 
     </tbody>
 </table>
 
-<?php echo $this->partial('partials/pagination', array('paginator' => $bets)); ?>
+{% include 'partials/pagination' with {'paginator': bets} %}

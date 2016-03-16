@@ -98,7 +98,7 @@ class IndexController extends TaController
 
         $view = new ViewModel(
             array(
-                'form' => $form,
+                'theForm' => $form,
                 'title' => 'Create a new bet',
                 'matches' => $matches
             )
@@ -138,7 +138,7 @@ class IndexController extends TaController
 
         $view = new ViewModel(
             array(
-                'form' => $form,
+                'theForm' => $form,
                 'title' => 'Update bet'
             )
         );
@@ -151,7 +151,7 @@ class IndexController extends TaController
     /**
      * Remove bets.
      *
-     * @todo implement service method, add to ui.
+     * @todo implement service method
      * @return \Zend\Http\Response
      */
     public function deleteAction()
@@ -171,7 +171,7 @@ class IndexController extends TaController
             //TODO
         }
 
-        return $this->fetchView(array('form' => $form));
+        return $this->fetchView(array('theForm' => $form));
     }
 
     /**
@@ -180,7 +180,7 @@ class IndexController extends TaController
     protected function getUpcomingMatches()
     {
         $from = new \DateTime();
-        $from->setTime(0,0,0);
+        $from->setTime(0, 0, 0);
 
         $to = new \DateTime();
         $to->modify('+ 1 week');

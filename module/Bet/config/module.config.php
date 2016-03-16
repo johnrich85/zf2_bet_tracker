@@ -36,10 +36,10 @@ return array(
     'view_manager' => array(
         'template_map' => array(
             'layout/layout'           => __DIR__ . '/../../Application/view/layout/layout.phtml',
-            'bet/index/index' => __DIR__ . '/../view/bet/index/index.phtml',
-            'bet/index/update' => __DIR__ . '/../view/bet/index/update.phtml',
-            'bet/index/delete' => __DIR__ . '/../view/bet/index/delete.phtml',
-            'partials/bet/form'     => __DIR__ . '/../view/partials/form.phtml',
+            'bet/index/index' => __DIR__ . '/../view/bet/index/index.twig',
+            'bet/index/update' => __DIR__ . '/../view/bet/index/update.twig',
+            'bet/index/delete' => __DIR__ . '/../view/bet/index/delete.twig',
+            'partials/pagination'     => __DIR__ . '/../view/partials/pagination.twig',
         ),
         'strategies' => array(
             'ViewJsonStrategy',

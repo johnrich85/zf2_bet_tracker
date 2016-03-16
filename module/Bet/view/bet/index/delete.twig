@@ -1,0 +1,29 @@
+<h3> Delete a bet </h3>
+
+{{ form().openTag(theForm)|raw }}
+
+    {{ form.setAttribute('action', url('bet', {'action' : 'add'})) }}
+
+        {{ form.prepare() }}
+
+        {{ formHidden(theForm.get('id')) }}
+        {{ formHidden(theForm.get('userId')) }}
+
+    <div class="form-group">
+        <label>Are you sure you want to delete:</label>
+
+         {{ formRow(theForm.get('name')) }}
+    </div>
+
+    <div class="form-group">
+        <label>If so, enter the name below &amp; then click delete.</label>
+        {{ formRow(theForm.get('confirmation')) }}
+    </div>
+
+    <div class="form-group">
+        {{ formRow(theForm.get('submit')) }}
+    </div>
+
+{{ form().closeTag(theForm)|raw }}
+
+

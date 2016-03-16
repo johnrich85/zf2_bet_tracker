@@ -1,0 +1,67 @@
+<h3>{{ title }}</h3>
+
+<div class="row">
+    <div class="col-lg-6 ">
+        {{ form().openTag(theForm)|raw }}
+
+        {{ formHidden(theForm.get('id')) }}
+
+        {{ formHidden(theForm.get('userId')) }}
+
+
+        <div class="form-group" id="match-name">
+            {{ formRow(theForm.get('name')) }}
+
+            <div class="modal fade alt-option" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Select a match...</h4>
+                        </div>
+                        <div class="modal-body">
+                            <select name="alt-value">
+                                {%  for label, group in matches %}
+                                    <optgroup label="{{ label }}">
+                                        {%  for match_id, match in group %}
+                                            <option id="{{ match_id }}">
+                                                {{ match }}
+                                            </option>
+                                        {% endfor %}
+                                    </optgroup>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary alt-select">Select</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-small btn-default show-alt-option">Select event...</button>
+        </div>
+
+        <div class="form-group">
+            {{ formRow(theForm.get('date')) }}
+        </div>
+
+        <div id="bet-entry">
+            <bet-entry amount="{{ theForm.get('amount').getValue() }}"
+                       winnings="{{ theForm.get('return').getValue() }}">
+            </bet-entry>
+        </div>
+
+        <div class="checkbox">
+            {{ formLabel(theForm.get('successful')) }}
+            {{ formCheckbox(theForm.get('successful')) }}
+        </div>
+
+        {{ formRow(theForm.get('secret')) }}
+        {{ formInput(theForm.get('submit')) }}
+
+        {{ form().closeTag(theForm)|raw }}
+    </div>
+</div>
+
+{{ HeadScript().appendFile(basePath() ~ '/js/bet/form.js')|raw }}
