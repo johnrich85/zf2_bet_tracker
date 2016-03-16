@@ -47,7 +47,7 @@ class IndexController extends TaController
         $form->init();
 
         return $this->fetchView([
-            'form' => $form
+            'theForm' => $form
         ]);
     }
 
@@ -73,7 +73,7 @@ class IndexController extends TaController
         $form->init();
 
         return $this->fetchView([
-            'form' => $form
+            'theForm' => $form
         ]);
     }
 

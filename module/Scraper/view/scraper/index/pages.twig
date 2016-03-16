@@ -1,11 +1,11 @@
-<h1><?php echo $this->title; ?></h1>
+<h1>{{ title }}</h1>
 
-<?php echo $this->form()->openTag($form);?>
+{{ form().openTag(theForm)|raw }}
 
 <div class="form-group">
-    <?php echo $this->formRow($form->get('page')); ?>
+    {{ formRow(theForm.get('page')) }}
 </div>
 
-<?php echo $this->formInput($form->get('submit')); ?>
+{{ formInput(theForm.get('submit')) }}
 
-<?php echo $this->form()->closeTag($form);
+{{ form().closeTag(theForm)|raw }}

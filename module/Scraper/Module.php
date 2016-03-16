@@ -1,10 +1,21 @@
 <?php namespace Scraper;
 
 use Scraper\Controller\IndexController;
+use Zend\ModuleManager\Feature\DependencyIndicatorInterface;
 use Zend\Mvc\MvcEvent;
 
-class Module
+class Module implements DependencyIndicatorInterface
 {
+    /**
+     * Check dependencies have been loaded.
+     *
+     * @return array
+     */
+    public function getModuleDependencies()
+    {
+        return array('Matches');
+    }
+
     public function onBootstrap(MvcEvent $e)
     {
         $eventManager = $e->getApplication()

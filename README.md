@@ -46,7 +46,7 @@ Bet tracker made using ZF2
 1. Logging
 2. ~~Template engine.~~
 2. Template engine - get layout working properly.
-3. XSS escaping.
+3. ~~XSS escaping.~~
 4. ~~CSRF for forms.~~
 5. Users, Authentication & ACL.
 6. ~~Frontend modules/dependency manager~~
