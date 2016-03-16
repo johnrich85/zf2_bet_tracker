@@ -1,5 +1,6 @@
 <?php namespace Scraper;
 
+use Scraper\Controller\CommandController;
 use Scraper\Controller\IndexController;
 use Zend\ModuleManager\Feature\DependencyIndicatorInterface;
 use Zend\Mvc\MvcEvent;
@@ -68,6 +69,13 @@ class Module implements DependencyIndicatorInterface
                         ->get('ScraperService');
 
                     return new IndexController($repo, $scraperService);
+                },
+                'CommandController' => function (\Zend\Mvc\Controller\ControllerManager $cm) {
+
+                    $scraperService = $cm->getServiceLocator()
+                        ->get('ScraperService');
+
+                    return new CommandController($scraperService);
                 },
             ),
         );

@@ -88,14 +88,19 @@ class GosuMatchCaster implements Caster
      * @param Match $match
      * @param array $data
      */
-    protected function addGames(Match $match, array $data) {
+    protected function addGames(Match $match, array $data)
+    {
+        if ($match->getGames()->count()) {
+            return;
+        }
+
         $first_score = $data['first_team_score'];
-        $second_score = $data['first_team_score'];
+        $second_score = $data['second_team_score'];
 
-        $games = $this->createGames($match,$first_score, 1, 0);
-        $games += $this->createGames($match,$second_score, 0, 1);
+        $games = $this->createGames($match, $first_score, 1, 0);
+        $games += $this->createGames($match, $second_score, 0, 1);
 
-        foreach($games as $game) {
+        foreach ($games as $game) {
             $match->getGames()->add($game);
         }
     }
@@ -107,7 +112,8 @@ class GosuMatchCaster implements Caster
      * @param $score2
      * @return array
      */
-    protected function createGames(Match $match, $numGames, $score1, $score2) {
+    protected function createGames(Match $match, $numGames, $score1, $score2)
+    {
         $payload = [];
 
         $date = new \DateTime();
@@ -121,7 +127,7 @@ class GosuMatchCaster implements Caster
             'second_team_score' => $score2
         ];
 
-        for($a = 0; $a < $numGames; $a++) {
+        for ($a = 0; $a < $numGames; $a++) {
             $game = $this->gameService->create($data);
 
             $payload[] = $game;
@@ -135,17 +141,16 @@ class GosuMatchCaster implements Caster
      * @param array $data
      * @return int|mixed
      */
-    protected function getWinner(Match $match, array $data) {
+    protected function getWinner(Match $match, array $data)
+    {
         $first_score = $data['first_team_score'];
-        $second_score = $data['first_team_score'];
+        $second_score = $data['second_team_score'];
 
-        if($first_score > $second_score) {
+        if ($first_score > $second_score) {
             $id = $match->getFirstTeam()->getId();
-        }
-        elseif($second_score > $first_score) {
+        } elseif ($second_score > $first_score) {
             $id = $match->getSecondTeam()->getId();
-        }
-        else {
+        } else {
             $id = 0;
         }
 
@@ -159,7 +164,8 @@ class GosuMatchCaster implements Caster
      * @param $data
      * @return \DateTime
      */
-    protected function getDate($data) {
+    protected function getDate($data)
+    {
         $date = new \DateTime(
             $data['date'],
             new \DateTimeZone('Europe/Berlin')

@@ -22,7 +22,8 @@ Bet tracker made using ZF2
 
 0. ~~Move source page generation out of index controller - separate action.~~
 1. ~~Scrape match sources, update winner. (step 1, create source page for each match)~~
-1. Relationship between match & SourcePage. Then create controller action to scrape all completed matches.
+1. ~~Relationship between match & SourcePage.~~
+1. Then create controller action to scrape all completed matches.
 2. Update bet model/form so that it's possible to enter multiple lines per bet.
 2. When selecting a match (on bet add/edit form), link that match to the bet.
 3. When a bet result is scraped, mark associated bets as winners/losers.
@@ -64,3 +65,6 @@ Bet tracker made using ZF2
 2. Install dependencies via composer (composer.phar install)
 3. Install frontend dependencies (bower install)
 4. Build schema (vendor/doctrine/doctrine-module/bin/doctrine-module orm:schema-tool:update
+
+##### Commands
+1. *Scrape completed matches* - php public/index.php scrape matches

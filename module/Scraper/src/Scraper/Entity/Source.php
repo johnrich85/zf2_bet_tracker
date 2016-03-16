@@ -10,9 +10,11 @@ use Zend\InputFilter\InputFilterInterface;
 
 /**
  * @ORM\Entity
+ * @ORM\Table(name="source_source")
  */
 
-class Source {
+class Source
+{
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")

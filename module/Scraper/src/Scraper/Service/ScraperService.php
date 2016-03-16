@@ -2,8 +2,10 @@
 
 use Application\AppClasses\Service as TaService;
 use Doctrine\ORM\EntityRepository;
+use Matches\Entity\Match;
 use Scraper\Entity\Source;
 use Scraper\Entity\SourcePage;
+use Scraper\Entity\SourcePageMatch;
 use Scraper\Repository\SourcePageRepository;
 
 class ScraperService extends TaService\TaService
@@ -37,6 +39,17 @@ class ScraperService extends TaService\TaService
     }
 
     /**
+     * @param \DateTime $from
+     * @param \DateTime $to
+     *
+     * @return array
+     */
+    public function allMatchPagesBetween(\DateTime $from, \DateTime $to)
+    {
+        return $this->pageRepo->allMatchesBetween($from, $to);
+    }
+
+    /**
      * @return array
      */
     public function getSourceNames()
@@ -56,7 +69,8 @@ class ScraperService extends TaService\TaService
      * @param $id
      * @return null|object
      */
-    public function findSource($id) {
+    public function findSource($id)
+    {
         return $this->sourceRepo->find($id);
     }
 
@@ -78,8 +92,10 @@ class ScraperService extends TaService\TaService
 
     /**
      * @param array[SourcePage] $pages
+     * @return array
      */
-    public function getPageTitles(array $pages) {
+    public function getPageTitles(array $pages)
+    {
         $payload = [];
 
         foreach ($pages as $page) {
@@ -121,10 +137,30 @@ class ScraperService extends TaService\TaService
             $sourcePage->setTitle($match->toString());
             $sourcePage->setSource($source);
 
+            $spm = $this->createSourcePageMatch($match, $sourcePage);
+
+            $sourcePage->setMatch($spm);
+
             $sourcePages[] = $sourcePage;
         }
 
         $this->persistEntities($sourcePages);
+    }
+
+    /**
+     * @param Match $match
+     * @param SourcePage $page
+     * @return SourcePageMatch
+     */
+    public function createSourcePageMatch(Match $match, SourcePage $page)
+    {
+        $spm = new SourcePageMatch();
+        $spm->setMatch($match);
+        $spm->setPage($page);
+
+        $this->em->persist($spm);
+
+        return $spm;
     }
 
     public function persist(\Doctrine\Entity $entity)

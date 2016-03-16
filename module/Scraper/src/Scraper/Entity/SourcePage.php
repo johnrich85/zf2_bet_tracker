@@ -1,13 +1,16 @@
 <?php namespace Scraper\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Matches\Entity\Match;
 
 /**
  * @ORM\Entity
+ * @ORM\Table(name="source_page")
  * @ORM\Entity(repositoryClass="Scraper\Repository\SourcePageRepository")
  */
 
-class SourcePage {
+class SourcePage
+{
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -37,6 +40,11 @@ class SourcePage {
      *  @ORM\JoinColumn(name="`source_id`", referencedColumnName="id")
      */
     protected $source;
+
+    /**
+     * @ORM\OneToOne(targetEntity="SourcePageMatch", mappedBy="page", fetch="LAZY", cascade={"persist", "remove"})
+     */
+    protected $match;
 
     /**
      * @return mixed
@@ -132,5 +140,21 @@ class SourcePage {
     public function setParser($parser)
     {
         $this->parser = $parser;
+    }
+
+    /**
+     * @return Match|null
+     */
+    public function getMatch()
+    {
+        return $this->match;
+    }
+
+    /**
+     * @param mixed $match
+     */
+    public function setMatch(SourcePageMatch $match)
+    {
+        $this->match = $match;
     }
 }

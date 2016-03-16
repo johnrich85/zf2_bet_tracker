@@ -18,6 +18,7 @@ return array(
             )
         )
     ),
+
     'router' => array(
         'routes' => array(
             'scraper' => array(
@@ -36,6 +37,23 @@ return array(
             ),
         ),
     ),
+
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'scrape' => array(
+                    'options' => array(
+                        'route'    => 'scrape matches',
+                        'defaults' => array(
+                            'controller' => 'CommandController',
+                            'action'     => 'scrapeMatches'
+                        )
+                    )
+                )
+            )
+        )
+    ),
+
     'service_manager' => array(
         'factories' => array(
             'GuzzleScraper'      => 'Scraper\Scraper\GuzzleScraper',
@@ -47,6 +65,7 @@ return array(
             'ScrapedHandler'     => 'Scraper\Events\Base'
         )
     ),
+
     'view_manager' => array(
         'template_map' => array(
             'scraper/index/index' => __DIR__ . '/../view/scraper/index/index.twig',

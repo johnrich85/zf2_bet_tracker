@@ -56,7 +56,8 @@ class GosuMatchParser implements Parser
      * @param $crawler
      * @return array
      */
-    protected function parseScore($crawler) {
+    protected function parseScore($crawler)
+    {
         $payload = [];
 
         $results = $crawler
