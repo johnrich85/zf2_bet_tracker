@@ -19,15 +19,14 @@ class CommandController extends TaController
         $this->scraperService = $scraperService;
     }
 
+    /**
+     * Scrapes matches, returning additional info such as
+     * winner, game details, date etc.
+     */
     public function scrapeMatchesAction()
     {
-        $from = new \DateTime();
-        $from->modify('-2 months');
-        $from->setTime(0, 0, 0);
-
-        $to = new \DateTime();
-        $to->modify('-3 hours');
-
+        $from = $this->getStartDate();
+        $to = $this->getEndDate();
 
         $pages = $this->scraperService
             ->allMatchPagesBetween($from, $to);
@@ -42,17 +41,37 @@ class CommandController extends TaController
                 $data = $scraper->fetch($page);
             } catch (\Exception $e) {
                 $message = 'Unable to scrape data for page:' . $page->getTitle();
-
                 error_log($message);
 
                 continue;
             }
 
-            if ($data) {
-                $this->scraperService->persistEntities($data);
-            }
+            $this->scraperService->persistEntities($data);
         }
 
         echo("Scraping completed");
+    }
+
+    /**
+     * @return \DateTime
+     */
+    protected function getStartDate()
+    {
+        $from = new \DateTime();
+        $from->modify('-2 months');
+        $from->setTime(0, 0, 0);
+
+        return $from;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    protected function getEndDate()
+    {
+        $to = new \DateTime();
+        $to->modify('-3 hours');
+
+        return $to;
     }
 }
