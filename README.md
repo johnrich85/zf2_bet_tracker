@@ -22,13 +22,13 @@ Bet tracker made using ZF2
 
 0. ~~Move source page generation out of index controller - separate action.~~
 1. ~~Scrape match sources, update winner. (step 1, create source page for each match)~~
-1. ~~Relationship between match & SourcePage.~~
-1. Then create controller action to scrape all completed matches.
-2. Update bet model/form so that it's possible to enter multiple lines per bet.
-2. When selecting a match (on bet add/edit form), link that match to the bet.
-3. When a bet result is scraped, mark associated bets as winners/losers.
-4. Bet status extension (win/lose/pending)
-5. List bets by day/week/month - group w/l for period, graphs for bets for sport or weekly etc
+2. ~~Relationship between match & SourcePage.~~
+3. ~~Then create controller action to scrape all completed matches.~~
+4. Update bet model/form so that it's possible to enter multiple lines per bet.
+5. When selecting a match (on bet add/edit form), link that match to the bet.
+6. When a bet result is scraped, mark associated bets as winners/losers.
+7. Bet status extension (win/lose/pending)
+8. List bets by day/week/month - group w/l for period, graphs for bets for sport or weekly etc
 
 ####  Priority 2: Match history
 
