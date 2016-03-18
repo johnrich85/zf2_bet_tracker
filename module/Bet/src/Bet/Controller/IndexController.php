@@ -64,9 +64,11 @@ class IndexController extends TaController
         }
 
         $bets = $this->betService->getPaginatedList($pageNum, $params);
+        $betsByDay = $this->betService->getBetsByDay($pageNum, 3, $params);
 
         return $this->fetchView(array(
             "bets" => $bets,
+            "betsByDay" => $betsByDay,
             "winning" => $this->betService->getBetCount(1),
             "losing" => $this->betService->getBetCount(0),
             "bankroll" => $this->bankrollService->getById(1)
@@ -96,18 +98,13 @@ class IndexController extends TaController
             }
         }
 
-        $view = new ViewModel(
-            array(
-                'theForm' => $form,
-                'title' => 'Create a new bet',
-                'matches' => $matches
-            )
-        );
+        $viewData = [
+            'theForm' => $form,
+            'title' => 'Create a new bet',
+            'matches' => $matches
+        ];
 
-        $view->setTemplate('bet/index/update');
-
-        return $view;
-
+        return $this->fetchView($viewData, 'bet/index/update');
     }
 
     /**
@@ -127,6 +124,8 @@ class IndexController extends TaController
 
             if ($result) {
                 $this->messageBag->add('info', 'Great Success! Bet updated...');
+            } else {
+                $this->messageBag->add('error', 'Fail! Bet not updated...');
             }
         } else {
             $form = $this->betService
@@ -136,16 +135,12 @@ class IndexController extends TaController
         $form->editMode();
         $form->prepare();
 
-        $view = new ViewModel(
-            array(
-                'theForm' => $form,
-                'title' => 'Update bet'
-            )
-        );
+        $viewData = [
+            'theForm' => $form,
+            'title' => 'Update bet'
+        ];
 
-        $view->setTemplate('bet/index/update');
-
-        return $view;
+        return $this->fetchView($viewData, 'bet/index/update');
     }
 
     /**
@@ -171,7 +166,11 @@ class IndexController extends TaController
             //TODO
         }
 
-        return $this->fetchView(array('theForm' => $form));
+        $viewData = [
+            'theForm' => $form
+        ];
+
+        return $this->fetchView($viewData);
     }
 
     /**

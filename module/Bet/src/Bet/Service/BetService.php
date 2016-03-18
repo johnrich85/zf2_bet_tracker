@@ -4,12 +4,11 @@ namespace Bet\Service;
 
 use Bankroll\Entity\Bankroll;
 use Bet\Entity\Bet;
-use Bet\Repository\BetRepository;
-use Bankroll\Repository\BankrollRepository;
 use Application\AppClasses\Service as TaService;
 use Application\AppInterface\PaginatationProviderInterface;
 use Application\AppTraits\PaginatorProviderTrait;
-use Doctrine\ORM\EntityRepository;
+
+use Bet\Paginator\FallBack;
 
 class BetService extends TaService\TaService implements PaginatationProviderInterface
 {
@@ -206,12 +205,32 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      */
     public function getPaginatedList($page, $params)
     {
-        $query = $this->betRepository
-            ->QueryBuilderFindBy($params);
+        $query = $this->betRepository->all($params);
 
         $paginator = $this->getPaginator($query);
+        $paginator->setItemCountPerPage(10);
         $paginator->setCurrentPageNumber($page);
 
         return $paginator;
     }
-} 
+
+    /**
+     * @param $page
+     * @param $params
+     * @return \Zend\Paginator\Paginator
+     */
+    public function getBetsByDay($page, $take, $params)
+    {
+        $query = $this->betRepository->allByDate($page, $take, $params);
+
+        $result = $query->getQuery()->getResult();
+
+        $numRows = $this->betRepository->totalRows($query);
+
+        return new FallBack(
+            $result,
+            $numRows,
+            $take
+        );
+    }
+}

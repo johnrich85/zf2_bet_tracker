@@ -12,7 +12,8 @@ use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
 
-trait PaginatorProviderTrait {
+trait PaginatorProviderTrait
+{
 
     private $perPage = 10;
 
@@ -32,7 +33,8 @@ trait PaginatorProviderTrait {
         return $this->perPage;
     }
 
-    public function getPaginator($queryBuilder) {
+    public function getPaginator($queryBuilder)
+    {
         $adapter = new DoctrineAdapter(
             new ORMPaginator(
                 $queryBuilder
@@ -41,6 +43,7 @@ trait PaginatorProviderTrait {
 
         $paginator = new Paginator($adapter);
         $paginator->setDefaultItemCountPerPage($this->perPage);
+
         return $paginator;
     }
 

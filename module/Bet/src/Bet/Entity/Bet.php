@@ -12,8 +12,8 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="Bet\Repository\BetRepository")
  */
-
-class Bet implements InputFilterAwareInterface {
+class Bet implements InputFilterAwareInterface
+{
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -146,17 +146,16 @@ class Bet implements InputFilterAwareInterface {
      */
     public function calculateProfitOrLoss()
     {
-        if($this->successful === null ||
+        if ($this->successful === null ||
             $this->amount === null ||
-            $this->return === null)
-        {
+            $this->return === null
+        ) {
             $message = 'Unable to calculate the return, bet is not fully populated.';
 
             Throw new \Exception($message);
         }
 
-        if ($this->successful != 1)
-        {
+        if ($this->successful != 1) {
             return $this->amount * -1;
         }
 
@@ -169,16 +168,17 @@ class Bet implements InputFilterAwareInterface {
      *
      * @param $value
      */
-    public function calculateProfileLossDifference($value) {
-        return  $this->calculateProfitOrLoss() - $value;
+    public function calculateProfileLossDifference($value)
+    {
+        return $this->calculateProfitOrLoss() - $value;
     }
 
 
     //Todo: Form related methods - need a better way of doing this
     public function exchangeArray($data)
     {
-        $this->id     = (isset($data['id']))     ? $data['id']     : null;
-        $this->userId     = (isset($data['userId']))     ? $data['userId']     : null;
+        $this->id = (isset($data['id'])) ? $data['id'] : null;
+        $this->userId = (isset($data['userId'])) ? $data['userId'] : null;
         $this->name = (isset($data['name'])) ? $data['name'] : null;
         $this->date = (isset($data['date'])) ? $data['date'] : null;
         $this->amount = (isset($data['amount'])) ? $data['amount'] : null;
@@ -195,34 +195,34 @@ class Bet implements InputFilterAwareInterface {
     {
         if (!$this->inputFilter) {
             $inputFilter = new InputFilter();
-            $factory     = new InputFactory();
+            $factory = new InputFactory();
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'name',
+                'name' => 'name',
                 'required' => true,
-                'filters'  => array(
+                'filters' => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
                 ),
                 'validators' => array(
                     array(
-                        'name'    => 'StringLength',
+                        'name' => 'StringLength',
                         'options' => array(
                             'encoding' => 'UTF-8',
-                            'min'      => 1,
-                            'max'      => 100,
+                            'min' => 1,
+                            'max' => 100,
                         ),
                     ),
                 ),
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'date',
+                'name' => 'date',
                 'required' => true,
                 'filters' => array(
                     array(
-                        'name'      => 'DateTimeFormatter',
-                        'options'   => array(
+                        'name' => 'DateTimeFormatter',
+                        'options' => array(
                             'format' => 'Y-m-d H:i:s',
                         ),
                     ),
@@ -230,36 +230,36 @@ class Bet implements InputFilterAwareInterface {
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'amount',
+                'name' => 'amount',
                 'required' => true,
-                'filters'  => array(
+                'filters' => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
                 ),
                 'validators' => array(
                     array(
-                        'name'    => 'Between',
+                        'name' => 'Between',
                         'options' => array(
-                            'min'      => 1,
-                            'max'      => 100,
+                            'min' => 1,
+                            'max' => 100000,
                         ),
                     ),
                 ),
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'return',
+                'name' => 'return',
                 'required' => true,
-                'filters'  => array(
+                'filters' => array(
                     array('name' => 'StripTags'),
                     array('name' => 'StringTrim'),
                 ),
                 'validators' => array(
                     array(
-                        'name'    => 'Between',
+                        'name' => 'Between',
                         'options' => array(
-                            'min'      => 0,
-                            'max'      => 10000,
+                            'min' => 0,
+                            'max' => 100000,
                         ),
                     ),
                 ),
