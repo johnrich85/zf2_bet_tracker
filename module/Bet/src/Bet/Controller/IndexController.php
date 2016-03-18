@@ -64,7 +64,7 @@ class IndexController extends TaController
         }
 
         $bets = $this->betService->getPaginatedList($pageNum, $params);
-        $betsByDay = $this->betService->getBetsByDay($pageNum, 3, $params);
+        $betsByDay = $this->betService->getBetsByDay($pageNum, 5, $params);
 
         return $this->fetchView(array(
             "bets" => $bets,
