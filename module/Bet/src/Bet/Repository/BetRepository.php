@@ -60,19 +60,32 @@ class BetRepository extends AppRepository\TaRepository {
      * @param array $params
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function allByDate($page, $take, array $params)
+    public function allByDate($skip, $take, array $params)
     {
         $query = $this->all($params);
 
-        $query->setFirstResult($page);
+        $query->setFirstResult($skip);
 
         $query->setMaxResults($take);
 
-        $query->select('date(bet.date) as theDate, SUM(bet.return) - SUM(bet.amount) as total');
+        $query->select('date(bet.date) as theDate, SUM(bet.calculated_profit) as total');
 
         $this->setWhereClauseParams($query, $params);
 
         $query->groupBy('theDate');
+
+        return $query;
+    }
+
+    public function allByMonth($skip, $take, array $params)
+    {
+        $query = $this->allByDate($skip, $take, $params);
+
+        $dql  = 'concat(month(bet.date), year(bet.date)) as HIDDEN theDate, ';
+        $dql .= 'SUM(bet.calculated_profit) as total, ';
+        $dql .= 'date(bet.date) as date';
+
+        $query->select($dql);
 
         return $query;
     }

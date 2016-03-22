@@ -1,6 +1,7 @@
 <div class="text-center">
+
     <ul class="pagination">
-        {% for i in 0..paginator.getPages().pageCount() %}
+        {% for i in 0..paginator.getPages().pageCount %}
             <li>
                 <a href="?p={{ i + 1 }}" data-original-title="Bets" title="Bets">
                     {{ i + 1 }}

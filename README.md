@@ -16,6 +16,7 @@ Bet tracker made using ZF2
 8. ~~Get vue.js working.~~
 9. Rewrite custom jquery plugins as vue.js models.
 10. remove bootstrap css & replace with bower_component counterpart
+11. Partials for bet/index reports.
 
 
 ####  Priority 1: Improved betting

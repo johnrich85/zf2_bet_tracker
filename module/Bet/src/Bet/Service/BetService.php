@@ -95,7 +95,9 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
 
         if ($this->form->isValid()) {
             $bet->exchangeArray($this->form->getData());
-            $betValue = $bet->calculateProfitOrLoss();
+            $bet->setCalculatedProfit();
+
+            $betValue = $bet->calculateNetProfit();
 
             $bankroll = $this->bankrollService
                 ->amendAmount($this->userId, $betValue);
@@ -131,11 +133,13 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
         $this->form->setData($data);
 
         if ($this->form->isValid()) {
-            $oldPL = $bet->calculateProfitOrLoss();
+            $oldPL = $bet->calculateNetProfit();
 
             $bet->exchangeArray($this->form->getData());
 
-            $difference = $bet->calculateProfileLossDifference($oldPL);
+            $bet->setCalculatedProfit();
+
+            $difference = $bet->calculateProfitDifference($oldPL);
 
             $bankroll = $this->bankrollService
                 ->amendAmount($this->userId, $difference);
@@ -221,7 +225,32 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      */
     public function getBetsByDay($page, $take, $params)
     {
-        $query = $this->betRepository->allByDate($page, $take, $params);
+        $skip = ($page -1) * $take;
+
+        $query = $this->betRepository->allByDate($skip, $take, $params);
+
+        $result = $query->getQuery()->getResult();
+
+        $numRows = $this->betRepository->totalRows($query);
+
+        return new FallBack(
+            $result,
+            $numRows,
+            $take
+        );
+    }
+
+    /**
+     * @param $page
+     * @param $take
+     * @param $params
+     * @return FallBack
+     */
+    public function getBetsByMonth($page, $take, $params)
+    {
+        $skip = ($page -1) * $take;
+
+        $query = $this->betRepository->allByMonth($skip, $take, $params);
 
         $result = $query->getQuery()->getResult();
 

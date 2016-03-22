@@ -37,6 +37,9 @@ class Bet implements InputFilterAwareInterface
     /** @ORM\Column(name="`return`",type="float") */
     protected $return;
 
+    /** @ORM\Column(name="`calculated_profit`",type="float") */
+    protected $calculated_profit;
+
     /** @ORM\Column(name="`successful`",type="integer") */
     protected $successful;
 
@@ -139,12 +142,33 @@ class Bet implements InputFilterAwareInterface
     }
 
     /**
+     * @return mixed
+     */
+    public function getCalculatedProfit()
+    {
+        return $this->calculated_profit;
+    }
+
+    /**
+     * @param mixed $calculated_profit
+     */
+    public function setCalculatedProfit()
+    {
+        if($this->successful) {
+            $this->calculated_profit = $this->calculateNetProfit();
+        }
+        else {
+            $this->calculated_profit = $this->amount * -1;
+        }
+    }
+
+    /**
      * Returns either the profit or loss for a given bet.
      *
      * @return double
      * @throws \Exception
      */
-    public function calculateProfitOrLoss()
+    public function calculateNetProfit()
     {
         if ($this->successful === null ||
             $this->amount === null ||
@@ -168,9 +192,9 @@ class Bet implements InputFilterAwareInterface
      *
      * @param $value
      */
-    public function calculateProfileLossDifference($value)
+    public function calculateProfitDifference($value)
     {
-        return $this->calculateProfitOrLoss() - $value;
+        return $this->calculateNetProfit() - $value;
     }
 
 
@@ -276,5 +300,4 @@ class Bet implements InputFilterAwareInterface
     {
         return get_object_vars($this);
     }
-
 }
