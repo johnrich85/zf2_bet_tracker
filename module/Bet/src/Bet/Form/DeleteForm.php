@@ -1,12 +1,4 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: John
- * Date: 01/05/14
- * Time: 20:47
- */
-
-namespace Bet\Form;
+<?php namespace Bet\Form;
 
 use Zend\Form\Form;
 

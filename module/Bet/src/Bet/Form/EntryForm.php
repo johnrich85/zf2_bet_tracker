@@ -15,17 +15,17 @@ class EntryForm extends Form
         $this->setAttribute('method', 'post');
 
         $this->add(array(
-                'name' => 'id',
-                'attributes' => array(
-                    'type'  => 'hidden',
-                    'placeholder' => 'ID'
-                )
+            'name' => 'id',
+            'attributes' => array(
+                'type' => 'hidden',
+                'placeholder' => 'ID'
+            )
         ));
 
         $this->add(array(
             'name' => 'userId',
             'attributes' => array(
-                'type'  => 'hidden',
+                'type' => 'hidden',
                 'placeholder' => 'ID',
                 'value' => '1',
             ),
@@ -35,7 +35,7 @@ class EntryForm extends Form
         $this->add(array(
             'name' => 'name',
             'attributes' => array(
-                'type'  => 'text',
+                'type' => 'text',
                 'placeholder' => 'Name / Title',
                 'class' => 'form-control'
             )
@@ -45,7 +45,7 @@ class EntryForm extends Form
             'name' => 'date',
             'type' => 'text',
             'attributes' => array(
-                'required'  => 'required',
+                'required' => 'required',
                 'class' => 'form-control',
             )
         ));
@@ -53,7 +53,7 @@ class EntryForm extends Form
         $this->add(array(
             'name' => 'amount',
             'attributes' => array(
-                'type'  => 'text',
+                'type' => 'text',
                 'placeholder' => 'Bet amount',
                 'class' => 'form-control'
             )
@@ -62,7 +62,7 @@ class EntryForm extends Form
         $this->add(array(
             'name' => 'return',
             'attributes' => array(
-                'type'  => 'text',
+                'type' => 'text',
                 'placeholder' => 'Total return',
                 'class' => 'form-control'
             )
@@ -70,7 +70,7 @@ class EntryForm extends Form
 
         $this->add(array(
             'name' => 'successful',
-            'type'  => 'checkbox',
+            'type' => 'checkbox',
             'options' => array(
                 'label' => 'Enter as a winning bet?',
                 'use_hidden_element' => true,
@@ -83,7 +83,7 @@ class EntryForm extends Form
         $this->add(array(
             'name' => 'submit',
             'attributes' => array(
-                'type'  => 'submit',
+                'type' => 'submit',
                 'value' => 'Add',
                 'id' => 'submitbutton',
             ),
@@ -99,9 +99,22 @@ class EntryForm extends Form
             )
         ));
 
+        $this->addBetLineFields();
+
         $this->setAttribute('action', '/bet/add');
 
         $this->setDefaults();
+    }
+
+    /**
+     * Adds bet line fields.
+     */
+    protected function addBetLineFields()
+    {
+        $this->add(array(
+            'name' => 'lines',
+            'type' => 'Bet\Form\Fieldset\Line'
+        ));
     }
 
     /**
@@ -112,19 +125,20 @@ class EntryForm extends Form
         $ele = $this->get('id');
         $id = $ele->getValue();
 
-        $this->setAttribute('action', '/bet/edit/'.$id);
+        $this->setAttribute('action', '/bet/edit/' . $id);
         $this->get('submit')->setValue('Edit');
     }
 
     /**
      * Sets default values
      */
-    public function setDefaults() {
+    public function setDefaults()
+    {
         $date = $this->get('date')->getValue();
 
         $now = new \DateTime();
 
-        if(empty($date)) {
+        if (empty($date)) {
             $this->get('date')
                 ->setValue($now->format('Y-m-d H:i:s'));
         }

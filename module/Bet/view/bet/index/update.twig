@@ -12,6 +12,8 @@
         <div class="form-group" id="match-name">
             {{ formRow(theForm.get('name')) }}
 
+            {{ formCollection(theForm.get('lines'))|raw }}
+
             <div class="modal fade alt-option" tabindex="-1" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">

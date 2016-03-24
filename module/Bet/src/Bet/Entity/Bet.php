@@ -21,7 +21,6 @@ class Bet implements InputFilterAwareInterface
      */
     protected $id;
 
-    //TODO - need to implement users :D
     /** @ORM\Column(name="`userId`",type="integer") */
     protected $userId;
 
@@ -43,6 +42,14 @@ class Bet implements InputFilterAwareInterface
     /** @ORM\Column(name="`successful`",type="integer") */
     protected $successful;
 
+    /**
+     * @ORM\OneToMany(targetEntity="BetLine", mappedBy="bet", cascade={"remove"})
+     */
+    protected $lines;
+
+    /**
+     * @var
+     */
     protected $inputFilter;
 
     /**
