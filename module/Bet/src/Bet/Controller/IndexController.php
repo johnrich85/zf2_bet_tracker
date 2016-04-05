@@ -102,7 +102,7 @@ class IndexController extends TaController
         $viewData = [
             'theForm' => $form,
             'title' => 'Create a new bet',
-            'matches' => $matches
+            'matches' => json_encode($matches)
         ];
 
         return $this->fetchView($viewData, 'bet/index/update');

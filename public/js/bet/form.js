@@ -1,12 +1,10 @@
 require(
     [
         'jquery',
-        "form_alternative_ele",
-        "component_bet_entry"
+        "component_bet_entry",
+        "component_form_alt_option"
     ],
     function($) {
-        $(document).ready(function() {
-            $("#match-name").alternativeOption({});
-        })
+
     }
 );

@@ -1,47 +1,27 @@
 <h3>{{ title }}</h3>
 
 <div class="row">
-    <div class="col-lg-6 ">
+    <div class="col-lg-9">
         {{ form().openTag(theForm)|raw }}
 
         {{ formHidden(theForm.get('id')) }}
 
         {{ formHidden(theForm.get('userId')) }}
 
-
         <div class="form-group" id="match-name">
-            {{ formRow(theForm.get('name')) }}
+            <div class="with-alt">
+                {{ formRow(theForm.get('name')) }}
 
-            {{ formCollection(theForm.get('lines'))|raw }}
-
-            <div class="modal fade alt-option" tabindex="-1" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">Select a match...</h4>
-                        </div>
-                        <div class="modal-body">
-                            <select name="alt-value">
-                                {%  for label, group in matches %}
-                                    <optgroup label="{{ label }}">
-                                        {%  for match_id, match in group %}
-                                            <option id="{{ match_id }}">
-                                                {{ match }}
-                                            </option>
-                                        {% endfor %}
-                                    </optgroup>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary alt-select">Select</button>
-                        </div>
-                    </div>
-                </div>
+                <alt-option target="name"
+                            options="{{ matches }}"
+                            title="Select a match..."
+                            modal_class="alt-option">
+                </alt-option>
             </div>
+        </div>
 
-            <button class="btn btn-small btn-default show-alt-option">Select event...</button>
+        <div class="form-group">
+            {{ formCollection(theForm.get('lines'))|raw }}
         </div>
 
         <div class="form-group">

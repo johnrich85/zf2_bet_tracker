@@ -9,6 +9,11 @@ use League\Fractal\Serializer\DataArraySerializer;
 class MatchesByDate extends DataArraySerializer
 {
     /**
+     * @var array
+     */
+    protected $indexMap = [];
+
+    /**
      * @param string $resourceKey
      * @param array $data
      * @return array
@@ -22,11 +27,33 @@ class MatchesByDate extends DataArraySerializer
             $id = $match['id'];
             $name = $match['name'] . ", " . $match['date'];
 
-            $payload[$group][$id] = $name;
+            if (!in_array($group, $this->indexMap)) {
+                $payload[] = $this->createIndex($group);
+            }
+
+            $groupKey = array_keys($this->indexMap, $group)[0];
+
+            $payload[$groupKey]['options'][$id] = $name;
 
             unset($data[$key]);
         }
 
         return $payload;
+    }
+
+    /**
+     * Returns structure for group.
+     *
+     * @param $label
+     * @return array
+     */
+    protected function createIndex($label)
+    {
+        $this->indexMap[] = $label;
+
+        return [
+            'label' => $label,
+            'options' => []
+        ];
     }
 }

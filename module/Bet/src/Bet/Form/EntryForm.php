@@ -35,9 +35,10 @@ class EntryForm extends Form
         $this->add(array(
             'name' => 'name',
             'attributes' => array(
+                'required' => 'required',
                 'type' => 'text',
                 'placeholder' => 'Name / Title',
-                'class' => 'form-control'
+                'class' => 'form-control',
             )
         ));
 

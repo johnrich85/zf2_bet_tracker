@@ -8,7 +8,8 @@ var require = {
         "vue": "/bower_components/vue/dist/vue",
         "form_alternative_ele": "/js/form/alternative-option",
         "fraction": "/bower_components/fraction.js/fraction.min",
-        "component_bet_entry": "/js/vuejs/components/bet-entry"
+        "component_bet_entry": "/js/vuejs/components/bet-entry",
+        "component_form_alt_option": "/js/vuejs/components/form/alternative-option"
     }
     ,
     shim: {

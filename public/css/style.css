@@ -40,3 +40,28 @@ div.container a.brand {
 .messages.alert ul {
     margin:0;
 }
+
+/***** Bet Module ******/
+fieldset.bet-line {
+    border:1px dashed #94B6C3;
+    width:100%;
+    overflow: auto;
+    padding:9px;
+    padding-top:0;
+}
+
+fieldset.bet-line legend {
+    border-bottom:0;
+    font-size:15px;
+    width:auto;
+    color:#64828E;
+    margin-bottom:0;
+}
+fieldset.bet-line input[type=text] {
+    width:24%;
+    float:left;
+    margin-right:1.25%;
+}
+fieldset.bet-line input[type=text]:last-child {
+    margin-right:0
+}

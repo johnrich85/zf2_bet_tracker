@@ -43,6 +43,14 @@ Bet tracker made using ZF2
 2. New Player model, linked to team.# - player recent stats, current rating, injured/suspended etc.
 
 
+### Improved betting point 4 sub checklist
+
+1. Create new vue model for Modals.
+2. Create new vue model for Select (with/without optrgoups).
+3. ~~Create new 'alternative-option' vue model (adds button to ele, adds modal containing select, binds select value to input).~~
+4. Create new bet line vue model, create bet lines vue model. Create x amount of bet lines based on lines array.
+5. Add new button to UI that allows more lines to be added.
+
 ##### Next up
 
 1. Logging
@@ -52,6 +60,7 @@ Bet tracker made using ZF2
 4. ~~CSRF for forms.~~
 5. Users, Authentication & ACL.
 6. ~~Frontend modules/dependency manager~~
+7. Make modules self contained (add css/js etc to module, will need a 'publish' method to push to publci folder).
 
 
 ##### Bugs

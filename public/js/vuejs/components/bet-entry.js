@@ -13,6 +13,7 @@ require(
                 'odds'
             ],
 
+
             ready: function() {
                 $('.odds-field').tooltip();
             },
