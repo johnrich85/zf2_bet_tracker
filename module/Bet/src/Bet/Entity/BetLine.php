@@ -3,12 +3,13 @@
 namespace Bet\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="bet_line")
  */
-class BetLine
+class BetLine implements Arrayable
 {
     /**
      * @ORM\Id
@@ -151,5 +152,21 @@ class BetLine
     public function setBet($bet)
     {
         $this->bet = $bet;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'selection' => $this->getSelection(),
+            'odds' => $this->getOdds(),
+            'win' => $this->getWin(),
+            'match' => $this->getMatch(),
+            'bet' => $this->getBet(),
+        ];
     }
 }

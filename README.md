@@ -21,11 +21,16 @@ Bet tracker made using ZF2
 
 ####  Priority 1: Improved betting
 
+##### Multiple lines per bet.
+
+1. ~~Update form so that multiple lines can be rendered.~~
+2. Update controller so that onPost form is repopulated
+3. Update service so that it handles new line data.
+
 0. ~~Move source page generation out of index controller - separate action.~~
 1. ~~Scrape match sources, update winner. (step 1, create source page for each match)~~
 2. ~~Relationship between match & SourcePage.~~
 3. ~~Then create controller action to scrape all completed matches.~~
-4. Update bet model/form so that it's possible to enter multiple lines per bet.
 5. When selecting a match (on bet add/edit form), link that match to the bet.
 6. When a bet result is scraped, mark associated bets as winners/losers.
 7. Bet status extension (win/lose/pending)

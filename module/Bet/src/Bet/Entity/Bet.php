@@ -2,6 +2,7 @@
 
 namespace Bet\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Factory as InputFactory;
@@ -51,6 +52,54 @@ class Bet implements InputFilterAwareInterface
      * @var
      */
     protected $inputFilter;
+
+    /**
+     * Bet constructor.
+     */
+    public function __construct()
+    {
+        $this->lines = new ArrayCollection();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @param mixed $userId
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLines()
+    {
+        return $this->lines;
+    }
+
+    /**
+     * @param mixed $lines
+     */
+    public function setLines($lines)
+    {
+        $this->lines = $lines;
+    }
+
+    /**
+     * @param BetLine $line
+     */
+    public function addLine(BetLine $line)
+    {
+        $this->lines->add($line);
+    }
 
     /**
      * @param mixed $name
