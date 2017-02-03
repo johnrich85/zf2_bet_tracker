@@ -31,7 +31,7 @@ class Line extends Fieldset
         $this->setLabel('Bet Line ' . $this->getDisplayLabel());
 
         $this->add(array(
-            'name' => $this->generateLineName($this->line_num, 'id'),
+            'name' => $this->generateLineName('id'),
             'attributes' => array(
                 'type' => 'hidden',
                 'class' => 'form-control'
@@ -39,7 +39,7 @@ class Line extends Fieldset
         ));
 
         $this->add(array(
-            'name' => $this->generateLineName($this->line_num, 'match'),
+            'name' => $this->generateLineName('match'),
             'attributes' => array(
                 'type' => 'hidden',
                 'class' => 'form-control'
@@ -47,7 +47,7 @@ class Line extends Fieldset
         ));
 
         $this->add(array(
-            'name' => $this->generateLineName($this->line_num, 'name'),
+            'name' => $this->generateLineName('name'),
             'attributes' => array(
                 'type' => 'text',
                 'placeholder' => 'Match name',
@@ -56,7 +56,7 @@ class Line extends Fieldset
         ));
 
         $this->add(array(
-            'name' => $this->generateLineName($this->line_num, 'selection'),
+            'name' => $this->generateLineName('selection'),
             'attributes' => array(
                 'type' => 'text',
                 'placeholder' => 'e.g TSM to lose',
@@ -65,7 +65,7 @@ class Line extends Fieldset
         ));
 
         $this->add(array(
-            'name' => $this->generateLineName($this->line_num, 'odds'),
+            'name' => $this->generateLineName('odds'),
             'attributes' => array(
                 'type' => 'text',
                 'placeholder' => 'e.g 5/2',
@@ -74,7 +74,7 @@ class Line extends Fieldset
         ));
 
         $this->add(array(
-            'name' => $this->generateLineName($this->line_num, 'win'),
+            'name' => $this->generateLineName('win'),
             'attributes' => array(
                 'type' => 'Zend\Form\Element\Select',
                 'label' => 'Line status',
@@ -111,10 +111,8 @@ class Line extends Fieldset
     {
         $payload = [];
 
-        $lineNum = $this->line_num;
-
         foreach($data as $key=>$value) {
-            $newKey = $this->generateLineName($lineNum, $key);
+            $newKey = $this->generateLineName($key);
 
             $payload[$newKey] = $value;
         }
@@ -130,15 +128,9 @@ class Line extends Fieldset
      * @param $fieldName
      * @return mixed|string
      */
-    protected function generateLineName($index, $fieldName)
+    protected function generateLineName($fieldName)
     {
-        $name = $this->name_format;
-
-        $name = str_replace('<num>', $index, $name);
-
-        $name = str_replace('<name>', $fieldName, $name);
-
-        return $name;
+        return $fieldName;
     }
 
     /**

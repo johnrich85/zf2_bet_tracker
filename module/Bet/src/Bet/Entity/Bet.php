@@ -2,6 +2,7 @@
 
 namespace Bet\Entity;
 
+use Bet\Hydrator\BetHydrator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\InputFilter\InputFilter;
@@ -44,7 +45,7 @@ class Bet implements InputFilterAwareInterface
     protected $successful;
 
     /**
-     * @ORM\OneToMany(targetEntity="BetLine", mappedBy="bet", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="BetLine", mappedBy="bet", cascade={"persist", "remove"})
      */
     protected $lines;
 
@@ -245,8 +246,8 @@ class Bet implements InputFilterAwareInterface
     /**
      * Returns the difference between $value
      * and the current P/L
-     *
      * @param $value
+     * @return float
      */
     public function calculateProfitDifference($value)
     {
@@ -255,22 +256,26 @@ class Bet implements InputFilterAwareInterface
 
 
     //Todo: Form related methods - need a better way of doing this
+    //Todo: (probably hydrators)
     public function exchangeArray($data)
     {
-        $this->id = (isset($data['id'])) ? $data['id'] : null;
-        $this->userId = (isset($data['userId'])) ? $data['userId'] : null;
-        $this->name = (isset($data['name'])) ? $data['name'] : null;
-        $this->date = (isset($data['date'])) ? $data['date'] : null;
-        $this->amount = (isset($data['amount'])) ? $data['amount'] : null;
-        $this->return = (isset($data['return'])) ? $data['return'] : null;
-        $this->successful = (isset($data['successful'])) ? $data['successful'] : null;
+        $hydrator = new BetHydrator();
+
+        $hydrator->hydrate($data, $this);
     }
 
+    /**
+     * @param InputFilterInterface $inputFilter
+     * @throws \Exception
+     */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
         throw new \Exception("Not used");
     }
 
+    /**
+     * @return InputFilter
+     */
     public function getInputFilter()
     {
         if (!$this->inputFilter) {

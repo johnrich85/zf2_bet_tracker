@@ -24,8 +24,12 @@ Bet tracker made using ZF2
 ##### Multiple lines per bet.
 
 1. ~~Update form so that multiple lines can be rendered.~~
-2. Update controller so that onPost form is repopulated
-3. Update service so that it handles new line data.
+2. ~~Add hydrators~~
+3. On add bet, bet line form(or model) is not populate 
+4. Update controller so that onPost form is repopulated
+5. Update service so that it handles new line data.
+6. Bet line match population (see hydrator)
+7. UI button to add new line.
 
 0. ~~Move source page generation out of index controller - separate action.~~
 1. ~~Scrape match sources, update winner. (step 1, create source page for each match)~~

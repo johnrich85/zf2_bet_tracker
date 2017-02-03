@@ -2,6 +2,7 @@
 
 namespace Bet\Entity;
 
+use Bet\Hydrator\BetLineHydrator;
 use Doctrine\ORM\Mapping as ORM;
 use Illuminate\Contracts\Support\Arrayable;
 
@@ -37,7 +38,7 @@ class BetLine implements Arrayable
     protected $match;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Matches\Entity\Match", inversedBy="lines")
+     * @ORM\ManyToOne(targetEntity="Bet\Entity\Bet", inversedBy="lines")
      * @ORM\JoinColumn(name="`bet_id`", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $bet;
@@ -152,6 +153,16 @@ class BetLine implements Arrayable
     public function setBet($bet)
     {
         $this->bet = $bet;
+    }
+
+    /**
+     * @param $data
+     */
+    public function populate($data)
+    {
+        $hydrator = new BetLineHydrator();
+
+        $hydrator->hydrate($data, $this);
     }
 
     /**

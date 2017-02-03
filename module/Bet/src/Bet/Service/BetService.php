@@ -132,6 +132,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
         $this->form->setInputFilter($bet->getInputFilter());
         $this->form->setData($data);
 
+
         if ($this->form->isValid()) {
             $oldPL = $bet->calculateNetProfit();
 
