@@ -99,6 +99,8 @@ class IndexController extends TaController
             }
         }
 
+        $form->prepare();
+
         $viewData = [
             'theForm' => $form,
             'title' => 'Create a new bet',

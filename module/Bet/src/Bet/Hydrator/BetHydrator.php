@@ -44,7 +44,6 @@ class BetHydrator extends ClassMethods
      */
     public function hydrate(array $data, $object)
     {
-        var_dump($data);
         $this->linesHydrator->setContext($object);
 
         return parent::hydrate($data, $object);

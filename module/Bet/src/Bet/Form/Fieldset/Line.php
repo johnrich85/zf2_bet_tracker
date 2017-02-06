@@ -95,8 +95,6 @@ class Line extends Fieldset
      */
     public function populateValues($data)
     {
-        $data = $this->prefixKeys($data);
-
         parent::populateValues($data);
     }
 

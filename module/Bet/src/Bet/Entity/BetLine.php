@@ -32,14 +32,14 @@ class BetLine implements Arrayable
     protected $win;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Matches\Entity\Match")
+     * @ORM\ManyToOne(targetEntity="\Matches\Entity\Match")
      * @ORM\JoinColumn(name="`match_id`", referencedColumnName="id", nullable=true)
      */
     protected $match;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Bet\Entity\Bet", inversedBy="lines")
-     * @ORM\JoinColumn(name="`bet_id`", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="\Bet\Entity\Bet", inversedBy="lines")
+     * @ORM\JoinColumn(name="`bet_id`", referencedColumnName="id")
      */
     protected $bet;
 

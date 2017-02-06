@@ -45,7 +45,7 @@ class Bet implements InputFilterAwareInterface
     protected $successful;
 
     /**
-     * @ORM\OneToMany(targetEntity="BetLine", mappedBy="bet", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="\Bet\Entity\BetLine", mappedBy="bet", cascade={"persist", "remove"})
      */
     protected $lines;
 

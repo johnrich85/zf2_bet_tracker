@@ -94,6 +94,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
         $this->form->setData($data);
 
         if ($this->form->isValid()) {
+
             $bet->exchangeArray($this->form->getData());
             $bet->setCalculatedProfit();
 

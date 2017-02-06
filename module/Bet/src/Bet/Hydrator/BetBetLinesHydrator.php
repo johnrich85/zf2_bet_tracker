@@ -37,7 +37,6 @@ class BetBetLinesHydrator implements StrategyInterface
             return;
         }
 
-        var_dump($value);
         $existingLines = $this->context->getLines();
 
         foreach($value as $line) {
@@ -48,6 +47,7 @@ class BetBetLinesHydrator implements StrategyInterface
             } else {
                 $modify = new BetLine();
                 $existingLines->add($modify);
+                $modify->setBet($this->context);
             }
 
             $modify->populate($line);
