@@ -255,8 +255,9 @@ class Bet implements InputFilterAwareInterface
     }
 
 
-    //Todo: Form related methods - need a better way of doing this
-    //Todo: (probably hydrators)
+    /**
+     * @param $data
+     */
     public function exchangeArray($data)
     {
         $hydrator = new BetHydrator();

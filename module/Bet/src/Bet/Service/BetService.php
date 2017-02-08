@@ -157,6 +157,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
     /**
      * @param $successful
      * @return mixed
+     * @todo : move to repo
      */
     public function getBetCount($successful)
     {
