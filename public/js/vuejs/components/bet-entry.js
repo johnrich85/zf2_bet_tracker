@@ -1,10 +1,15 @@
-require(
+define(
     [
         "vue",
         "fraction",
         "bootstrap"
     ],
     function(Vue, Fraction) {
+        /**
+         * Bet amount component
+         *
+         * @type {*}
+         */
         var BetAmount = Vue.extend({
             template: '<div class="form-group" id="bet-value"><input name="amount" type="text" placeholder="Bet amount" class="form-control" v-model="value"> <input class="odds-field btn btn-small btn-default" name="odds" type="text" v-model="odds" v-on:focus="handleFocus" v-on:keyup="handleKeyup" data-toggle="tooltip" data-placement="top" title="" data-original-title="Example: 5/2 (pause for a second to automatically add the /)"></div>',
 
@@ -13,11 +18,16 @@ require(
                 'odds'
             ],
 
-
+            /**
+             * On Ready
+             */
             ready: function() {
                 $('.odds-field').tooltip();
             },
 
+            /**
+             * Class methods.
+             */
             methods: {
                 /**
                  * Removes default text
@@ -65,6 +75,10 @@ require(
             }
         });
 
+        /**
+         * BetReturn component
+         * @type {*}
+         */
         var BetReturn = Vue.extend({
             template: '<div class="form-group"> <input name="return" type="text" placeholder="Total return" class="form-control" v-model="value"> </div>',
             props: [
@@ -72,7 +86,10 @@ require(
             ]
         })
 
-        var BetEntry = Vue.extend({
+        /**
+         * BetEntry Component
+         */
+        return BetEntry = Vue.extend({
             /**
              * The template.
              */
@@ -172,14 +189,6 @@ require(
                     return fraction;
                 }
             }
-        })
-
-
-        //TODO: move this out of here. Find a better way to declare templates.
-        Vue.component('bet-entry', BetEntry);
-
-        new Vue({
-            el: '#bet-entry'
         })
     }
 );

@@ -25,9 +25,10 @@ Bet tracker made using ZF2
 
 1. ~~Update form so that multiple lines can be rendered.~~
 2. ~~Add hydrators~~
-3. On add bet, bet line form(or model) is not populate 
-4. Update controller so that onPost form is repopulated
-5. Update service so that it handles new line data.
+3. ~~On add bet, bet line form(or model) is not populate~~
+4. ~~Update controller so that onPost form is repopulated~~
+5. ~~Update service so that it handles new line data.~~
+6. New BetLine component in vue - pump in bet lines and generate fieldset (need to store a global bet return based on odds of all bet lines).
 6. Bet line match population (see hydrator)
 7. UI button to add new line.
 
