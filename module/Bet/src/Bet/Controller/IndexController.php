@@ -3,6 +3,8 @@
 namespace Bet\Controller;
 
 use Application\AppClasses\Controller\TaController;
+use Bet\Entity\Bet;
+use Bet\Entity\BetLine;
 use \Bet\Service\BetService;
 use \Bankroll\Service\BankrollService;
 use \Illuminate\Support\MessageBag;
@@ -84,25 +86,29 @@ class IndexController extends TaController
      */
     public function addAction()
     {
-        $form = $this->betService->getEntryForm();
-
         $request = $this->getRequest();
 
         $matches = $this->getUpcomingMatches();
 
-        if ($request->isPost()) {
-            $result = $this->betService
-                ->create($request->getPost());
+        $model = new Bet();
 
-            if ($result) {
-                return $this->redirect()->toRoute('bet');
-            }
+        if ($request->isPost()) {
+//            $result = $this->betService->create($request->getPost());
+//
+//            if ($result) {
+//                return $this->redirect()->toRoute('bet');
+//            }
         }
 
-        $form->prepare();
+        //TODO: add transformers and move this over.
+        $modelData = $model->toArray();
+        if(count($modelData['lines']) == 0) {
+            $line = new BetLine();
+            $modelData['lines'][] = $line->toArray();
+        }
 
         $viewData = [
-            'theForm' => $form,
+            'bet' => json_encode($modelData),
             'title' => 'Create a new bet',
             'matches' => json_encode($matches)
         ];

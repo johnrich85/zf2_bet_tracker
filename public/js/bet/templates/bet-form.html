@@ -1,0 +1,48 @@
+<div class="col-lg-9">
+    <form>
+        <input v-model="bet.id" type="hidden" name="id">
+        <input v-model="bet.userId" type="hidden" name="userId">
+
+        <div class="form-group" id="match-name">
+            <input v-model="bet.name" type="text" name="name" placeholder="Title your bet, maggot" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <input v-model="bet.date" type="text" name="date" placeholder="Date" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <input v-model="bet.amount" type="text" name="amount" placeholder="Amount staked" class="form-control">
+        </div>
+
+        <!--TODO: loop and create bet lines-->
+        <div id="bet-line-wrap" class="form-group">
+            <div v-for="(key, line) in bet.lines">
+                <bet-line :bet-line="line"
+                          :index="key"
+                          :matches="matches">
+
+                </bet-line>
+            </div>
+
+            <button v-on:click="addLine" id="add-bet-line"> <i class="fa fa-plus"></i> </button>
+        </div>
+
+        <div class="form-group">
+            <input v-model="bet.return" type="text" name="return" placeholder="Filthy returns" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <div class="checkbox">
+                <labe>
+                    Successful
+                    <input type="checkbox" name="successful" v-model="bet.successful">
+                </labe>
+            </div>
+        </div>
+
+        <input v-model="bet.secret" type="hidden" name="secret" >
+
+        <input type="submit" value="Submit" name="submit">
+    </form>
+</div>

@@ -42,14 +42,23 @@ div.container a.brand {
 }
 
 /***** Bet Module ******/
+#bet-line-wrap {
+    position: relative;
+}
+#add-bet-line {
+    position:absolute;
+    bottom:14px;
+    right:20px;
+}
 fieldset.bet-line {
     border:1px dashed #94B6C3;
     width:100%;
-    overflow: auto;
     padding:9px;
     padding-top:0;
 }
-
+fieldset.bet-line .form-group {
+    margin-bottom: 0;
+}
 fieldset.bet-line legend {
     border-bottom:0;
     font-size:15px;
@@ -61,6 +70,8 @@ fieldset.bet-line input[type=text] {
     width:24%;
     float:left;
     margin-right:1.25%;
+    margin-top:9px;
+
 }
 fieldset.bet-line input[type=text]:last-child {
     margin-right:0

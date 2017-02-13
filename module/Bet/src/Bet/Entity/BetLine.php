@@ -170,14 +170,8 @@ class BetLine implements Arrayable
      */
     public function toArray()
     {
-        return [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'selection' => $this->getSelection(),
-            'odds' => $this->getOdds(),
-            'win' => $this->getWin(),
-            'match' => $this->getMatch(),
-            'bet' => $this->getBet(),
-        ];
+        $payload = get_object_vars($this);
+
+        return $payload;
     }
 }

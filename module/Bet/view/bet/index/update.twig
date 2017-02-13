@@ -1,49 +1,7 @@
 <h3>{{ title }}</h3>
 
-<div class="row">
-    <div class="col-lg-9">
-        {{ form().openTag(theForm)|raw }}
-
-        {{ formHidden(theForm.get('id')) }}
-
-        {{ formHidden(theForm.get('userId')) }}
-
-        <div class="form-group" id="match-name">
-            <div class="with-alt">
-                {{ formRow(theForm.get('name')) }}
-
-                <alt-option target="name"
-                            options="{{ matches }}"
-                            title="Select a match..."
-                            modal_class="alt-option">
-                </alt-option>
-            </div>
-        </div>
-
-        <div class="form-group">
-            {{ formCollection(theForm.get('lines'))|raw }}
-        </div>
-
-        <div class="form-group">
-            {{ formRow(theForm.get('date')) }}
-        </div>
-
-        <div id="bet-entry">
-            <bet-entry amount="{{ theForm.get('amount').getValue() }}"
-                       winnings="{{ theForm.get('return').getValue() }}">
-            </bet-entry>
-        </div>
-
-        <div class="checkbox">
-            {{ formLabel(theForm.get('successful')) }}
-            {{ formCheckbox(theForm.get('successful')) }}
-        </div>
-
-        {{ formRow(theForm.get('secret')) }}
-        {{ formInput(theForm.get('submit')) }}
-
-        {{ form().closeTag(theForm)|raw }}
-    </div>
+<div id="bet-entry-form" class="row">
+    <bet-entry-form bet="{{ bet }}" matches="{{ matches }}"></bet-entry-form>
 </div>
 
 {{ HeadScript().prependFile(basePath() ~ '/js/bet/form.js')|raw }}

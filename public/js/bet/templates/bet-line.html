@@ -1,0 +1,28 @@
+<fieldset class="bet-line">
+    <div class="row">
+        <div class="col-md-1">
+            <h6>Line {{index+1}}</h6>
+        </div>
+
+        <div class="col-md-4 form-group" id="match-name">
+            <div class="with-alt">
+                <input v-model="betLine.match" type="text" name="lines[{{index}}][match]" placeholder="Select a match..." class="form-control">
+
+                <alt-option :target="targetEle"
+                            :options="matches"
+                            title="Select a match..."
+                            modal_class="alt-option">
+                </alt-option>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <input v-model="betLine.id" type="hidden" name="lines[{{index}}][id]">
+            <input v-model="betLine.win" type="hidden" name="lines[{{index}}][win]">
+            <input v-model="betLine.name" type="hidden" name="lines[{{index}}][name]" placeholder="Name">
+
+            <input class="form-control" v-model="betLine.selection" type="text" name="lines[{{index}}][selection]" placeholder="Selection">
+            <input class="form-control" v-model="betLine.odds" type="text" name="lines[{{index}}][odds]" placeholder="Odds">
+        </div>
+    </div>
+</fieldset>

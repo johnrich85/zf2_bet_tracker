@@ -5,6 +5,7 @@ namespace Bet\Entity;
 use Bet\Hydrator\BetHydrator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Illuminate\Contracts\Support\Arrayable;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilterAwareInterface;
@@ -14,7 +15,7 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="Bet\Repository\BetRepository")
  */
-class Bet implements InputFilterAwareInterface
+class Bet implements InputFilterAwareInterface, Arrayable
 {
     /**
      * @ORM\Id
@@ -48,11 +49,6 @@ class Bet implements InputFilterAwareInterface
      * @ORM\OneToMany(targetEntity="\Bet\Entity\BetLine", mappedBy="bet", cascade={"persist", "remove"})
      */
     protected $lines;
-
-    /**
-     * @var
-     */
-    protected $inputFilter;
 
     /**
      * Bet constructor.
@@ -358,8 +354,15 @@ class Bet implements InputFilterAwareInterface
         return $this->inputFilter;
     }
 
-    public function getArrayCopy()
+    /**
+     * @return array
+     */
+    public function toArray()
     {
-        return get_object_vars($this);
+        $payload = get_object_vars($this);
+
+        $payload['lines'] = $payload['lines']->toArray();
+
+        return $payload;
     }
 }

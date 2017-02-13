@@ -20,6 +20,7 @@
     "vue": "~1.0.17",
     "jquery": "^2.2.1",
     "requirejs": "^2.1.22",
+    "requirejs-text":"~2.0.10",
     "bootstrap": "^3.3.6",
     "tablesorter": "jquery.tablesorter#^2.25.5",
     "fraction.js": "^3.2.5"

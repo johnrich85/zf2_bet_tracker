@@ -2,10 +2,15 @@
 .form-group {
     position: relative;
 }
+fieldset.bet-line .with-alt  input[type=text] {
+    width:77%;
+}
 .form-group .show-alt-option {
     position:absolute;
     right:0;
-    top:0;
+    top:9px;
+    width: 27%;
+    text-align: center;
 }
 
 /* Odds field */

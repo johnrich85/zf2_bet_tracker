@@ -1,4 +1,4 @@
-require(
+define(
     [
         "vue",
         "jquery",
@@ -26,7 +26,7 @@ require(
             '                    </div>'+
             '                </div>'+
             '            </div>'+
-            '            <button class="btn btn-small btn-default show-alt-option" v-on:click="showModal">Select...</button>',
+            '            <button class="btn btn-small btn-default show-alt-option" v-on:click="showModal"> <i class="fa fa-list-ol"></i></button>',
 
             /**
              * Properties which can be passed in
@@ -51,20 +51,10 @@ require(
             },
 
             /**
-             * Part of the vuejs lifecycle, as the name
-             * suggests it's called prior to compilation.
-             */
-            beforeCompile : function() {
-                this.options = JSON.parse(this.options);
-            },
-
-            /**
              *
              */
             ready : function() {
                 this.modal = jQuery('.' + this.modal_class);
-
-                console.log(this.$root.$el);
             },
 
             /**
@@ -83,7 +73,7 @@ require(
                 updateInput : function(e) {
                     e.preventDefault();
 
-                    var inputSelector = 'input[name=' + this.target + ']';
+                    var inputSelector = 'input[name=\'' + this.target + '\']';
 
                     jQuery(this.$root.$el).find(inputSelector).val(this.select);
 
@@ -94,8 +84,6 @@ require(
 
         Vue.component('alt-option', AlternativeOption);
 
-        new Vue({
-            el: '.with-alt'
-        })
+        return AlternativeOption;
     }
 );
