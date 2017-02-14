@@ -41,6 +41,11 @@ div.container a.brand {
     margin:0;
 }
 
+.messages.alert ul li {
+    display: block;
+    text-transform: capitalize;
+}
+
 /***** Bet Module ******/
 #bet-line-wrap {
     position: relative;

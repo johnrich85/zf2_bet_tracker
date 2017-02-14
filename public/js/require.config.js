@@ -1,9 +1,6 @@
 // require.js looks for the following global when initializing
 var require = {
-    baseUrl: ".",
-    paths : {
-        'bet' : 'bet/123/'
-    },
+    baseUrl: "/",
     paths: {
         "jquery": "/bower_components/jquery/dist/jquery",
         "tablesorter": "/bower_components/tablesorter/dist/js/jquery.tablesorter.min",

@@ -15,7 +15,7 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="Bet\Repository\BetRepository")
  */
-class Bet implements InputFilterAwareInterface, Arrayable
+class Bet implements Arrayable
 {
     /**
      * @ORM\Id
@@ -254,105 +254,17 @@ class Bet implements InputFilterAwareInterface, Arrayable
     /**
      * @param $data
      */
-    public function exchangeArray($data)
+    public function populate($data)
     {
+        if(!isset($data['successful'])) {
+            $data['successful'] = 0;
+        }
+
         $hydrator = new BetHydrator();
 
         $hydrator->hydrate($data, $this);
     }
 
-    /**
-     * @param InputFilterInterface $inputFilter
-     * @throws \Exception
-     */
-    public function setInputFilter(InputFilterInterface $inputFilter)
-    {
-        throw new \Exception("Not used");
-    }
-
-    /**
-     * @return InputFilter
-     */
-    public function getInputFilter()
-    {
-        if (!$this->inputFilter) {
-            $inputFilter = new InputFilter();
-            $factory = new InputFactory();
-
-            $inputFilter->add($factory->createInput(array(
-                'name' => 'name',
-                'required' => true,
-                'filters' => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name' => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min' => 1,
-                            'max' => 100,
-                        ),
-                    ),
-                ),
-            )));
-
-            $inputFilter->add($factory->createInput(array(
-                'name' => 'date',
-                'required' => true,
-                'filters' => array(
-                    array(
-                        'name' => 'DateTimeFormatter',
-                        'options' => array(
-                            'format' => 'Y-m-d H:i:s',
-                        ),
-                    ),
-                ),
-            )));
-
-            $inputFilter->add($factory->createInput(array(
-                'name' => 'amount',
-                'required' => true,
-                'filters' => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name' => 'Between',
-                        'options' => array(
-                            'min' => 1,
-                            'max' => 100000,
-                        ),
-                    ),
-                ),
-            )));
-
-            $inputFilter->add($factory->createInput(array(
-                'name' => 'return',
-                'required' => true,
-                'filters' => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name' => 'Between',
-                        'options' => array(
-                            'min' => 0,
-                            'max' => 100000,
-                        ),
-                    ),
-                ),
-            )));
-
-            $this->inputFilter = $inputFilter;
-
-        }
-
-        return $this->inputFilter;
-    }
 
     /**
      * @return array

@@ -1,5 +1,6 @@
-<?php
-namespace Bet;
+<?php namespace Bet;
+
+use Bet\Validator\BetValidatorFactory;
 
 return array(
     'router' => array(
@@ -24,6 +25,7 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'BetService'     => 'Bet\Service\BetFactory',
+            'BetValidator'   => BetValidatorFactory::class,
         ),
         'invokables' => array (
             'BetEntity'   => 'Bet\Entity\Bet',

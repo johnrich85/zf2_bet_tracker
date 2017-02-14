@@ -1,6 +1,4 @@
-<?php
-
-namespace Bet\Controller;
+<?php namespace Bet\Controller;
 
 use Application\AppClasses\Controller\TaController;
 use Bet\Entity\Bet;
@@ -12,8 +10,14 @@ use \League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use \Matches\Service\MatchesService;
 use Matches\Transformers\Serializer\MatchesByDate;
+use Particle\Validator\Rule\NotEmpty;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class IndexController
+ *
+ * @package Bet\Controller
+ */
 class IndexController extends TaController
 {
     /**
@@ -86,26 +90,17 @@ class IndexController extends TaController
      */
     public function addAction()
     {
-        $request = $this->getRequest();
-
         $matches = $this->getUpcomingMatches();
+
+        $params = $this->getRequest()->getPost();
 
         $model = new Bet();
 
-        if ($request->isPost()) {
-//            $result = $this->betService->create($request->getPost());
-//
-//            if ($result) {
-//                return $this->redirect()->toRoute('bet');
-//            }
+        if(count($params)) {
+            $model->populate((array) $params);
         }
 
-        //TODO: add transformers and move this over.
-        $modelData = $model->toArray();
-        if(count($modelData['lines']) == 0) {
-            $line = new BetLine();
-            $modelData['lines'][] = $line->toArray();
-        }
+        $modelData = $this->transform($model);
 
         $viewData = [
             'bet' => json_encode($modelData),
@@ -117,6 +112,35 @@ class IndexController extends TaController
     }
 
     /**
+     * Processes post request.
+     *
+     * @return \Zend\Http\Response|ViewModel
+     */
+    public function processAction()
+    {
+        $request = $this->getRequest();
+
+        $data = (array) $request->getPost();
+
+        $result = $this->betService->create($data);
+
+        if (!$result) {
+            $errors = $this->betService->getMessages();
+
+            $this->parseErrors($errors);
+
+            return $this->forward()->dispatch('betController', array(
+                'action' => 'add',
+                'data'   => $data,
+            ));
+        }
+
+        $this->messageBag->add('success', 'Bet added');
+
+        return $this->redirect()->toRoute('bet');
+    }
+
+    /**
      * Update bets.
      *
      * @return \Zend\Http\Response|ViewModel
@@ -125,11 +149,14 @@ class IndexController extends TaController
     {
         $request = $this->getRequest();
 
+        $matches = $this->getUpcomingMatches();
+
         if ($request->isPost()) {
-            $form = $this->betService->getEntryForm();
+            $bet = $this->betService
+                ->find($request->getPost('id'));
 
             $result = $this->betService
-                ->update($request->getPost());
+                ->update($bet, $request->getPost());
 
             if ($result) {
                 $this->messageBag->add('info', 'Great Success! Bet updated...');
@@ -137,16 +164,16 @@ class IndexController extends TaController
                 $this->messageBag->add('error', 'Fail! Bet not updated...');
             }
         } else {
-            $form = $this->betService
-                ->getEntryForm($this->params('id'));
+            $bet = $this->betService
+                ->find($this->params('id'));
         }
 
-        $form->editMode();
-        $form->prepare();
+        $modelData = $this->transform($bet);
 
         $viewData = [
-            'theForm' => $form,
-            'title' => 'Update bet'
+            'bet' => json_encode($modelData),
+            'title' => 'Updating le bet',
+            'matches' => json_encode($matches)
         ];
 
         return $this->fetchView($viewData, 'bet/index/update');
@@ -180,6 +207,33 @@ class IndexController extends TaController
         ];
 
         return $this->fetchView($viewData);
+    }
+
+    /**
+     * @param Bet $model
+     * @return array
+     * @Todo: move to transformer.
+     */
+    protected function transform(Bet $model)
+    {
+        $modelData = $model->toArray();
+        if(count($modelData['lines']) == 0) {
+            $line = new BetLine();
+            $modelData['lines'][] = $line->toArray();
+        }
+
+        return $modelData;
+    }
+
+    /**
+     * @param $errors
+     * @todo: move out of controller.
+     */
+    protected function parseErrors($errors)
+    {
+        foreach($errors as $error) {
+            $this->messageBag->add('error', current($error));
+        }
     }
 
     /**

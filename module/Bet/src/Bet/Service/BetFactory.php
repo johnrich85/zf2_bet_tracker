@@ -2,6 +2,7 @@
 
 namespace Bet\Service;
 
+use Bet\Validator\BetValidator;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -16,10 +17,14 @@ class BetFactory implements FactoryInterface
         $bankrollService = $serviceLocator
             ->get('BankrollService');
 
+        $validator = $serviceLocator->get('BetValidator');
+
         $BetService = new BetService(
             $entityManager->getRepository('Bet\Entity\Bet'),
-            $bankrollService
+            $bankrollService,
+            $validator
         );
+
         $BetService->setServiceManager($serviceLocator);
         $BetService->setEntityManager($entityManager);
 

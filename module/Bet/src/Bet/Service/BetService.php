@@ -9,6 +9,7 @@ use Application\AppInterface\PaginatationProviderInterface;
 use Application\AppTraits\PaginatorProviderTrait;
 
 use Bet\Paginator\FallBack;
+use Bet\Validator\BetValidator;
 
 class BetService extends TaService\TaService implements PaginatationProviderInterface
 {
@@ -31,12 +32,22 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
     protected $bankrollService;
 
     /**
-     * Constructor
+     * @var BetValidator
      */
-    public function __construct($betRepository, $bankrollService)
+    protected $validator;
+
+    /**
+     * BetService constructor.
+     *
+     * @param $betRepository
+     * @param $bankrollService
+     * @param BetValidator $validator
+     */
+    public function __construct($betRepository, $bankrollService, BetValidator $validator)
     {
         $this->betRepository = $betRepository;
         $this->bankrollService = $bankrollService;
+        $this->validator = $validator;
     }
 
     /**
@@ -78,24 +89,18 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
     }
 
     /**
-     * @param $data
+     * @param array $data
+     *
      * @return bool
-     * @throws Exception
      */
-    public function create($data)
+    public function create(array $data)
     {
-        if (!$this->form) {
-            $this->getEntryForm();
-        }
-
         $bet = $this->sm->get('BetEntity');
 
-        $this->form->setInputFilter($bet->getInputFilter());
-        $this->form->setData($data);
+        if ($this->validator->isValid($data)) {
 
-        if ($this->form->isValid()) {
+            $bet->populate($data);
 
-            $bet->exchangeArray($this->form->getData());
             $bet->setCalculatedProfit();
 
             $betValue = $bet->calculateNetProfit();
@@ -117,27 +122,13 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      * @throws Exception
      * @throws \Exception
      */
-    public function update($data)
+    public function update(Bet $bet, $data)
     {
-        if (!$this->form) {
-            $this->getEntryForm();
-        }
+        $oldPL = $bet->calculateNetProfit();
 
-        $bet = $this->em->find('Bet\Entity\Bet', $data->id);
+        $bet->populate($data);
 
-        if ($bet == false) {
-            $exceptionMsg = "Error, trying to update non-existent Bet with id of: " . $data->id;
-            throw new \Exception($exceptionMsg);
-        }
-
-        $this->form->setInputFilter($bet->getInputFilter());
-        $this->form->setData($data);
-
-
-        if ($this->form->isValid()) {
-            $oldPL = $bet->calculateNetProfit();
-
-            $bet->exchangeArray($this->form->getData());
+        if ($this->validator->isValid($bet->toArray())) {
 
             $bet->setCalculatedProfit();
 
@@ -152,6 +143,23 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
         }
 
         return false;
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function find($id)
+    {
+        return $this->em->find('Bet\Entity\Bet', $id);
+    }
+
+    /**
+     * @return array
+     */
+    public function getMessages()
+    {
+        return $this->validator->getMessages();
     }
 
     /**
