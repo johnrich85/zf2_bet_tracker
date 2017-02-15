@@ -40,8 +40,7 @@ class BetValidator implements ValidatorInterface
     {
         $this->validator->required('name')
             ->lengthBetween(1, 100)
-            ->alpha();
-
+            ->alnum();
 
         $this->validator->required('date')
             ->datetime('Y-m-d H:i:s');

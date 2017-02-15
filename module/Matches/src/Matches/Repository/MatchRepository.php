@@ -1,6 +1,7 @@
 <?php namespace Matches\Repository;
 
 use Application\AppClasses\Repository as AppRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 class MatchRepository extends AppRepository\TaRepository
 {
@@ -25,7 +26,10 @@ class MatchRepository extends AppRepository\TaRepository
                 )
             );
 
-        $matches = $qb->getQuery()->getResult();
+        $matches = $qb->getQuery()
+            ->setFetchMode('Matches\Entity\Match', "first_team", ClassMetadata::FETCH_EAGER)
+            ->setFetchMode('Matches\Entity\Match', "second_team", ClassMetadata::FETCH_EAGER)
+            ->execute();
 
         return $matches;
     }

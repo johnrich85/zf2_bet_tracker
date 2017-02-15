@@ -23,12 +23,12 @@ class Team {
     protected $sport;
 
     /**
-     * @ORM\OneToMany(targetEntity="Match", mappedBy="first_team", fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="Match", mappedBy="first_team", fetch="LAZY")
      */
     protected $matches_home;
 
     /**
-     * @ORM\OneToMany(targetEntity="Match", mappedBy="second_team", fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="Match", mappedBy="second_team", fetch="LAZY")
      */
     protected $matches_away;
 

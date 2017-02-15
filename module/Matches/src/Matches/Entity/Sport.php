@@ -23,7 +23,7 @@ class Sport {
     protected $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="Match", mappedBy="sport", fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="Match", mappedBy="sport")
      */
     protected $matches;
 

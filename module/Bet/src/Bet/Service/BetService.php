@@ -126,7 +126,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
     {
         $oldPL = $bet->calculateNetProfit();
 
-        $bet->populate($data);
+        $bet->populate((array) $data);
 
         if ($this->validator->isValid($bet->toArray())) {
 

@@ -76,7 +76,7 @@ class Match
     protected $event;
 
     /**
-     * @ORM\OneToMany(targetEntity="Game", mappedBy="match", fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="Game", mappedBy="match")
      */
     protected $games;
 

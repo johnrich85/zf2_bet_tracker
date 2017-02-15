@@ -38,14 +38,9 @@ require(
              * @returns {{bet: string}}
              */
             data:function () {
-
-            },
-
-            /**
-             * Called when loaded.
-             */
-            ready : function() {
-                this.bet = JSON.parse(this.bet);
+                return {
+                    action : '/bet/process'
+                }
             },
 
             /**
@@ -53,7 +48,12 @@ require(
              * suggests it's called prior to compilation.
              */
             beforeCompile : function() {
+                this.bet = JSON.parse(this.bet);
                 this.matches = JSON.parse(this.matches);
+
+                if(this.bet.id) {
+                    this.action = '/bet/edit/' + this.bet.id
+                }
             },
 
             /**

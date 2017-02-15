@@ -220,6 +220,10 @@ class IndexController extends TaController
         if(count($modelData['lines']) == 0) {
             $line = new BetLine();
             $modelData['lines'][] = $line->toArray();
+        } else {
+            foreach($modelData['lines'] as $key=>$line) {
+                $modelData['lines'][$key] = $line->toArray();
+            }
         }
 
         return $modelData;
