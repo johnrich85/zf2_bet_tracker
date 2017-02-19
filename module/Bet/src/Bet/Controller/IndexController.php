@@ -3,6 +3,7 @@
 use Application\AppClasses\Controller\TaController;
 use Bet\Entity\Bet;
 use Bet\Entity\BetLine;
+use Bet\Hydrator\BetHydrator;
 use \Bet\Service\BetService;
 use \Bankroll\Service\BankrollService;
 use \Illuminate\Support\MessageBag;
@@ -36,22 +37,32 @@ class IndexController extends TaController
     protected $matchesService;
 
     /**
+     * @var BetHydrator
+     */
+    protected $betHydrator;
+
+    /**
+     * IndexController constructor.
+     *
      * @param BetService $betService
      * @param BankrollService $bankrollService
      * @param MatchesService $matchesService
      * @param MessageBag $messageBag
+     * @param BetHydrator $betHydrator
      */
     public function __construct(
         BetService $betService,
         BankrollService $bankrollService,
         MatchesService $matchesService,
-        MessageBag $messageBag
+        MessageBag $messageBag,
+        BetHydrator $betHydrator
     ) {
 
         $this->betService = $betService;
         $this->bankrollService = $bankrollService;
         $this->matchesService = $matchesService;
         $this->messageBag = $messageBag;
+        $this->betHydrator = $betHydrator;
     }
 
     /**
@@ -97,7 +108,7 @@ class IndexController extends TaController
         $model = new Bet();
 
         if(count($params)) {
-            $model->populate((array) $params);
+            $this->betHydrator->hydrate((array) $params, $model);
         }
 
         $modelData = $this->transform($model);

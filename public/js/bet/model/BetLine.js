@@ -8,7 +8,9 @@ define([], function() {
         function BetLine() {
             this.id= null;
             this.bet = null;
-            this.match= null;
+            this.match= {
+                id : null
+            };
             this.name = null;
             this.odds= null;
             this.selection = null;

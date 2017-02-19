@@ -17,19 +17,32 @@ class BetBetLinesHydrator implements StrategyInterface
     protected $context;
 
     /**
+     * @var BetLineHydrator
+     */
+    protected $lineHydrator;
+
+    /**
+     * BetBetLinesHydrator constructor.
+     * @param BetLineHydrator $lineHydrator
+     */
+    public function __construct(BetLineHydrator $lineHydrator)
+    {
+        $this->hydrator = $lineHydrator;
+    }
+
+    /**
      * @param mixed $value
      * @return array
      */
     public function extract($value)
     {
-        // TODO: Implement extract() method.
-
         return [];
     }
 
     /**
      * @param mixed $value
      * @return mixed|void
+     *
      */
     public function hydrate($value)
     {
@@ -50,7 +63,7 @@ class BetBetLinesHydrator implements StrategyInterface
                 $modify->setBet($this->context);
             }
 
-            $modify->populate($line);
+            $this->hydrator->hydrate($line, $modify);
         }
 
         return $existingLines;

@@ -22,7 +22,8 @@ class BetFactory implements FactoryInterface
         $BetService = new BetService(
             $entityManager->getRepository('Bet\Entity\Bet'),
             $bankrollService,
-            $validator
+            $validator,
+            $serviceLocator->get('BetHydrator')
         );
 
         $BetService->setServiceManager($serviceLocator);

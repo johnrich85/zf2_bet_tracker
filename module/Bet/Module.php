@@ -45,11 +45,15 @@ class Module
                     $messageBag = $cm->getServiceLocator()
                         ->get('MessageBag');
 
+                    $hydrator = $cm->getServiceLocator()
+                        ->get('BetHydrator');
+
                     return new Controller\IndexController(
                         $betService,
                         $bankrollService,
                         $matchesService,
-                        $messageBag
+                        $messageBag,
+                        $hydrator
                     );
                 },
             ),

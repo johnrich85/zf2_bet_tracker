@@ -36,7 +36,8 @@ define(
                 'options',
                 'title',
                 'modal_class',
-                'target'
+                'target',
+                'onSelect'
             ],
 
             /**
@@ -67,17 +68,46 @@ define(
                  */
                 showModal : function(e) {
                     e.preventDefault();
+
                     this.modal.modal('show');
                 },
 
                 updateInput : function(e) {
                     e.preventDefault();
+                    var a, b, group, selection;
 
                     var inputSelector = 'input[name=\'' + this.target + '\']';
 
                     jQuery(this.$root.$el).find(inputSelector).val(this.select);
 
+                    if(this.onSelect) {
+                        this.onSelect(this.fetchSelection(this.select));
+                    }
+
                     this.modal.modal('hide');
+                },
+
+                /**
+                 * Keys key and label for current selection.
+                 *
+                 * @param current
+                 * @returns {{key: string, label: *}}
+                 */
+                fetchSelection : function(current) {
+                    for(a in this.options) {
+                        group = this.options[a];
+
+                        outer : for(b in group['options']) {
+                            if(this.select == group['options'][b]) {
+                                return {
+                                    key : b,
+                                    label : group['options'][b]
+                                };
+
+                                break outer;
+                            }
+                        }
+                    }
                 }
             }
         })

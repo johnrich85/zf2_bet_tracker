@@ -5,12 +5,15 @@
         </div>
 
         <div class="col-md-4 form-group" id="match-name">
+            <input v-model="betLine.match.id" type="hidden" name="lines[{{index}}][match]">
+
             <div class="with-alt">
-                <input v-model="betLine.match" type="text" name="lines[{{index}}][match]" placeholder="Select a match..." class="form-control">
+                <input name="match_name_{{index}}" v-model="betLine.match.name" type="text" placeholder="Select a match..." class="form-control">
 
                 <alt-option :target="targetEle"
                             :options="matches"
                             title="Select a match..."
+                            :on-select="populateMatch"
                             modal_class="alt-option">
                 </alt-option>
             </div>
@@ -22,7 +25,14 @@
             <input v-model="betLine.name" type="hidden" name="lines[{{index}}][name]" placeholder="Name">
 
             <input class="form-control" v-model="betLine.selection" type="text" name="lines[{{index}}][selection]" placeholder="Selection">
-            <input class="form-control" v-model="betLine.odds" type="text" name="lines[{{index}}][odds]" placeholder="Odds">
+
+            <div>
+                <input class="form-control" v-model="betLine.odds" type="text" name="lines[{{index}}][odds]" placeholder="Odds">
+                <span class="emph">
+                   {{ odds_as_fraction }}
+                </span>
+            </div>
+
         </div>
     </div>
 </fieldset>

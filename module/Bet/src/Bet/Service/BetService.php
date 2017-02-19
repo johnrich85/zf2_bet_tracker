@@ -8,6 +8,7 @@ use Application\AppClasses\Service as TaService;
 use Application\AppInterface\PaginatationProviderInterface;
 use Application\AppTraits\PaginatorProviderTrait;
 
+use Bet\Hydrator\BetHydrator;
 use Bet\Paginator\FallBack;
 use Bet\Validator\BetValidator;
 
@@ -37,17 +38,24 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
     protected $validator;
 
     /**
+     * @var BetHydrator
+     */
+    protected $hydrator;
+
+    /**
      * BetService constructor.
      *
      * @param $betRepository
      * @param $bankrollService
      * @param BetValidator $validator
+     * @param BetHydrator $hydrator
      */
-    public function __construct($betRepository, $bankrollService, BetValidator $validator)
+    public function __construct($betRepository, $bankrollService, BetValidator $validator, BetHydrator $hydrator)
     {
         $this->betRepository = $betRepository;
         $this->bankrollService = $bankrollService;
         $this->validator = $validator;
+        $this->hydrator = $hydrator;
     }
 
     /**
@@ -99,7 +107,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
 
         if ($this->validator->isValid($data)) {
 
-            $bet->populate($data);
+            $this->hydrator->hydrate($data, $bet);
 
             $bet->setCalculatedProfit();
 
@@ -126,7 +134,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
     {
         $oldPL = $bet->calculateNetProfit();
 
-        $bet->populate((array) $data);
+        $this->hydrator->hydrate((array) $data, $bet);
 
         if ($this->validator->isValid($bet->toArray())) {
 
@@ -151,7 +159,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
      */
     public function find($id)
     {
-        return $this->em->find('Bet\Entity\Bet', $id);
+        return $this->betRepository->find($id);
     }
 
     /**

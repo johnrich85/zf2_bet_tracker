@@ -3,9 +3,10 @@ define(
         "vue",
         "jquery",
         "component_form_alt_option",
-        "text!../js/bet/templates/bet-line.html"
+        "text!../js/bet/templates/bet-line.html",
+        "fraction"
     ],
-    function(Vue, $, AltOption, template) {
+    function(Vue, $, AltOption, template, Fraction) {
         var BetLine = Vue.extend({
             /**
              * The template.
@@ -19,7 +20,8 @@ define(
             props: [
                 'betLine',
                 'index',
-                'matches'
+                'matches',
+                'onOdds'
             ],
 
             /**
@@ -36,7 +38,8 @@ define(
              */
             data : function () {
                 return {
-                    targetEle : 'lines[<index>][match]'
+                    targetEle : 'match_name_' + this.index,
+                    odds_as_fraction : null
                 };
             },
 
@@ -46,12 +49,20 @@ define(
              */
             beforeCompile : function() {
                 this.targetEle = this.getTargetEle();
+
+                this.updateFraction();
             },
 
             /**
              * Watch declarations
              */
-            watch : {},
+            watch : {
+                'betLine.odds' : function() {
+                    this.onOdds(this.index, this.betLine.odds);
+
+                    this.updateFraction();
+                }
+            },
 
             /**
              * Methods
@@ -65,6 +76,27 @@ define(
                 getTargetEle : function() {
                     return this.targetEle
                         .replace('<index>', this.index);
+                },
+
+                /**
+                 * Populates match fields.
+                 *
+                 * @param match
+                 */
+                populateMatch : function (match) {
+                    this.betLine.match.id = Number(match.key);
+                },
+
+                /**
+                 * Shows odds as fraction.
+                 */
+                updateFraction : function() {
+                    if(this.betLine.odds) {
+                        this.odds_as_fraction = new Fraction(this.betLine.odds)
+                            .toFraction();
+                    } else {
+                        this.odds_as_fraction = '';
+                    }
                 }
             }
         })

@@ -250,22 +250,6 @@ class Bet implements Arrayable
         return $this->calculateNetProfit() - $value;
     }
 
-
-    /**
-     * @param $data
-     */
-    public function populate($data)
-    {
-        if(!isset($data['successful'])) {
-            $data['successful'] = 0;
-        }
-
-        $hydrator = new BetHydrator();
-
-        $hydrator->hydrate($data, $this);
-    }
-
-
     /**
      * @return array
      */

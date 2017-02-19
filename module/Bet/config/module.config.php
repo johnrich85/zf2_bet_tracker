@@ -1,5 +1,11 @@
 <?php namespace Bet;
 
+use Bet\Hydrator\BetBetLinesHydrator;
+use Bet\Hydrator\BetHydrator;
+use Bet\Hydrator\BetLineHydrator;
+use Bet\Hydrator\Factory\BetBetHydratorFactory;
+use Bet\Hydrator\Factory\BetBetLinesHydratorFactory;
+use Bet\Hydrator\Factory\BetLineHydratorFactory;
 use Bet\Validator\BetValidatorFactory;
 
 return array(
@@ -26,6 +32,9 @@ return array(
         'factories' => array(
             'BetService'     => 'Bet\Service\BetFactory',
             'BetValidator'   => BetValidatorFactory::class,
+            'BetHydrator'   => BetBetHydratorFactory::class,
+            'BetLineHydrator'   => BetLineHydratorFactory::class,
+            'BetBetLinesHydrator'   => BetBetLinesHydratorFactory::class,
         ),
         'invokables' => array (
             'BetEntity'   => 'Bet\Entity\Bet',

@@ -18,12 +18,13 @@ class BetHydrator extends ClassMethods
      * BetHydrator constructor.
      *
      * @param bool $underscoreSeparatedKeys
+     * @param BetBetLinesHydrator $linesHydrator
      */
-    public function __construct($underscoreSeparatedKeys = true)
+    public function __construct($underscoreSeparatedKeys = true, BetBetLinesHydrator $linesHydrator)
     {
         parent::__construct($underscoreSeparatedKeys);
 
-        $this->linesHydrator = new BetBetLinesHydrator();
+        $this->linesHydrator = $linesHydrator;
 
         $this->addStrategy('lines', $this->linesHydrator);
     }
@@ -44,6 +45,12 @@ class BetHydrator extends ClassMethods
      */
     public function hydrate(array $data, $object)
     {
+        if(!isset($data['successful'])) {
+            $data['successful'] = 0;
+        } else {
+            $data['successful'] = 1;
+        }
+
         $this->linesHydrator->setContext($object);
 
         return parent::hydrate($data, $object);

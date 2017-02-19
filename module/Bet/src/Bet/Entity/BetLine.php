@@ -5,6 +5,7 @@ namespace Bet\Entity;
 use Bet\Hydrator\BetLineHydrator;
 use Doctrine\ORM\Mapping as ORM;
 use Illuminate\Contracts\Support\Arrayable;
+use Matches\Entity\Match;
 
 /**
  * @ORM\Entity
@@ -156,21 +157,18 @@ class BetLine implements Arrayable
     }
 
     /**
-     * @param $data
-     */
-    public function populate($data)
-    {
-        $hydrator = new BetLineHydrator();
-
-        $hydrator->hydrate($data, $this);
-    }
-
-    /**
      * @return array
      */
     public function toArray()
     {
         $payload = get_object_vars($this);
+
+        if($payload['match'] instanceof Match) {
+            $payload['match'] = $payload['match']->toArray();
+        } else {
+            $match = new Match();
+            $payload['match'] = $match->toArray();
+        }
 
         return $payload;
     }

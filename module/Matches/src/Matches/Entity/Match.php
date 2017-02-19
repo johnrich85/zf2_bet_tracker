@@ -2,13 +2,14 @@
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="match_match")
  * @ORM\Entity(repositoryClass="Matches\Repository\MatchRepository")
  */
-class Match
+class Match implements Arrayable
 {
     /**
      * @ORM\Id
@@ -332,8 +333,25 @@ class Match
      */
     public function toString()
     {
+        if(!$this->first_team || !$this->second_team) {
+            return '';
+        }
+
         $name = $this->first_team->getName() . " vs " . $this->second_team->getName();
 
         return $name;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $payload = get_object_vars($this);
+
+        $payload['name'] = $this->toString();
+        $payload['games'] = $payload['games']->toArray();
+
+        return $payload;
     }
 }

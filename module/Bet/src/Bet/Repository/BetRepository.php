@@ -1,11 +1,38 @@
 <?php namespace Bet\Repository;
 
 use Application\AppClasses\Repository as AppRepository;
+use Bet\Entity\Bet;
+use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 class BetRepository extends AppRepository\TaRepository {
 
     protected $entitySimpleName = 'bet';
+
+    /**
+     * @param mixed $id
+     *
+     * @return mixed
+     */
+    public function find($id)
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('b, bl')
+            ->from('Bet\Entity\Bet', 'b')
+            ->join('b.lines', 'bl')
+            ->join('bl.match', 'm')
+            ->where('b.id = :id')
+            ->setParameters(
+                array('id' => $id)
+            );
+
+        $bet = $qb->getQuery()
+            ->getOneOrNullResult();
+
+        return $bet;
+    }
 
     /**
      * Overrides doctrine 'findAll' method, changing

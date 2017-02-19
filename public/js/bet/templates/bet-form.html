@@ -15,12 +15,12 @@
             <input v-model="bet.amount" type="text" name="amount" placeholder="Amount staked" class="form-control">
         </div>
 
-        <!--TODO: loop and create bet lines-->
         <div id="bet-line-wrap" class="form-group">
             <div v-for="(key, line) in bet.lines">
                 <bet-line :bet-line="line"
                           :index="key"
-                          :matches="matches">
+                          :matches="matches"
+                          :on-odds="oddsUpdated">
 
                 </bet-line>
             </div>

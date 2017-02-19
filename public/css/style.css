@@ -4,6 +4,13 @@ body {
     background: #EDF2F4;
 }
 
+.emph {
+    padding:5px;
+    color: #2b2d42;
+    font-size:22px;
+    font-family: "Bree Serif";
+    line-height:22px;
+}
 .zf-green {
     color: #68b604;
 }
@@ -76,8 +83,11 @@ fieldset.bet-line input[type=text] {
     float:left;
     margin-right:1.25%;
     margin-top:9px;
-
 }
 fieldset.bet-line input[type=text]:last-child {
     margin-right:0
+}
+.bet-line .emph {
+    margin-top:8px;
+    display:inline-block;
 }

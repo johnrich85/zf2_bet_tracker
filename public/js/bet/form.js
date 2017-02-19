@@ -6,9 +6,10 @@ require(
         "component_form_alt_option",
         "component_bet_bet_line",
         "model_bet_bet_line",
-        "text!../js/bet/templates/bet-form.html"
+        "text!../js/bet/templates/bet-form.html",
+        "fraction"
     ],
-    function(Vue, $, BetEntry, AltOption, BetLineComponent, BetLine, entryTemplate) {
+    function(Vue, $, BetEntry, AltOption, BetLineComponent, BetLine, entryTemplate, Fraction) {
         BetEntryForm = Vue.extend({
             /**
              * The template.
@@ -39,7 +40,8 @@ require(
              */
             data:function () {
                 return {
-                    action : '/bet/process'
+                    action : '/bet/process',
+                    odds : {}
                 }
             },
 
@@ -53,6 +55,11 @@ require(
 
                 if(this.bet.id) {
                     this.action = '/bet/edit/' + this.bet.id
+                }
+
+                for(var a in this.bet.lines) {
+                    var curLine = this.bet.lines[a];
+                    this.odds[a] = new Fraction(curLine.odds);
                 }
             },
 
@@ -73,6 +80,43 @@ require(
                     e.preventDefault();
 
                     this.bet.lines.push(BetLine.create());
+                },
+
+                /**
+                 * Callback function passed to nested
+                 * lines. Updates odds for the line.
+                 *
+                 * @param line
+                 * @param odds
+                 */
+                oddsUpdated : function(line, odds) {
+                    if(isNaN(odds) || odds == '') {
+                        this.odds[line] = null;
+                        //todo: show error
+                    } else {
+                        this.odds[line] = new Fraction(odds);
+                    }
+
+                    this.calculateReturns();
+                },
+
+
+                /**
+                 *
+                 */
+                calculateReturns : function() {
+                    var stake = this.bet.amount;
+
+                    for(var a in this.odds) {
+                        if(!this.odds[a]) {
+                            continue;
+                        }
+
+                        stake *= this.odds[a].valueOf();
+                    }
+
+                    this.bet.return = new Fraction(stake)
+                        .round(2);
                 }
             }
         })
