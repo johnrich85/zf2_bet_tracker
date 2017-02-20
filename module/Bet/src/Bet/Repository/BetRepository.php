@@ -21,8 +21,8 @@ class BetRepository extends AppRepository\TaRepository {
 
         $qb->select('b, bl')
             ->from('Bet\Entity\Bet', 'b')
-            ->join('b.lines', 'bl')
-            ->join('bl.match', 'm')
+            ->leftJoin('b.lines', 'bl')
+            ->leftJoin('bl.match', 'm')
             ->where('b.id = :id')
             ->setParameters(
                 array('id' => $id)

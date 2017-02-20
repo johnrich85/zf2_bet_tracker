@@ -144,6 +144,7 @@ class ScraperService extends TaService\TaService
             $sourcePages[] = $sourcePage;
         }
 
+
         $this->persistEntities($sourcePages);
     }
 

@@ -65,6 +65,9 @@ class GosuMatchCaster implements Caster
         return $this->entities;
     }
 
+    /**
+     * @param array $data
+     */
     public function cast(array $data)
     {
         $match = $this->getMatch($data);

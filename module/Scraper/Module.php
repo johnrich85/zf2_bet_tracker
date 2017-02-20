@@ -93,7 +93,7 @@ class Module implements DependencyIndicatorInterface
         $scrapedHandler = $sm->get('ScrapedHandler');
 
         $em->attach(
-            'Scraper\Controller\IndexController',
+            IndexController::class,
             'Scraper.scraped',
             array($scrapedHandler, 'handle')
         );

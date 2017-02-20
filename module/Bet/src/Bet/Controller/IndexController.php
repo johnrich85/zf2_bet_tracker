@@ -260,7 +260,7 @@ class IndexController extends TaController
         $from->setTime(0, 0, 0);
 
         $to = new \DateTime();
-        $to->modify('+ 1 week');
+        $to->modify('+ 2 week');
 
         $matches = $this->matchesService
             ->allBetween($from, $to);

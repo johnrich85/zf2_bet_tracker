@@ -92,11 +92,32 @@ define(
                  */
                 updateFraction : function() {
                     if(this.betLine.odds) {
-                        this.odds_as_fraction = new Fraction(this.betLine.odds)
-                            .toFraction();
+                        this.odds_as_fraction = this.toFraction(this.betLine.odds)
                     } else {
                         this.odds_as_fraction = '';
                     }
+                },
+
+                /**
+                 * Converts number to fracton.
+                 *
+                 * @param num
+                 * @returns {*}
+                 */
+                toFraction : function(num) {
+                    var payload;
+
+                    if(this.betLine.odds <= 1) {
+                        return;
+                    }
+
+                    var asFraction = new Fraction(this.betLine.odds - 1);
+
+                    payload = asFraction['n'];
+                    payload += "/";
+                    payload += asFraction['d'];
+
+                    return payload;
                 }
             }
         })

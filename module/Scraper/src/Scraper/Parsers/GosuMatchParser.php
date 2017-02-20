@@ -45,6 +45,7 @@ class GosuMatchParser implements Parser
         $this->data['date'] = $this->parseDate($crawler);
         $this->data['first_team_name'] = $this->parseName(1, $crawler);
         $this->data['second_team_name'] = $this->parseName(2, $crawler);
+
         $this->data['match_source'] = $this->response->getHeaderLine('REQUEST_URI');
 
         $this->entityCaster->cast($this->data);
@@ -61,7 +62,7 @@ class GosuMatchParser implements Parser
         $payload = [];
 
         $results = $crawler
-            ->filter('.hidden.results span');
+            ->filter('div.score span');
 
         $payload['first_team_score'] = $results->eq(0)
             ->text();
@@ -77,7 +78,7 @@ class GosuMatchParser implements Parser
      * @return string
      */
     protected function parseDate($crawler) {
-        $date = $crawler->filter('.datetime')
+        $date = $crawler->filter('.match  .details small')
             ->first()
             ->text();
 
@@ -90,7 +91,7 @@ class GosuMatchParser implements Parser
      * @return string
      */
     protected function parseName($id, $crawler) {
-        $selector = ".opponent$id h3 a";
+        $selector = ".match  .team.team-$id a";
 
         $date = $crawler->filter($selector)
             ->first()

@@ -34,7 +34,7 @@ class Base implements PageScraperHandler
         $this->service = $this->params['service'];
         $this->page = $this->params['page'];
 
-        if ($this->page->getCaster() == 'GosuLoLCaster') {
+        if ($this->page->getCaster() == 'GosuLolCaster') {
             $this->handleGosuMatchScrape();
         }
     }

@@ -34,7 +34,7 @@ class CommandController extends TaController
         $sm = $this->getServiceLocator();
 
         foreach ($pages as $page) {
-            sleep(rand(0, 2));
+            sleep(rand(0, 3));
 
             try {
                 $scraper = new GuzzleScraper($sm);

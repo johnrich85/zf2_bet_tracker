@@ -507,4 +507,15 @@ class Match extends \Matches\Entity\Match implements \Doctrine\ORM\Proxy\Proxy
         return parent::toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function toArray()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'toArray', array());
+
+        return parent::toArray();
+    }
+
 }

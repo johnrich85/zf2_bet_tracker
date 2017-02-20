@@ -165,6 +165,8 @@ class GosuLoLCaster implements Caster
             $period = ' minutes';
         } elseif (strpos($interval, 's')) {
             $period = ' seconds';
+        } elseif (strpos($interval, 'w')) {
+            $period = ' weeks';
         } else {
             return;
         }
