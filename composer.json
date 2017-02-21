@@ -19,6 +19,7 @@
     "symfony/dom-crawler": "~3.0",
     "symfony/css-selector": "~3.0",
     "league/fractal": "^0.13.0",
-    "particle/validator": "^2.2"
+    "particle/validator": "^2.2",
+    "rwoverdijk/assetmanager": "1.6"
   }
 }

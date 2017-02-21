@@ -2,14 +2,13 @@ require(
     [
         "vue",
         "jquery",
-        "component_bet_entry",
         "component_form_alt_option",
-        "component_bet_bet_line",
-        "model_bet_bet_line",
+        "bet_component_line",
+        "bet_model_line",
         "text!../js/bet/templates/bet-form.html",
         "fraction"
     ],
-    function(Vue, $, BetEntry, AltOption, BetLineComponent, BetLine, entryTemplate, Fraction) {
+    function(Vue, $, AltOption, BetLineComponent, BetLine, entryTemplate, Fraction) {
         BetEntryForm = Vue.extend({
             /**
              * The template.
