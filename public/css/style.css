@@ -91,3 +91,42 @@ fieldset.bet-line input[type=text]:last-child {
     margin-top:8px;
     display:inline-block;
 }
+.line-result {
+    font-size:20px;
+    position: absolute;
+    left: 101%;
+    top:10px;
+    color: #999;
+}
+.line-result i {
+    border: 1px solid #ffffff;
+    box-shadow: 0px 0px 13px #d1d8da;
+    background: #fbfbfb;
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    border-radius:5px;
+    padding:5px;
+    width:67px;
+    text-align: center;
+}
+.line-result i:before {
+    vertical-align: middle;
+}
+.line-result i span {
+    font-family: "Bree Serif";
+    font-size:12px;
+    line-height:20px;
+    padding-left:5px;
+    vertical-align: middle;
+}
+
+/*
+Transitions
+ */
+.fade-transition {
+    transition: all .3s ease;
+    overflow: hidden;
+}
+.fade-enter, .fade-leave {
+    opacity: 0;
+}

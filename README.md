@@ -36,7 +36,7 @@ Bet tracker made using ZF2
 1. ~~Scrape match sources, update winner. (step 1, create source page for each match)~~
 2. ~~Relationship between match & SourcePage.~~
 3. ~~Then create controller action to scrape all completed matches.~~
-5. When selecting a match (on bet add/edit form), link that match to the bet.
+5. ~~When selecting a match (on bet add/edit form), link that match to the bet.~~
 6. When a bet result is scraped, mark associated bets as winners/losers.
 7. Bet status extension (win/lose/pending)
 8. List bets by day/week/month - group w/l for period, graphs for bets for sport or weekly etc
@@ -58,8 +58,8 @@ Bet tracker made using ZF2
 1. Create new vue model for Modals.
 2. Create new vue model for Select (with/without optrgoups).
 3. ~~Create new 'alternative-option' vue model (adds button to ele, adds modal containing select, binds select value to input).~~
-4. Create new bet line vue model, create bet lines vue model. Create x amount of bet lines based on lines array.
-5. Add new button to UI that allows more lines to be added.
+4. ~~Create new bet line vue model, create bet lines vue model. Create x amount of bet lines based on lines array.~~
+5. ~~Add new button to UI that allows more lines to be added.~~
 
 ##### Next up
 
@@ -70,7 +70,7 @@ Bet tracker made using ZF2
 4. ~~CSRF for forms.~~
 5. Users, Authentication & ACL.
 6. ~~Frontend modules/dependency manager~~
-7. Make modules self contained (add css/js etc to module, will need a 'publish' method to push to publci folder).
+7. ~~Make modules self contained (add css/js etc to module, will need a 'publish' method to push to publci folder).~~
 
 
 ##### Bugs

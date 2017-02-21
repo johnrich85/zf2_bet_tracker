@@ -39,10 +39,15 @@
                     <input type="checkbox" name="successful" v-model="bet.successful">
                 </labe>
             </div>
+
+            <input v-model="bet.secret" type="hidden" name="secret" >
+
+            <input type="submit" value="Submit" name="submit">
         </div>
 
-        <input v-model="bet.secret" type="hidden" name="secret" >
 
-        <input type="submit" value="Submit" name="submit">
+        <transition name="fade">
+            <img v-if="bet.successful" transition="fade" src="/img/monies.jpg">
+        </transition>
     </form>
 </div>

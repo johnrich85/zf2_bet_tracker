@@ -33,6 +33,11 @@
                 </span>
             </div>
 
+            <div class="line-result">
+                <i v-if="betLine.win == 1" class="text-success fa fa-check-circle-o"><span>GG!</span></i>
+                <i v-if="betLine.win == 2" class="text-danger fa fa-times-circle-o"><span>REKT</span></i>
+                <i v-if="betLine.win == 0" class="fa fa-circle-o"><span>TBC</span></i>
+            </div>
         </div>
     </div>
 </fieldset>
