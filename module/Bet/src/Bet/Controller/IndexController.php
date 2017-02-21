@@ -73,6 +73,7 @@ class IndexController extends TaController
     public function indexAction()
     {
         $pageNum = $this->params()->fromQuery('p');
+
         $params = array();
 
         $successfulFilter = $this->params()->fromQuery('successful');
@@ -103,13 +104,9 @@ class IndexController extends TaController
     {
         $matches = $this->getUpcomingMatches();
 
-        $params = $this->getRequest()->getPost();
+        $params = $this->getRouteOrPost();
 
-        $model = new Bet();
-
-        if(count($params)) {
-            $this->betHydrator->hydrate((array) $params, $model);
-        }
+        $model = $this->getBetModel($params);
 
         $modelData = $this->transform($model);
 
@@ -146,10 +143,9 @@ class IndexController extends TaController
             ));
         }
 
-        $this->messageBag->add('success', 'Bet added');
-
         return $this->redirect()->toRoute('bet');
     }
+
 
     /**
      * Update bets.
@@ -158,25 +154,14 @@ class IndexController extends TaController
      */
     public function editAction()
     {
-        $request = $this->getRequest();
-
         $matches = $this->getUpcomingMatches();
+        $params = $this->getRouteOrPost();
 
-        if ($request->isPost()) {
-            $bet = $this->betService
-                ->find($request->getPost('id'));
-
-            $result = $this->betService
-                ->update($bet, $request->getPost());
-
-            if ($result) {
-                $this->messageBag->add('info', 'Great Success! Bet updated...');
-            } else {
-                $this->messageBag->add('error', 'Fail! Bet not updated...');
-            }
-        } else {
+        if($this->params('id')) {
             $bet = $this->betService
                 ->find($this->params('id'));
+        } else {
+            $bet = $this->getBetModel($params);
         }
 
         $modelData = $this->transform($bet);
@@ -191,33 +176,74 @@ class IndexController extends TaController
     }
 
     /**
+     * Processes update action.
+     *
+     * @return mixed|\Zend\Http\Response
+     */
+    public function processUpdateAction()
+    {
+        $request = $this->getRequest();
+
+        $data = (array) $request->getPost();
+
+        $bet = $this->betService
+            ->find($request->getPost('id'));
+
+        $result = $this->betService
+            ->update($bet, $request->getPost());
+
+        if (!$result) {
+            $errors = $this->betService->getMessages();
+
+            $this->parseErrors($errors);
+
+            return $this->forward()->dispatch('betController', array(
+                'action' => 'edit',
+                'data'   => $data,
+            ));
+        }
+
+        return $this->redirect()->toRoute('bet');
+    }
+
+    /**
      * Remove bets.
      *
-     * @todo implement service method
+     * @todo implement
      * @return \Zend\Http\Response
      */
     public function deleteAction()
     {
-        $request = $this->getRequest();
-        $id = $this->params('id');
 
-        $form = $this->betService->getDeleteForm($id);
+    }
 
-        if (!$id) {
-            return $this->notFoundAction();
-        } elseif (!$form) {
-            return $this->redirect()->toRoute('bet');
+    /**
+     * @return mixed
+     */
+    protected function getRouteOrPost()
+    {
+        $payload = $this->params()->fromRoute('data');
+
+        if($payload == null) {
+            $payload = $this->getRequest()->getPost();
         }
 
-        if ($request->isPost()) {
-            //TODO
+        return $payload;
+    }
+
+    /**
+     * @param $params
+     * @return Bet
+     */
+    protected function getBetModel($params)
+    {
+        $bet = new Bet();
+
+        if(count($params)) {
+            $this->betHydrator->hydrate((array) $params, $bet);
         }
 
-        $viewData = [
-            'theForm' => $form
-        ];
-
-        return $this->fetchView($viewData);
+        return $bet;
     }
 
     /**

@@ -54,7 +54,7 @@ require(
                 this.matches = JSON.parse(this.matches);
 
                 if(this.bet.id) {
-                    this.action = '/bet/edit/' + this.bet.id
+                    this.action = '/bet/processUpdate/' + this.bet.id
                 }
 
                 for(var a in this.bet.lines) {

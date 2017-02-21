@@ -1,6 +1,4 @@
-<?php
-
-namespace Bet\Service;
+<?php namespace Bet\Service;
 
 use Bankroll\Entity\Bankroll;
 use Bet\Entity\Bet;
@@ -12,6 +10,11 @@ use Bet\Hydrator\BetHydrator;
 use Bet\Paginator\FallBack;
 use Bet\Validator\BetValidator;
 
+/**
+ * Class BetService
+ *
+ * @package Bet\Service
+ */
 class BetService extends TaService\TaService implements PaginatationProviderInterface
 {
 
@@ -56,44 +59,6 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
         $this->bankrollService = $bankrollService;
         $this->validator = $validator;
         $this->hydrator = $hydrator;
-    }
-
-    /**
-     * @param null $id
-     * @return mixed
-     */
-    public function getEntryForm($id = null)
-    {
-        $this->form = $this->sm->get('BetEntryForm');
-
-        if (!$id) {
-            return $this->form;
-        }
-
-        if ($bet = $this->em->find('Bet\Entity\Bet', $id)) {
-            $this->form->bind($bet);
-        }
-
-        return $this->form;
-    }
-
-    /**
-     * @param null $id
-     * @return mixed
-     */
-    public function getDeleteForm($id = null)
-    {
-        $this->form = $this->sm->get('BetDeleteForm');
-
-        if (!$id) {
-            return $this->form;
-        }
-
-        if ($bet = $this->em->find('Bet\Entity\Bet', $id)) {
-            $this->form->bind($bet);
-        }
-
-        return $this->form;
     }
 
     /**
@@ -173,20 +138,11 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
     /**
      * @param $successful
      * @return mixed
-     * @todo : move to repo
      */
     public function getBetCount($successful)
     {
-        $qb = $this->em->createQueryBuilder();
-
-        $qb->select('count(bet)')
-            ->from('Bet\Entity\Bet', 'bet')
-            ->where('bet.successful = :successful')
-            ->setParameters(array('successful' => $successful));
-
-        $count = $qb->getQuery()->getSingleScalarResult();
-
-        return $count;
+        return $this->betRepository
+            ->ggetBetCountByStatus($successful);
     }
 
     /**
@@ -252,11 +208,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
 
         $numRows = $this->betRepository->totalRows($query);
 
-        return new FallBack(
-            $result,
-            $numRows,
-            $take
-        );
+        return new FallBack($result, $numRows, $take);
     }
 
     /**
@@ -269,16 +221,13 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
     {
         $skip = ($page -1) * $take;
 
-        $query = $this->betRepository->allByMonth($skip, $take, $params);
+        $query = $this->betRepository
+            ->allByMonth($skip, $take, $params);
 
         $result = $query->getQuery()->getResult();
 
         $numRows = $this->betRepository->totalRows($query);
 
-        return new FallBack(
-            $result,
-            $numRows,
-            $take
-        );
+        return new FallBack($result, $numRows, $take);
     }
 }

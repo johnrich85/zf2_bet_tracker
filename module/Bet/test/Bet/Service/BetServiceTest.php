@@ -12,32 +12,6 @@ class BetServiceTest extends \PHPUnit_Framework_TestCase  {
         $this->serviceManager = Bootstrap::getServiceManager();
     }
 
-    public function testGetDeleteFormValidId() {
-
-        $betService = $this->getBetServiceInstance();
-
-        $betRepo = $betService->getRepository();
-        $betRepo->expects($this->once())
-            ->method('find')
-            ->will($this->returnValue(new \Bet\Entity\Bet()));
-
-        $form = $betService->getDeleteForm(1);
-        $this->assertInstanceOf('\Bet\Form\DeleteForm', $form);
-    }
-
-    public function testGetDeleteFormInvalidId() {
-
-        $betService = $this->getBetServiceInstance();
-
-        $betRepo = $betService->getRepository();
-        $betRepo->expects($this->once())
-            ->method('find')
-            ->will($this->returnValue(null));
-
-        $form = $betService->getDeleteForm(1);
-        $this->assertEquals(false, $form);
-    }
-
     public function getBetServiceInstance() {
         $entityManager = $this->serviceManager->get('doctrine.entitymanager.orm_default');
 
