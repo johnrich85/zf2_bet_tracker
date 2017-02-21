@@ -142,7 +142,7 @@ class BetService extends TaService\TaService implements PaginatationProviderInte
     public function getBetCount($successful)
     {
         return $this->betRepository
-            ->ggetBetCountByStatus($successful);
+            ->getBetCountByStatus($successful);
     }
 
     /**
