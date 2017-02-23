@@ -59,6 +59,7 @@ class BetBetLinesHydrator implements StrategyInterface
                 $modify = $existing;
             } else {
                 $modify = new BetLine();
+
                 $existingLines->add($modify);
                 $modify->setBet($this->context);
             }
@@ -76,10 +77,13 @@ class BetBetLinesHydrator implements StrategyInterface
      */
     protected function filterById($collection, $line)
     {
-        return $collection->filter(
-            function($entry) use ($line) {
+        if(empty($line['id'])) {
+            return false;
+        }
+
+        return $collection->filter(function($entry) use ($line) {
                 return $entry->getId() == $line['id'];
-            })->first();
+        })->first();
     }
 
     /**
